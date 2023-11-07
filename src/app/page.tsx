@@ -1,59 +1,112 @@
-import Link from "next/link";
-
+import { SignInButton, GetStartedButton } from "./_components/AuthButtons";
 import { getServerAuthSession } from "@/server/auth";
-import { api } from "@/trpc/server";
+import {
+  CalendarClock,
+  Cog,
+  FileSearch,
+  Forward,
+  Palmtree,
+  Users,
+} from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await getServerAuthSession();
-  const hello = await api.post.hello.query({ text: "from tRPC" });
+
+  if (session?.user) {
+    redirect("/dashboard");
+  }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
+    <main className="mt-4 flex   flex-col items-center px-2 sm:px-0">
+      <section className="w-full py-12">
+        <div className="container px-4 md:px-6">
+          <div className="grid items-center gap-6">
+            <div className="flex flex-col justify-center space-y-8 text-center">
+              <div className="space-y-2">
+                <h1 className="bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-3xl font-bold tracking-tighter text-transparent sm:text-5xl xl:text-6xl/none">
+                  Simplify Administration, Maximize Results
+                </h1>
+                <p className="mx-auto max-w-[600px] md:text-xl">
+                  Designed to enhance your productivity and streamline your
+                  workflow.
+                </p>
+              </div>
+              <div className="mx-auto w-full max-w-full space-y-4">
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="flex flex-col items-center space-y-2 rounded-lg border-gray-800 p-4">
+                    <div className="p-2">
+                      <Users />
+                    </div>
+                    <h2 className="text-xl font-bold ">Staff Overview</h2>
+                    <p>
+                      All your staff in one place. See their shifts,
+                      availability, and contact information.
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center space-y-2 rounded-lg border-gray-800 p-4">
+                    <div className="p-2">
+                      <CalendarClock />
+                    </div>
+                    <h2 className="text-xl font-bold ">Schedule Planing</h2>
+                    <p>
+                      Create and share schedules with your staff. Easily add or
+                      remove shifts.
+                    </p>
+                  </div>{" "}
+                  <div className="flex flex-col items-center space-y-2 rounded-lg border-gray-800 p-4">
+                    <div className=" p-2">
+                      <Forward />
+                    </div>
+                    <h2 className="text-xl font-bold ">Share Documents</h2>
+                    <p>Share schedules and documents with your team easily.</p>
+                  </div>
+                  <div className="flex flex-col items-center space-y-2 rounded-lg border-gray-800 p-4">
+                    <div className="p-2">
+                      <Palmtree />
+                    </div>
+                    <h2 className="text-xl font-bold ">
+                      Vacation and Sick Days
+                    </h2>
+                    <p>
+                      Plan vacations for your staff and keep track of their sick
+                      days.
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center space-y-2 rounded-lg border-gray-800 p-4">
+                    <div className="p-2">
+                      <FileSearch />
+                    </div>
+                    <h2 className="text-xl font-bold ">
+                      Keep Track of Everything
+                    </h2>
+                    <p>
+                      Keep track of your staff's hours, notes, overtime, and
+                      more.
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center space-y-2 rounded-lg border-gray-800 p-4">
+                    <div className="p-2">
+                      <Cog />
+                    </div>
+                    <h2 className="text-xl font-bold ">
+                      Advanced Customization
+                    </h2>
+                    <p>
+                      Every business is different. Customize StaffHub to fit
+                      your needs.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-2xl text-white">
-            {hello ? hello.greeting : "Loading tRPC query..."}
-          </p>
-
-          <div className="flex flex-col items-center justify-center gap-4">
-            <p className="text-center text-2xl text-white">
-              {session && <span>Logged in as {session.user?.name}</span>}
-            </p>
-            <Link
-              href={session ? "/api/auth/signout" : "/api/auth/signin"}
-              className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-            >
-              {session ? "Sign out" : "Sign in"}
-            </Link>
           </div>
         </div>
+      </section>
+
+      <div className="flex space-x-1">
+        <SignInButton text="Get Started" />
+        <GetStartedButton />
       </div>
     </main>
   );

@@ -76,8 +76,6 @@
   }
   body {
     @apply bg-background text-foreground overflow-y-scroll;
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+    
   }
 }
