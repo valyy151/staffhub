@@ -35,7 +35,7 @@ export default async function Staff({
         <div className="flex items-center space-x-2">
           <Search />
           <Link
-            href={"/staff/new"}
+            href={"/staff/create"}
             className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
           >
             <UserPlus className="mr-2" /> New Employee

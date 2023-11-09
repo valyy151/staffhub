@@ -72,7 +72,7 @@ model VerificationToken {
 model Employee {
     id                 String              @id @default(cuid())
     name               String
-    email              String
+    email              String @unique
     address            String
     userId             String
     phoneNumber        String
