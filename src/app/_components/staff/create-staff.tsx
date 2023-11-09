@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/app/_components/ui/button";
+import { SubmitButton } from "./submit-button";
 import {
   Card,
   CardHeader,
@@ -10,13 +10,53 @@ import {
   CardFooter,
 } from "@/app/_components/ui/card";
 import { Input } from "@/app/_components/ui/input";
-import { createStaff } from "@/server/api/routers/actions/staff";
-import { useFormStatus } from "react-dom";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { api } from "@/trpc/react";
 
 export default function CreateStaffForm() {
-  const { pending } = useFormStatus();
+  const { toast } = useToast();
+
+  const createStaff = api.staff.create.useMutation({
+    onSuccess: () => {
+      toast({
+        title: "Staff created",
+        description: "The staff has been created successfully.",
+      });
+      setTimeout(() => {
+        location.href = "/staff";
+      }, 1000);
+    },
+
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "An error occurred while creating the staff.",
+      });
+    },
+  });
+
+  const handleSubmit = async (formData: FormData) => {
+    const { email, lastName, firstName } = Object.fromEntries(
+      formData.entries(),
+    );
+
+    if (!email || !lastName || !firstName)
+      return toast({
+        title: "Please fill out all fields.",
+      });
+
+    createStaff.mutateAsync({
+      email: email as string,
+      lastName: lastName as string,
+      firstName: firstName as string,
+    });
+  };
+
   return (
-    <form action={createStaff} className="mb-10 mt-20 flex-grow">
+    <form
+      action={(formData: FormData) => handleSubmit(formData)}
+      className="mb-10 mt-20 flex-grow"
+    >
       <Card className="mx-auto max-w-2xl">
         <CardHeader>
           <CardTitle>Create a New Employee</CardTitle>
@@ -69,14 +109,7 @@ export default function CreateStaffForm() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={pending}
-            aria-disabled={pending}
-          >
-            Create User
-          </Button>
+          <SubmitButton />
         </CardFooter>
       </Card>
     </form>

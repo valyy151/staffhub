@@ -29,6 +29,13 @@ export const staffRouter = createTRPCRouter({
             },
           ],
         },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          address: true,
+          phoneNumber: true,
+        },
         skip: input.page ? (input.page - 1) * 10 : 0,
         take: 10,
         orderBy: {
