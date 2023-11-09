@@ -1,11 +1,23 @@
-"use server";
+'use server'
 
-import { api } from "@/trpc/server";
+import { api } from '@/trpc/server'
 
-export async function createStaff(formData: FormData) {
-  await api.staff.create.mutate({
-    email: formData.get("email") as string,
-    lastName: formData.get("lastName") as string,
-    firstName: formData.get("firstName") as string,
-  });
+type StaffData = { email: string; lastName: string; firstName: string }
+
+export async function createStaff(prevState: any, formData: FormData) {
+	const { email, lastName, firstName } = Object.fromEntries(formData.entries()) as StaffData
+
+	try {
+		if (!email || !lastName || !firstName) {
+			throw new Error('Please fill out all fields')
+		}
+
+		await api.staff.create.mutate({ email, lastName, firstName })
+
+		return { message: 'Staff member created successfully' }
+	} catch (err) {
+		if (err instanceof Error) {
+			return { message: JSON.parse(err.message)[0].message }
+		}
+	}
 }

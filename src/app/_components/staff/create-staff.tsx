@@ -1,92 +1,48 @@
-"use client";
+'use client'
 
-import { SubmitButton } from "./submit-button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/app/_components/ui/card";
-import { Input } from "@/app/_components/ui/input";
-import { useToast } from "@/app/_components/ui/use-toast";
-import { api } from "@/trpc/react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/app/_components/ui/card'
+import { Input } from '@/app/_components/ui/input'
+import { useToast } from '@/app/_components/ui/use-toast'
+import { createStaff } from '@/server/api/routers/actions/staff'
+import { useFormState, useFormStatus } from 'react-dom'
+import { Button } from '../ui/button'
+import { useEffect } from 'react'
 
 export default function CreateStaffForm() {
-  const { toast } = useToast();
+	const { toast } = useToast()
+	const initialState = { message: null }
 
-  const createStaff = api.staff.create.useMutation({
-    onSuccess: () => {
-      toast({
-        title: "Staff created",
-        description: "The staff has been created successfully.",
-      });
-      setTimeout(() => {
-        location.href = "/staff";
-      }, 1000);
-    },
+	const [state, formAction] = useFormState(createStaff, initialState)
 
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "An error occurred while creating the staff.",
-      });
-    },
-  });
+	useEffect(() => {
+		state?.message && toast({ title: state?.message })
+	}, [state])
 
-  const handleSubmit = async (formData: FormData) => {
-    const { email, lastName, firstName } = Object.fromEntries(
-      formData.entries(),
-    );
+	return (
+		<form action={formAction} className='mb-10 mt-20 flex-grow'>
+			<Card className='mx-auto max-w-2xl'>
+				<CardHeader>
+					<CardTitle>Create a New Employee</CardTitle>
+					<CardDescription>Fill out the form below to create a new employee.</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div className='space-y-4'>
+						<div className='grid grid-cols-2 gap-4'>
+							<div className='space-y-2'>
+								<label htmlFor='firstName'>First name</label>
+								<Input id='firstName' name='firstName' placeholder='John' />
+							</div>
+							<div className='space-y-2'>
+								<label htmlFor='lastName'>Last name</label>
+								<Input id='lastName' name='lastName' placeholder='Doe' />
+							</div>
+						</div>
+						<div className='space-y-2'>
+							<label htmlFor='email'>Email</label>
+							<Input id='email' name='email' type='string' placeholder='johndoe@example.com' />
+						</div>
 
-    if (!email || !lastName || !firstName)
-      return toast({
-        title: "Please fill out all fields.",
-      });
-
-    createStaff.mutateAsync({
-      email: email as string,
-      lastName: lastName as string,
-      firstName: firstName as string,
-    });
-  };
-
-  return (
-    <form
-      action={(formData: FormData) => handleSubmit(formData)}
-      className="mb-10 mt-20 flex-grow"
-    >
-      <Card className="mx-auto max-w-2xl">
-        <CardHeader>
-          <CardTitle>Create a New Employee</CardTitle>
-          <CardDescription>
-            Fill out the form below to create a new employee.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label htmlFor="firstName">First name</label>
-                <Input id="firstName" name="firstName" placeholder="John" />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="lastName">Last name</label>
-                <Input id="lastName" name="lastName" placeholder="Doe" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="email">Email</label>
-              <Input
-                id="email"
-                name="email"
-                placeholder="johndoe@example.com"
-                type="email"
-              />
-            </div>
-
-            {/* {roles?.length! > 0 && (
+						{/* {roles?.length! > 0 && (
             <div className="space-y-2">
               <label htmlFor="role">Role</label>
               <Select onValueChange={(value) => setRole(value)}>
@@ -106,12 +62,21 @@ export default function CreateStaffForm() {
               </Select>
             </div>
           )} */}
-          </div>
-        </CardContent>
-        <CardFooter>
-          <SubmitButton />
-        </CardFooter>
-      </Card>
-    </form>
-  );
+					</div>
+				</CardContent>
+				<CardFooter>
+					<SubmitButton />
+				</CardFooter>
+			</Card>
+		</form>
+	)
+}
+
+function SubmitButton() {
+	const { pending } = useFormStatus()
+	return (
+		<Button type='submit' className='w-full' disabled={pending} aria-disabled={pending}>
+			Create User
+		</Button>
+	)
 }
