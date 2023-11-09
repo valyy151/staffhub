@@ -15,7 +15,9 @@ export default function CreateStaffForm() {
 	const [state, formAction] = useFormState(createStaff, initialState)
 
 	useEffect(() => {
-		state?.message && toast({ title: state?.message })
+		if (state?.message) {
+			toast({ title: state?.message })
+		}
 	}, [state])
 
 	return (

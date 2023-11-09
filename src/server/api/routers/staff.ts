@@ -2,7 +2,6 @@ import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { db } from '@/server/db'
-import { redirect } from 'next/navigation'
 
 export const staffRouter = createTRPCRouter({
 	getStaffMembers: protectedProcedure
@@ -73,4 +72,17 @@ export const staffRouter = createTRPCRouter({
 				},
 			})
 		}),
+
+	getStaffMember: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		return await ctx.db.employee.findUnique({
+			where: { id, userId: ctx.session.user.id },
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				address: true,
+				phoneNumber: true,
+			},
+		})
+	}),
 })

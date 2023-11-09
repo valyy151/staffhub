@@ -14,6 +14,7 @@ export default async function Staff({ searchParams }: { searchParams?: { query?:
 		query,
 		page: currentPage,
 	})
+
 	const numberOfStaff = await api.staff.getNumberOfStaff.query()
 
 	const totalPages = Math.ceil(numberOfStaff / 10)
