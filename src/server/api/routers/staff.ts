@@ -4,7 +4,7 @@ import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { db } from '@/server/db'
 
 export const staffRouter = createTRPCRouter({
-	getStaffMembers: protectedProcedure
+	getStaff: protectedProcedure
 		.input(
 			z.object({
 				page: z.number().optional(),
@@ -82,6 +82,25 @@ export const staffRouter = createTRPCRouter({
 				email: true,
 				address: true,
 				phoneNumber: true,
+				notes: {
+					take: 3,
+					orderBy: { createdAt: 'desc' },
+					select: { id: true, content: true, createdAt: true },
+				},
+			},
+		})
+	}),
+
+	getStaffNotes: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		return await ctx.db.employee.findUnique({
+			where: { id, userId: ctx.session.user.id },
+			select: {
+				id: true,
+				name: true,
+				notes: {
+					orderBy: { createdAt: 'desc' },
+					select: { id: true, content: true, createdAt: true },
+				},
 			},
 		})
 	}),

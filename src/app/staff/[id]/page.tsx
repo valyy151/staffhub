@@ -39,7 +39,7 @@ export default async function StaffProfile({ params }: { params: { id: string } 
 						<CardTitle>Recent Notes</CardTitle>
 					</CardHeader>
 					<CardContent>
-						<CardDescription>Notes go here</CardDescription>
+						<CardDescription>{employee?.notes.length! > 0 ? employee?.notes.map((note) => <span key={note.id}>{note.content}</span>) : <span> 'No notes'</span>}</CardDescription>
 					</CardContent>
 				</Card>
 

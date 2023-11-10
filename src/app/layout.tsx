@@ -4,11 +4,11 @@ import { Inter } from 'next/font/google'
 import { cookies } from 'next/headers'
 
 import { TRPCReactProvider } from '@/trpc/react'
-import Navbar from './_components/Navbar'
 import { ThemeProvider } from './_components/theme-provider'
 import { Toaster } from '@/src/app/_components/ui/toaster'
 
 import NextTopLoader from 'nextjs-toploader'
+import Navbar from './_components/navbar'
 
 const inter = Inter({
 	subsets: ['latin'],
