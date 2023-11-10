@@ -15,10 +15,6 @@ export default function StaffProfileLayout({ children }: { children: React.React
 						<BarChart3 />
 						<span className='text-sm font-medium'>Overview</span>
 					</Link>
-					<Link href={`/staff/${id}/personal`} className={`flex w-full items-center space-x-2 rounded-lg px-2 py-2 hover:bg-accent ${path.endsWith('personal') && 'bg-secondary'}`}>
-						<User2 />
-						<span className='text-sm font-medium'>Personal Info</span>
-					</Link>
 					<Link href={`/staff/${id}/notes`} className={`flex w-full items-center space-x-2 rounded-lg px-2 py-2 hover:bg-accent ${path.endsWith('notes') && 'bg-secondary'}`}>
 						<ClipboardList />
 						<span className='text-sm font-medium'>Notes</span>

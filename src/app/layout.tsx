@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<TRPCReactProvider cookies={cookies().toString()}>
 					<ThemeProvider attribute='class'>
 						<Navbar />
-						<NextTopLoader />
+						<NextTopLoader showSpinner={false} />
 						{children}
 						<Toaster />
 					</ThemeProvider>

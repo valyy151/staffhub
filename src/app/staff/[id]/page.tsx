@@ -1,6 +1,6 @@
-import { Card, CardTitle, CardContent, CardDescription, CardFooter, CardHeader } from '@/app/_components/ui/card'
 import { api } from '@/trpc/server'
 import { PhoneIcon, MailIcon, HomeIcon } from 'lucide-react'
+import { Card, CardTitle, CardContent, CardDescription, CardFooter, CardHeader } from '@/app/_components/ui/card'
 
 export default async function StaffProfile({ params }: { params: { id: string } }) {
 	const employee = await api.staff.getStaffMember.query({ id: params.id })
@@ -8,7 +8,7 @@ export default async function StaffProfile({ params }: { params: { id: string } 
 		<div>
 			<h1 className='text-3xl font-bold px-1'>{employee?.name}</h1>
 			<section className='mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-				<Card>
+				<Card className='min-w-[24rem]'>
 					<CardHeader>
 						<CardTitle>Personal Info</CardTitle>
 					</CardHeader>

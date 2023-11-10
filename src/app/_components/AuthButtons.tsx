@@ -1,21 +1,17 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
-import { signIn, signOut } from "next-auth/react";
+import Link from 'next/link'
+import { Button, buttonVariants } from './ui/button'
+import { signIn } from 'next-auth/react'
 
 export function SignInButton({ text }: { text?: string }) {
-  return <Button onClick={() => signIn("google")}>{text ?? "Sign In"}</Button>;
+	return <Button onClick={() => signIn('google')}>{text ?? 'Sign In'}</Button>
 }
 
 export function GetStartedButton() {
-  return (
-    <Link
-      target="_blank"
-      href="https://staffhub-docs.vercel.app"
-      className={buttonVariants({ variant: "secondary" })}
-    >
-      How to use
-    </Link>
-  );
+	return (
+		<Link target='_blank' href='https://staffhub-docs.vercel.app' className={buttonVariants({ variant: 'secondary' })}>
+			How to use
+		</Link>
+	)
 }

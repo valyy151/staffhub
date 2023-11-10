@@ -1,9 +1,9 @@
-import { UserPlus } from 'lucide-react'
 import Link from 'next/link'
+import { api } from '@/trpc/server'
+import { UserPlus } from 'lucide-react'
 import Search from '@/app/_components/staff/search'
 import Heading from '@/app/_components/ui/heading'
 import Pagination from '@/app/_components/ui/pagination'
-import { api } from '@/trpc/server'
 import { StaffTable } from '../_components/staff/staff-table'
 
 export default async function Staff({ searchParams }: { searchParams?: { query?: string; page?: string } }) {
