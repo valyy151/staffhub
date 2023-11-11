@@ -1,3 +1,3 @@
-export default async function StaffPreferences() {
+export default function StaffPreferences() {
 	return <div>Staff Preferences</div>
 }

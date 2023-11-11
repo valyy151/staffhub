@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 
 import { TRPCReactProvider } from '@/trpc/react'
 import { ThemeProvider } from './_components/theme-provider'
-import { Toaster } from '@/src/app/_components/ui/toaster'
+import { Toaster } from '@/app/_components/ui/toaster'
 
 import NextTopLoader from 'nextjs-toploader'
 import Navbar from './_components/navbar'

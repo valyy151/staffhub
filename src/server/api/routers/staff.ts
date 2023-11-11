@@ -2,9 +2,10 @@ import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { db } from '@/server/db'
+import { getMonth } from '@/app/lib/utils'
 
 export const staffRouter = createTRPCRouter({
-	getStaff: protectedProcedure
+	get: protectedProcedure
 		.input(
 			z.object({
 				page: z.number().optional(),
@@ -62,7 +63,7 @@ export const staffRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ input: { firstName, lastName, email, address, phoneNumber }, ctx }) => {
-			await ctx.db.employee.create({
+			return await ctx.db.employee.create({
 				data: {
 					email,
 					address: address,
@@ -73,7 +74,9 @@ export const staffRouter = createTRPCRouter({
 			})
 		}),
 
-	getStaffMember: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+	getId: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		const [startOfMonth, endOfMonth] = getMonth(new Date())
+
 		return await ctx.db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },
 			select: {
@@ -87,11 +90,18 @@ export const staffRouter = createTRPCRouter({
 					orderBy: { createdAt: 'desc' },
 					select: { id: true, content: true, createdAt: true },
 				},
+				vacations: { orderBy: { start: 'desc' }, select: { id: true, start: true, end: true } },
+				sickLeaves: { orderBy: { start: 'desc' }, select: { id: true, start: true, end: true } },
+				shifts: {
+					orderBy: { start: 'desc' },
+					select: { start: true, end: true },
+					where: { start: { gte: startOfMonth, lte: endOfMonth } },
+				},
 			},
 		})
 	}),
 
-	getStaffNotes: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+	getNotes: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
 		return await ctx.db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },
 			select: {
@@ -103,5 +113,9 @@ export const staffRouter = createTRPCRouter({
 				},
 			},
 		})
+	}),
+
+	delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input: { id }, ctx }) => {
+		return await ctx.db.employee.delete({ where: { id, userId: ctx.session.user.id } })
 	}),
 })

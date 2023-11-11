@@ -1,27 +1,54 @@
 'use client'
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/app/_components/ui/card'
+import { useState } from 'react'
+import { api } from '@/trpc/react'
+import { Button } from '../ui/button'
+import { useRouter } from 'next/navigation'
 import { Input } from '@/app/_components/ui/input'
 import { useToast } from '@/app/_components/ui/use-toast'
-import { createStaff } from '@/server/api/routers/actions/staff'
-import { useFormState, useFormStatus } from 'react-dom'
-import { Button } from '../ui/button'
-import { useEffect } from 'react'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/app/_components/ui/card'
 
 export default function CreateStaffForm() {
+	const [email, setEmail] = useState('')
+	const [lastName, setLastName] = useState('')
+	const [firstName, setFirstName] = useState('')
+
 	const { toast } = useToast()
-	const initialState = { message: null }
 
-	const [state, formAction] = useFormState(createStaff, initialState)
+	const router = useRouter()
 
-	useEffect(() => {
-		if (state?.message) {
-			toast({ title: state?.message })
+	const createStaff = api.staff.create.useMutation({
+		onSettled(_, error) {
+			if (error) {
+				toast({
+					title: 'Error Creating Staff Member',
+					variant: 'destructive',
+					description: JSON.parse(error.message)[0].message ?? 'Unknown error',
+				})
+			} else {
+				router.push('/staff')
+				router.refresh()
+				toast({ title: 'Staff Member Created' })
+			}
+		},
+	})
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		if (!email || !firstName || !lastName) {
+			return toast({
+				title: 'Please fill out all fields',
+				variant: 'destructive',
+			})
 		}
-	}, [state])
+
+		createStaff.mutate({ email, firstName, lastName })
+	}
 
 	return (
-		<form action={formAction} className='mb-10 mt-20 flex-grow'>
+		<form
+			onSubmit={handleSubmit}
+			className='mb-10 mt-20 flex-grow'>
 			<Card className='mx-auto max-w-2xl'>
 				<CardHeader>
 					<CardTitle>Create a New Employee</CardTitle>
@@ -32,16 +59,36 @@ export default function CreateStaffForm() {
 						<div className='grid grid-cols-2 gap-4'>
 							<div className='space-y-2'>
 								<label htmlFor='firstName'>First name</label>
-								<Input id='firstName' name='firstName' placeholder='John' />
+								<Input
+									autoFocus
+									id='firstName'
+									name='firstName'
+									value={firstName}
+									placeholder='John'
+									onChange={(e) => setFirstName(e.target.value)}
+								/>
 							</div>
 							<div className='space-y-2'>
 								<label htmlFor='lastName'>Last name</label>
-								<Input id='lastName' name='lastName' placeholder='Doe' />
+								<Input
+									id='lastName'
+									name='lastName'
+									value={lastName}
+									placeholder='Doe'
+									onChange={(e) => setLastName(e.target.value)}
+								/>
 							</div>
 						</div>
 						<div className='space-y-2'>
 							<label htmlFor='email'>Email</label>
-							<Input id='email' name='email' type='string' placeholder='johndoe@example.com' />
+							<Input
+								id='email'
+								name='email'
+								type='string'
+								value={email}
+								placeholder='johndoe@example.com'
+								onChange={(e) => setEmail(e.target.value)}
+							/>
 						</div>
 
 						{/* {roles?.length! > 0 && (
@@ -67,18 +114,15 @@ export default function CreateStaffForm() {
 					</div>
 				</CardContent>
 				<CardFooter>
-					<SubmitButton />
+					<Button
+						type='submit'
+						className='w-full'
+						disabled={createStaff.isLoading}
+						aria-disabled={createStaff.isLoading}>
+						Create User
+					</Button>
 				</CardFooter>
 			</Card>
 		</form>
-	)
-}
-
-function SubmitButton() {
-	const { pending } = useFormStatus()
-	return (
-		<Button type='submit' className='w-full' disabled={pending} aria-disabled={pending}>
-			Create User
-		</Button>
 	)
 }

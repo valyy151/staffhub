@@ -17,7 +17,11 @@ export function StaffTable({ staff }: { staff: StaffOutput }) {
 			</TableHeader>
 			<TableBody>
 				{staff.map((employee) => (
-					<TableRow key={employee.id} onMouseOver={() => router.prefetch(`/staff/${employee.id}`)} onClick={() => router.push(`/staff/${employee.id}`)} className='cursor-pointer'>
+					<TableRow
+						key={employee.id}
+						onClick={() => router.push(`/staff/${employee.id}`)}
+						onMouseOver={() => router.prefetch(`/staff/${employee.id}`)}
+						className='cursor-pointer'>
 						<TableCell className='cursor-pointer whitespace-nowrap font-medium'>{employee.name}</TableCell>
 
 						<TableCell className='cursor-pointer whitespace-nowrap'>{employee.phoneNumber}</TableCell>

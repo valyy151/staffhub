@@ -85,14 +85,24 @@ export default async function Navbar() {
 					{session?.user ? (
 						<NavigationMenuItem>
 							<NavigationMenuTrigger className='flex items-center'>
-								<Image width={22} height={22} alt={session?.user.name!!} src={session?.user.image!!} className='mr-2 rounded-full' />
+								<Image
+									width={22}
+									height={22}
+									alt={session?.user.name!}
+									src={session?.user.image!}
+									className='mr-2 rounded-full'
+								/>
 								<span>Settings</span>
 							</NavigationMenuTrigger>
 
 							<NavigationMenuContent>
 								<ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
 									{links.map((link) => (
-										<ListItem key={link.title} href={link.href} title={link.title} className={link.href === '/api/auth/signout' ? 'hover:text-rose-500' : ''}>
+										<ListItem
+											key={link.title}
+											href={link.href}
+											title={link.title}
+											className={link.href === '/api/auth/signout' ? 'hover:text-rose-500' : ''}>
 											{link.description}
 										</ListItem>
 									))}

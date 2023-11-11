@@ -10,7 +10,7 @@ export default async function Staff({ searchParams }: { searchParams?: { query?:
 	const query = searchParams?.query || ''
 	const currentPage = Number(searchParams?.page) || 1
 
-	const staff = await api.staff.getStaff.query({
+	const staff = await api.staff.get.query({
 		query,
 		page: currentPage,
 	})

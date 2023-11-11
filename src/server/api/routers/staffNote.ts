@@ -12,7 +12,7 @@ export const staffNoteRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ input, ctx }) => {
-			await db.employeeNote.create({
+			return await db.employeeNote.create({
 				data: {
 					content: input.content,
 					userId: ctx.session.user.id,

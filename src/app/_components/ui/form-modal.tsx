@@ -9,17 +9,18 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-} from '@/src/app/_components/ui/alert-dialog'
+} from '@/app/_components/ui/alert-dialog'
 
 type ModalProps = {
 	text: string
+	pending: boolean
 	heading?: string
 	showModal: boolean
 	cancel: MouseEventHandler<HTMLButtonElement>
 	submit: MouseEventHandler<HTMLButtonElement>
 }
 
-export default function FormModal({ text, submit, cancel }: ModalProps) {
+export default function FormModal({ text, pending, submit, cancel }: ModalProps) {
 	return (
 		<AlertDialog open>
 			<AlertDialogContent>
@@ -29,7 +30,12 @@ export default function FormModal({ text, submit, cancel }: ModalProps) {
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel onClick={cancel}>Cancel</AlertDialogCancel>
-					<AlertDialogAction onClick={submit}>Continue</AlertDialogAction>
+					<AlertDialogAction
+						onClick={submit}
+						disabled={pending}
+						aria-disabled={pending}>
+						Continue
+					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

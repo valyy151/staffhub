@@ -1,46 +1,43 @@
 'use client'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/src/app/_components/ui/alert-dialog'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/app/_components/ui/alert-dialog'
 import { api } from '@/trpc/react'
 import { useState } from 'react'
 import { useToast } from './use-toast'
 import { Button } from './button'
 import { ScrollTextIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 export default function CreateNote({ employeeId }: { employeeId: string }) {
 	const [content, setContent] = useState('')
 	const [showAddNote, setShowAddNote] = useState(false)
 
-	const utils = api.useUtils()
+	const router = useRouter()
 
 	const { toast } = useToast()
 
 	const createNoteMutation = api.staffNote.create.useMutation({
 		onSuccess: () => {
 			toast({
-				title: 'Note created successfully.',
+				title: 'Note created successfully',
 			})
 			setContent('')
+			router.refresh()
 			setShowAddNote(false)
-			utils.staffNote.invalidate()
 		},
 
 		onError: () => {
 			toast({
-				title: 'There was a problem creating the note.',
+				title: 'There was a problem creating the note',
 				variant: 'destructive',
 			})
 		},
 	})
 
-	const handleSubmit = () => {
-		createNoteMutation.mutate({
-			content,
-			employeeId,
-		})
-	}
 	return (
 		<>
-			<Button onClick={() => setShowAddNote(true)} className='mt-2 w-fit'>
+			<Button
+				onClick={() => setShowAddNote(true)}
+				className='mt-2 w-fit'>
 				<ScrollTextIcon className='mr-2' />
 				New Note
 			</Button>
@@ -60,7 +57,12 @@ export default function CreateNote({ employeeId }: { employeeId: string }) {
 						/>
 						<AlertDialogFooter>
 							<AlertDialogCancel onClick={() => setShowAddNote(false)}>Cancel</AlertDialogCancel>
-							<AlertDialogAction onClick={handleSubmit}>Continue</AlertDialogAction>
+							<AlertDialogAction
+								disabled={createNoteMutation.isLoading}
+								aria-disabled={createNoteMutation.isLoading}
+								onClick={() => createNoteMutation.mutate({ content, employeeId })}>
+								Continue
+							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>
