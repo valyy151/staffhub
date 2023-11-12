@@ -6,7 +6,7 @@ import { api } from '@/trpc/react'
 import { Trash2Icon, MoreVerticalIcon } from 'lucide-react'
 import FormModal from '../ui/form-modal'
 import { useRouter } from 'next/navigation'
-import { Card, CardTitle, CardDescription, CardHeader } from '@/app/_components/ui/card'
+import { Card, CardTitle, CardHeader } from '@/app/_components/ui/card'
 import { howManyDays } from '@/app/lib/utils'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu'
 
@@ -34,9 +34,9 @@ export default function SickLeave({ sickLeave }: { sickLeave: Absence }) {
 	})
 
 	return (
-		<Card>
+		<Card className='mb-4'>
 			<CardHeader className='px-4 py-2'>
-				<CardDescription className='text-md flex flex-col'>
+				<div className='text-md flex flex-col text-muted-foreground'>
 					<div className='flex justify-between items-center pb-6'>
 						<CardTitle className='text-lg'>
 							Total: {howManyDays(sickLeave) + 1} Sick {howManyDays(sickLeave) + 1 === 1 ? 'Day' : 'Days'}
@@ -76,7 +76,7 @@ export default function SickLeave({ sickLeave }: { sickLeave: Absence }) {
 							})}
 						</span>
 					</span>
-				</CardDescription>
+				</div>
 			</CardHeader>
 
 			{showModal && (

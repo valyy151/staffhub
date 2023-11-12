@@ -95,7 +95,7 @@ export default function ProfileCards({ employee }: { employee: StaffIdOutput }) 
 				<CardContent>
 					<CardDescription className='flex flex-col space-y-1'>
 						<span>Sick Days: {sickDays}</span>
-						<span>Total Hours: {hours}</span>
+						<span>Total Work Hours: {hours}</span>
 					</CardDescription>
 				</CardContent>
 			</Card>
