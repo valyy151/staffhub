@@ -10,24 +10,28 @@ import { Card, CardTitle, CardHeader } from '@/app/_components/ui/card'
 import { howManyDays } from '@/app/lib/utils'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu'
 
-export default function SickLeave({ sickLeave }: { sickLeave: Absence }) {
+export default function Absence({ absence, type }: { absence: Absence; type: 'vacation' | 'sick' }) {
 	const [showModal, setShowModal] = useState<boolean>(false)
 
 	const { toast } = useToast()
 
 	const router = useRouter()
 
-	const deleteSickLeave = api.sickLeave.delete.useMutation({
+	const mutation = type === 'vacation' ? api.vacation.delete : api.sickLeave.delete
+
+	const toastText = type === 'vacation' ? 'Vacation' : 'Sick Leave'
+
+	const deleteAbsence = mutation.useMutation({
 		onSuccess: () => {
 			toast({
-				title: 'Sick leave deleted successfully.',
+				title: `${toastText} deleted`,
 			})
 			setShowModal(false)
 			router.refresh()
 		},
 		onError: () => {
 			toast({
-				title: 'There was a problem deleting the sick leave.',
+				title: `Error deleting ${toastText}`,
 				variant: 'destructive',
 			})
 		},
@@ -39,7 +43,7 @@ export default function SickLeave({ sickLeave }: { sickLeave: Absence }) {
 				<div className='text-md flex flex-col text-muted-foreground'>
 					<div className='flex justify-between items-center pb-6'>
 						<CardTitle className='text-lg'>
-							Total: {howManyDays(sickLeave) + 1} Sick {howManyDays(sickLeave) + 1 === 1 ? 'Day' : 'Days'}
+							Amount: {howManyDays(absence) + 1} {type === 'vacation' ? 'Vacation' : 'Sick'} {howManyDays(absence) + 1 === 1 ? 'Day' : 'Days'}
 						</CardTitle>
 						<DropdownMenu>
 							<DropdownMenuTrigger className='focus-visible:outline-none'>
@@ -61,7 +65,7 @@ export default function SickLeave({ sickLeave }: { sickLeave: Absence }) {
 					<span className='flex justify-between'>
 						<span>
 							Start:{' '}
-							{new Date(Number(sickLeave.start)).toLocaleDateString('en-GB', {
+							{new Date(Number(absence.start)).toLocaleDateString('en-GB', {
 								day: 'numeric',
 								month: 'long',
 								year: 'numeric',
@@ -69,7 +73,7 @@ export default function SickLeave({ sickLeave }: { sickLeave: Absence }) {
 						</span>
 						<span>
 							End:{' '}
-							{new Date(Number(sickLeave.end)).toLocaleDateString('en-GB', {
+							{new Date(Number(absence.end)).toLocaleDateString('en-GB', {
 								day: 'numeric',
 								month: 'long',
 								year: 'numeric',
@@ -82,11 +86,11 @@ export default function SickLeave({ sickLeave }: { sickLeave: Absence }) {
 			{showModal && (
 				<FormModal
 					showModal={showModal}
-					heading={'Delete sick leave?'}
 					cancel={() => setShowModal(false)}
-					pending={deleteSickLeave.isLoading}
-					text={'Are you sure you want to delete this sick leave?'}
-					submit={() => deleteSickLeave.mutate({ id: sickLeave.id })}
+					pending={deleteAbsence.isLoading}
+					submit={() => deleteAbsence.mutate({ id: absence.id })}
+					heading={`Delete ${type === 'vacation' ? 'vacation' : 'sick Leave'}?`}
+					text={`Are you sure you want to delete this ${type === 'vacation' ? 'vacation' : 'sick leave'}?`}
 				/>
 			)}
 		</Card>

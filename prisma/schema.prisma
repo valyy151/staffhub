@@ -82,7 +82,6 @@ model Employee {
     sickLeaves         SickLeave[]
     notes              EmployeeNote[]
     schedulePreference SchedulePreference?
-    vacationDays       Int                 @default(25)
     user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@index([userId])
@@ -91,7 +90,6 @@ model Employee {
 model EmployeeNote {
     id         String   @id @default(cuid())
     userId     String
-    //content is a very long text
     content    String   @db.VarChar(255)  
     employeeId String
     createdAt  DateTime @default(now())

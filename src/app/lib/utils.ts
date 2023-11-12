@@ -109,18 +109,22 @@ export const getMonth = (date: Date) => {
 	return [startOfMonth, endOfMonth]
 }
 
-export const checkSickLeaves = (sickLeaves: Absence[]): [Absence[], Absence] => {
+export const checkAbsences = (absences: Absence[]): [Absence[], Absence | undefined, Absence[]] => {
 	const today = new Date().getTime()
 
-	const currentSickLeave = sickLeaves.find((sickLeave) => {
-		return sickLeave.start < BigInt(today) && sickLeave.end > BigInt(today)
+	const currentAbsence = absences.find((absence) => {
+		return absence.start < BigInt(today) && absence.end > BigInt(today)
 	})
 
-	const pastSickLeaves = sickLeaves.filter((sickLeave) => {
-		return sickLeave.end < BigInt(today)
+	const pastAbsences = absences.filter((absence) => {
+		return absence.end < BigInt(today)
 	})
 
-	return [pastSickLeaves, currentSickLeave!]
+	const upcomingAbsences = absences.filter((absence) => {
+		return absence.start > BigInt(today)
+	})
+
+	return [pastAbsences, currentAbsence, upcomingAbsences]
 }
 
 export const howManyDays = (sickLeave: Absence) => {

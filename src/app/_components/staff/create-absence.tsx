@@ -11,7 +11,7 @@ import { api } from '@/trpc/react'
 import { useToast } from '../ui/use-toast'
 import { useRouter } from 'next/navigation'
 
-export default function NewSickLeave({ employee }: { employee: StaffIdOutput }) {
+export default function NewAbsence({ employee, type }: { employee: StaffIdOutput; type: 'vacation' | 'sick' }) {
 	const [showCreate, setShowCreate] = useState(false)
 
 	const [date, setDate] = useState<DateRange | undefined>({
@@ -23,15 +23,24 @@ export default function NewSickLeave({ employee }: { employee: StaffIdOutput }) 
 
 	const router = useRouter()
 
-	const createSickLeave = api.sickLeave.create.useMutation({
+	const mutation = type === 'vacation' ? api.vacation.create : api.sickLeave.create
+
+	const toastText = type === 'vacation' ? 'Vacation' : 'Sick Leave'
+
+	const createAbsence = mutation.useMutation({
 		onSuccess: () => {
-			toast({ title: 'Sick leave created' })
+			toast({
+				title: `${toastText} created`,
+			})
 			setShowCreate(false)
 			router.refresh()
 		},
 
 		onError: () => {
-			toast({ title: 'Error creating sick leave' })
+			toast({
+				title: `Error creating ${toastText}`,
+				variant: 'destructive',
+			})
 		},
 	})
 
@@ -44,14 +53,14 @@ export default function NewSickLeave({ employee }: { employee: StaffIdOutput }) 
 					size={20}
 					className='mr-2'
 				/>
-				New Sick Leave
+				New {type === 'vacation' ? 'Vacation' : 'Sick Leave'}
 			</Button>
 
 			{showCreate && (
 				<AlertDialog open>
 					<AlertDialogContent>
 						<AlertDialogHeader>
-							<AlertDialogTitle>New Sick Leave</AlertDialogTitle>
+							<AlertDialogTitle>New {type === 'vacation' ? 'Vacation' : 'Sick Leave'} </AlertDialogTitle>
 							<AlertDialogDescription>
 								Days planned: <span>{differenceInDays(date?.to!, date?.from!) + 1 > 0 ? differenceInDays(date?.to!, date?.from!) + 1 : 0}</span>
 							</AlertDialogDescription>
@@ -65,14 +74,14 @@ export default function NewSickLeave({ employee }: { employee: StaffIdOutput }) 
 							<AlertDialogCancel onClick={() => setShowCreate(false)}>Cancel</AlertDialogCancel>
 							<AlertDialogAction
 								onClick={() => {
-									createSickLeave.mutate({
+									createAbsence.mutate({
 										employeeId: employee?.id as string,
 										end: date?.to?.getTime() as number,
 										start: date?.from?.getTime() as number,
 									})
 								}}
-								disabled={createSickLeave.isLoading}
-								aria-disabled={createSickLeave.isLoading}>
+								disabled={createAbsence.isLoading}
+								aria-disabled={createAbsence.isLoading}>
 								Continue
 							</AlertDialogAction>
 						</AlertDialogFooter>

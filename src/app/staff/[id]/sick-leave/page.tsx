@@ -1,23 +1,29 @@
-import CreateSickLeave from '@/app/_components/staff/create-sick-leave'
-import SickLeave from '@/app/_components/staff/sick-leave'
+import CreateAbsence from '@/app/_components/staff/create-absence'
+import SickLeave from '@/app/_components/staff/absence'
 import Heading from '@/app/_components/ui/heading'
 import type { Absence } from '@/app/lib/types'
-import { checkSickLeaves } from '@/app/lib/utils'
+import { checkAbsences } from '@/app/lib/utils'
 import { api } from '@/trpc/server'
 import { HeartPulseIcon } from 'lucide-react'
-import CurrentSickLeave from '@/app/_components/staff/current-sick-leave'
+import CurrentAbsence from '@/app/_components/staff/current-absence'
 
 export default async function StaffSickLeave({ params }: { params: { id: string } }) {
 	const employee = await api.staff.getId.query({ id: params.id })
-	const [pastSickLeaves, currentSickLeave] = checkSickLeaves(employee?.sickLeaves as Absence[])
+	const [pastSickLeaves, currentSickLeave] = checkAbsences(employee?.sickLeaves as Absence[])
 	return (
 		<>
 			<div className='flex justify-between items-center'>
 				<Heading size={'xs'}>Sick Leaves for {employee?.name}</Heading>
-				<CreateSickLeave employee={employee} />
+				<CreateAbsence
+					type='sick'
+					employee={employee}
+				/>
 			</div>
 			{currentSickLeave ? (
-				<CurrentSickLeave sickLeave={currentSickLeave} />
+				<CurrentAbsence
+					absence={currentSickLeave}
+					type='sick'
+				/>
 			) : (
 				<div className='bg-green-500 rounded-md border text-white mt-4 p-2'>
 					<Heading
@@ -46,8 +52,9 @@ export default async function StaffSickLeave({ params }: { params: { id: string 
 
 					{pastSickLeaves?.map((sickLeave) => (
 						<SickLeave
+							type='sick'
 							key={sickLeave.id}
-							sickLeave={sickLeave}
+							absence={sickLeave}
 						/>
 					))}
 				</>

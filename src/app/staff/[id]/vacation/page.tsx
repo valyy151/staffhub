@@ -1,6 +1,112 @@
+import CreateAbsence from '@/app/_components/staff/create-absence'
+import CurrentAbsence from '@/app/_components/staff/current-absence'
+import Heading from '@/app/_components/ui/heading'
+import { Absence } from '@/app/lib/types'
+import { checkAbsences } from '@/app/lib/utils'
 import { api } from '@/trpc/server'
+import Vacation from '@/app/_components/staff/absence'
+import { PalmtreeIcon } from 'lucide-react'
 
 export default async function StaffVacation({ params }: { params: { id: string } }) {
 	const employee = await api.staff.getId.query({ id: params.id })
-	return <div>{employee?.name} Vacation</div>
+	const [pastVacations, currentVacation, upcomingVacations] = checkAbsences(employee?.vacations as Absence[])
+	return (
+		<>
+			<div className='flex justify-between items-center'>
+				<Heading size={'xs'}>Vacations for {employee?.name}</Heading>
+				<CreateAbsence
+					type='vacation'
+					employee={employee}
+				/>
+			</div>
+			{currentVacation ? (
+				<CurrentAbsence
+					type='vacation'
+					absence={currentVacation}
+				/>
+			) : (
+				<div className='bg-green-500 rounded-md border text-white mt-4 p-2'>
+					<Heading
+						size={'xxs'}
+						className='flex items-center'>
+						<PalmtreeIcon
+							size={42}
+							className='ml-1 mr-2 text-white'
+						/>
+						Currently not on vacation
+					</Heading>
+				</div>
+			)}
+
+			{upcomingVacations.length > 0 ? (
+				<>
+					<Heading
+						size={'xxs'}
+						className='mb-3 mt-12 flex items-center'>
+						<PalmtreeIcon
+							size={42}
+							className='ml-1 mr-2 text-green-400'
+						/>
+						Upcoming Vacations
+					</Heading>
+
+					{upcomingVacations?.map((vacation) => (
+						<Vacation
+							type='vacation'
+							key={vacation.id}
+							absence={vacation}
+						/>
+					))}
+				</>
+			) : (
+				<>
+					<Heading
+						size={'xxs'}
+						className='mb-3 mt-12 flex items-center'>
+						<PalmtreeIcon
+							size={42}
+							className='ml-1 mr-2 text-green-400'
+						/>
+						Upcoming Vacations
+					</Heading>
+					<p className='ml-14 mt-4'>No upcoming vacations</p>
+				</>
+			)}
+
+			{pastVacations.length > 0 ? (
+				<>
+					<Heading
+						size={'xxs'}
+						className='mb-3 mt-12 flex items-center'>
+						<PalmtreeIcon
+							size={42}
+							className='ml-1 mr-2 text-gray-400'
+						/>
+						Previous Vacations
+					</Heading>
+
+					{pastVacations?.map((vacation) => (
+						<Vacation
+							type='vacation'
+							key={vacation.id}
+							absence={vacation}
+						/>
+					))}
+				</>
+			) : (
+				<>
+					<Heading
+						size={'xxs'}
+						className='mb-3 mt-12 flex items-center'>
+						<PalmtreeIcon
+							size={42}
+							className='ml-1 mr-2 text-gray-400'
+						/>
+						Past Vacations
+					</Heading>
+					<p className='ml-14 mt-4'>No past vacations</p>
+				</>
+			)}
+		</>
+	)
 }
