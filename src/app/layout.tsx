@@ -3,11 +3,12 @@ import '@/styles/globals.css'
 import { Inter } from 'next/font/google'
 import { cookies } from 'next/headers'
 
+import NextTopLoader from 'nextjs-toploader'
+
 import { TRPCReactProvider } from '@/trpc/react'
 import { ThemeProvider } from './_components/theme-provider'
 import { Toaster } from '@/app/_components/ui/toaster'
 
-import NextTopLoader from 'nextjs-toploader'
 import Navbar from './_components/navbar'
 
 const inter = Inter({

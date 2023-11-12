@@ -25,17 +25,13 @@ export default function NewSickLeave({ employee }: { employee: StaffIdOutput }) 
 
 	const createSickLeave = api.sickLeave.create.useMutation({
 		onSuccess: () => {
-			toast({
-				title: 'Sick leave created',
-			})
+			toast({ title: 'Sick leave created' })
 			setShowCreate(false)
 			router.refresh()
 		},
 
 		onError: () => {
-			toast({
-				title: 'Error creating sick leave',
-			})
+			toast({ title: 'Error creating sick leave' })
 		},
 	})
 

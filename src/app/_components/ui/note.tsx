@@ -6,6 +6,7 @@ import { useToast } from './use-toast'
 import { api } from '@/trpc/react'
 import FormModal from './form-modal'
 import { useRouter } from 'next/navigation'
+import { Card, CardDescription } from './card'
 
 type NoteProps = {
 	employeeId: string
@@ -35,11 +36,11 @@ export default function Note({ note, employeeId }: NoteProps) {
 	})
 
 	return (
-		<div className='pb-2 flex w-full flex-col items-start'>
-			<div className='flex w-full min-w-[28rem] flex-col rounded-md border py-1 shadow bg-card'>
+		<Card className='mb-2'>
+			<CardDescription className='flex w-full min-w-[28rem] flex-col rounded-md border py-1 shadow bg-card'>
 				<p className='px-2 text-justify font-medium'>{note.content}</p>
 
-				<p className='border-b px-2 pb-2 text-sm font-light'>
+				<p className='border-b px-2 pb-2 text-xs font-light'>
 					Added{' '}
 					{note.createdAt.toLocaleString('en-GB', {
 						day: 'numeric',
@@ -64,7 +65,7 @@ export default function Note({ note, employeeId }: NoteProps) {
 					}{' '}
 					Remove
 				</Button>
-			</div>
+			</CardDescription>
 			{showModal && (
 				<FormModal
 					showModal={showModal}
@@ -75,6 +76,6 @@ export default function Note({ note, employeeId }: NoteProps) {
 					submit={() => deleteNoteMutation.mutate({ employeeId, id: note.id })}
 				/>
 			)}
-		</div>
+		</Card>
 	)
 }

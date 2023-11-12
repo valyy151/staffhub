@@ -115,6 +115,17 @@ export const staffRouter = createTRPCRouter({
 		})
 	}),
 
+	getRoles: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		return await ctx.db.employee.findUnique({
+			where: { id, userId: ctx.session.user.id },
+			select: {
+				id: true,
+				name: true,
+				roles: { select: { id: true, name: true }, orderBy: { name: 'asc' } },
+			},
+		})
+	}),
+
 	delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input: { id }, ctx }) => {
 		return await ctx.db.employee.delete({ where: { id, userId: ctx.session.user.id } })
 	}),

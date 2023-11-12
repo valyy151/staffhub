@@ -1,4 +1,4 @@
-import NewSickLeave from '@/app/_components/staff/new-sick-leave'
+import CreateSickLeave from '@/app/_components/staff/create-sick-leave'
 import SickLeave from '@/app/_components/staff/sick-leave'
 import Heading from '@/app/_components/ui/heading'
 import type { Absence } from '@/app/lib/types'
@@ -14,7 +14,7 @@ export default async function StaffSickLeave({ params }: { params: { id: string 
 		<>
 			<div className='flex justify-between items-center'>
 				<Heading size={'xs'}>Sick Leaves for {employee?.name}</Heading>
-				<NewSickLeave employee={employee} />
+				<CreateSickLeave employee={employee} />
 			</div>
 			{currentSickLeave ? (
 				<CurrentSickLeave sickLeave={currentSickLeave} />

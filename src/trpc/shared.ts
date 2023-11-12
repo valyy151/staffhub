@@ -32,3 +32,5 @@ export type RouterOutputs = inferRouterOutputs<AppRouter>
 export type StaffOutput = RouterOutputs['staff']['get']
 
 export type StaffIdOutput = RouterOutputs['staff']['getId']
+
+export type StaffRolesOutput = RouterOutputs['staff']['getRoles']
