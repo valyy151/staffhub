@@ -1,6 +1,7 @@
 import { createTRPCRouter } from '@/server/api/trpc'
 import { staffRouter } from '@/server/api/routers/staff'
 import { staffNoteRouter } from '@/server/api/routers/staffNote'
+import { sickLeaveRouter } from './routers/sickLeave'
 
 /**
  * This is the primary router for your server.
@@ -9,6 +10,7 @@ import { staffNoteRouter } from '@/server/api/routers/staffNote'
  */
 export const appRouter = createTRPCRouter({
 	staff: staffRouter,
+	sickLeave: sickLeaveRouter,
 	staffNote: staffNoteRouter,
 })
 

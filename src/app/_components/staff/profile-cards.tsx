@@ -1,8 +1,8 @@
-import { Absence, Shift } from '@/app/lib/types'
+import type { Absence, Shift } from '@/app/lib/types'
 import { PhoneIcon, MailIcon, HomeIcon } from 'lucide-react'
 import { calculateHours, checkAbsence, findAbsences } from '@/app/lib/utils'
 import { Card, CardTitle, CardContent, CardDescription, CardFooter, CardHeader } from '@/app/_components/ui/card'
-import { StaffIdOutput } from '@/trpc/shared'
+import type { StaffIdOutput } from '@/trpc/shared'
 
 export default function ProfileCards({ employee }: { employee: StaffIdOutput }) {
 	const hours = calculateHours(employee?.shifts as Shift[])

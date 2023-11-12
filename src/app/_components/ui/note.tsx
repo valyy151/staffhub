@@ -35,7 +35,7 @@ export default function Note({ note, employeeId }: NoteProps) {
 	})
 
 	return (
-		<div className='my-2 flex w-full flex-col items-start pb-1'>
+		<div className='pb-2 flex w-full flex-col items-start'>
 			<div className='flex w-full min-w-[28rem] flex-col rounded-md border py-1 shadow bg-card'>
 				<p className='px-2 text-justify font-medium'>{note.content}</p>
 

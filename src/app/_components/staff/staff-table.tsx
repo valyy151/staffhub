@@ -1,5 +1,5 @@
 'use client'
-import { StaffOutput } from '@/trpc/shared'
+import type { StaffOutput } from '@/trpc/shared'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { useRouter } from 'next/navigation'
 

@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { Absence, Shift } from './types'
+import type { Absence, Shift } from './types'
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -107,4 +107,23 @@ export const getMonth = (date: Date) => {
 	const endOfMonth = Math.floor(date.getTime() / 1000)
 
 	return [startOfMonth, endOfMonth]
+}
+
+export const checkSickLeaves = (sickLeaves: Absence[]): [Absence[], Absence] => {
+	const today = new Date().getTime()
+
+	const currentSickLeave = sickLeaves.find((sickLeave) => {
+		return sickLeave.start < BigInt(today) && sickLeave.end > BigInt(today)
+	})
+
+	const pastSickLeaves = sickLeaves.filter((sickLeave) => {
+		return sickLeave.end < BigInt(today)
+	})
+
+	return [pastSickLeaves, currentSickLeave!]
+}
+
+export const howManyDays = (sickLeave: Absence) => {
+	const days = (sickLeave.end - sickLeave.start) / BigInt(86400000)
+	return Number(days)
 }

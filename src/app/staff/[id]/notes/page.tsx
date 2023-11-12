@@ -7,16 +7,18 @@ export default async function StaffNotes({ params }: { params: { id: string } })
 	const employee = await api.staff.getNotes.query({ id: params.id })
 	return (
 		<div>
-			<Heading size={'sm'}>Notes for {employee?.name}</Heading>
-			<CreateNote employeeId={employee?.id!!} />
+			<div className='flex justify-between items-center'>
+				<Heading size={'xs'}>Notes for {employee?.name}</Heading>
+				<CreateNote employeeId={employee?.id!!} />
+			</div>
 
 			{employee?.notes.length! > 0 ? (
 				<div className='mt-4'>
 					{employee?.notes?.map((note) => (
 						<Note
 							note={note}
-							employeeId={employee.id}
 							key={note.id}
+							employeeId={employee.id}
 						/>
 					))}
 				</div>
