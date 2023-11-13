@@ -50,7 +50,7 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 					className='mb-4 ml-2'>
 					{employee?.name}, {month} - {calculateHours(shifts as Shift[])}
 				</Heading>
-				<div className='border'>
+				<div className='border max-h-[49.3rem] overflow-y-auto'>
 					<Table className='min-w-[40vw]'>
 						<TableHeader className='sticky top-0 bg-background shadow shadow-border dark:shadow-md dark:shadow-border'>
 							<TableHead className='border-r'>Day</TableHead>

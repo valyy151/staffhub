@@ -25,7 +25,7 @@ export default async function StaffVacation({ params }: { params: { id: string }
 					absence={currentVacation}
 				/>
 			) : (
-				<div className='bg-green-500 rounded-md border text-white mt-4 p-2'>
+				<div className='bg-green-500 rounded-md border text-white mt-4 p-2 min-w-[46rem]'>
 					<Heading
 						size={'xxs'}
 						className='flex items-center'>

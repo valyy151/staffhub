@@ -22,7 +22,7 @@ export const shiftRouter = createTRPCRouter({
 				select: { id: true, start: true, end: true },
 			}),
 			db.sickLeave.findMany({
-				where: { employeeId: id, start: { gte: startOfMonth, lte: endOfMonth }, userId: ctx.session.user.id },
+				where: { employeeId: id, start: { gte: startOfMonth * 1000, lte: endOfMonth * 1000 }, userId: ctx.session.user.id },
 				select: { id: true, start: true, end: true },
 			}),
 		])
