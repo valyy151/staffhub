@@ -80,11 +80,16 @@ export const calculateHours = (shifts: Shift[]): string => {
 	let minutes = 0
 
 	for (const shift of shifts) {
-		const startDate: Date = new Date(Number(shift.start))
-		const endDate: Date = new Date(Number(shift.end))
+		if (shift.start && shift.end) {
+			const diff = Number(shift.end) - Number(shift.start)
 
-		hours += endDate.getHours() - startDate.getHours()
-		minutes += endDate.getMinutes() - startDate.getMinutes()
+			const diffHours = Math.floor(diff / 3600)
+
+			const diffMinutes = Math.floor((diff % 3600) / 60)
+
+			hours += diffHours
+			minutes += diffMinutes
+		}
 	}
 
 	hours += Math.floor(minutes / 60)

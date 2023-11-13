@@ -5,6 +5,7 @@ import { sickLeaveRouter } from './routers/sickLeave'
 import { roleRouter } from './routers/role'
 import { vacationRouter } from './routers/vacation'
 import { shiftModelRouter } from './routers/shiftModel'
+import { shiftRouter } from './routers/shift'
 
 /**
  * This is the primary router for your server.
@@ -12,8 +13,9 @@ import { shiftModelRouter } from './routers/shiftModel'
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-	staff: staffRouter,
 	role: roleRouter,
+	shift: shiftRouter,
+	staff: staffRouter,
 	vacation: vacationRouter,
 	sickLeave: sickLeaveRouter,
 	staffNote: staffNoteRouter,

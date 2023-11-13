@@ -18,7 +18,7 @@ export const sickLeaveRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ input: { start, end, employeeId }, ctx }) => {
-			const shifts = await ctx.db.shift.findMany({
+			const shifts = await db.shift.findMany({
 				where: {
 					date: {
 						lte: end / 1000,
@@ -31,7 +31,7 @@ export const sickLeaveRouter = createTRPCRouter({
 
 			const shiftIds = shifts.map((shift) => shift.id)
 
-			await ctx.db.absence.createMany({
+			await db.absence.createMany({
 				data: shiftIds.map((shiftId) => ({
 					shiftId,
 					reason: 'Sick Leave',
@@ -39,7 +39,7 @@ export const sickLeaveRouter = createTRPCRouter({
 				})),
 			})
 
-			return await ctx.db.sickLeave.create({
+			return await db.sickLeave.create({
 				data: {
 					end,
 					start,

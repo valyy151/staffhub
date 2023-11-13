@@ -63,7 +63,7 @@ export const staffRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ input: { firstName, lastName, email, address, phoneNumber }, ctx }) => {
-			return await ctx.db.employee.create({
+			return await db.employee.create({
 				data: {
 					email,
 					address: address,
@@ -77,7 +77,7 @@ export const staffRouter = createTRPCRouter({
 	getId: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
 		const [startOfMonth, endOfMonth] = getMonth(new Date())
 
-		return await ctx.db.employee.findUnique({
+		return await db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },
 			select: {
 				id: true,
@@ -102,7 +102,7 @@ export const staffRouter = createTRPCRouter({
 	}),
 
 	getNotes: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
-		return await ctx.db.employee.findUnique({
+		return await db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },
 			select: {
 				id: true,
@@ -116,7 +116,7 @@ export const staffRouter = createTRPCRouter({
 	}),
 
 	getRoles: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
-		return await ctx.db.employee.findUnique({
+		return await db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },
 			select: {
 				id: true,
@@ -127,7 +127,7 @@ export const staffRouter = createTRPCRouter({
 	}),
 
 	getSickLeaves: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
-		return await ctx.db.employee.findUnique({
+		return await db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },
 			select: {
 				id: true,
@@ -138,7 +138,7 @@ export const staffRouter = createTRPCRouter({
 	}),
 
 	getVacations: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
-		return await ctx.db.employee.findUnique({
+		return await db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },
 			select: {
 				id: true,
@@ -148,8 +148,43 @@ export const staffRouter = createTRPCRouter({
 		})
 	}),
 
+	getSchedule: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		const [startOfMonth, endOfMonth] = getMonth(new Date())
+
+		const [employee, workDays] = await Promise.all([
+			db.employee.findUnique({
+				where: { id, userId: ctx.session.user.id },
+				select: {
+					id: true,
+					name: true,
+					shifts: {
+						orderBy: { start: 'desc' },
+						select: { id: true, date: true, start: true, end: true },
+						where: { start: { gte: startOfMonth, lte: endOfMonth } },
+					},
+				},
+			}),
+			db.workDay.findMany({
+				where: { date: { gte: startOfMonth, lte: endOfMonth } },
+				select: { id: true, date: true },
+			}),
+		])
+
+		const newShifts = workDays.map((workDay) => {
+			const shift = employee?.shifts.find((shift) => shift.date === workDay.date)
+
+			if (shift) {
+				return { ...shift, workDayId: workDay.id }
+			}
+
+			return { date: workDay.date, workDayId: workDay.id, start: 0, end: 0 }
+		})
+
+		return { ...employee, shifts: newShifts }
+	}),
+
 	getPreference: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
-		return await ctx.db.employee.findUnique({
+		return await db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },
 			select: {
 				id: true,
@@ -168,7 +203,7 @@ export const staffRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ input: { id, hoursPerMonth, shiftModelIds }, ctx }) => {
-			return await ctx.db.employee.update({
+			return await db.employee.update({
 				where: { id, userId: ctx.session.user.id },
 				data: {
 					schedulePreference: {
@@ -184,6 +219,6 @@ export const staffRouter = createTRPCRouter({
 		}),
 
 	delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input: { id }, ctx }) => {
-		return await ctx.db.employee.delete({ where: { id, userId: ctx.session.user.id } })
+		return await db.employee.delete({ where: { id, userId: ctx.session.user.id } })
 	}),
 })
