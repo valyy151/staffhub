@@ -2,7 +2,7 @@ import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { db } from '@/server/db'
 import { z } from 'zod'
 
-export const rolesRouter = createTRPCRouter({
+export const roleRouter = createTRPCRouter({
 	get: protectedProcedure.query(async ({ ctx }) => {
 		return await db.staffRole.findMany({
 			where: {

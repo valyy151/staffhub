@@ -126,6 +126,63 @@ export const staffRouter = createTRPCRouter({
 		})
 	}),
 
+	getSickLeaves: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		return await ctx.db.employee.findUnique({
+			where: { id, userId: ctx.session.user.id },
+			select: {
+				id: true,
+				name: true,
+				sickLeaves: { orderBy: { start: 'desc' }, select: { id: true, start: true, end: true } },
+			},
+		})
+	}),
+
+	getVacations: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		return await ctx.db.employee.findUnique({
+			where: { id, userId: ctx.session.user.id },
+			select: {
+				id: true,
+				name: true,
+				vacations: { orderBy: { start: 'desc' }, select: { id: true, start: true, end: true } },
+			},
+		})
+	}),
+
+	getPreference: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		return await ctx.db.employee.findUnique({
+			where: { id, userId: ctx.session.user.id },
+			select: {
+				id: true,
+				name: true,
+				schedulePreference: { select: { id: true, hoursPerMonth: true, createdAt: true, shiftModels: { select: { id: true, start: true, end: true } } } },
+			},
+		})
+	}),
+
+	editPreference: protectedProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				hoursPerMonth: z.number(),
+				shiftModelIds: z.array(z.string()),
+			})
+		)
+		.mutation(async ({ input: { id, hoursPerMonth, shiftModelIds }, ctx }) => {
+			return await ctx.db.employee.update({
+				where: { id, userId: ctx.session.user.id },
+				data: {
+					schedulePreference: {
+						update: {
+							hoursPerMonth,
+							shiftModels: {
+								set: shiftModelIds.map((id) => ({ id })),
+							},
+						},
+					},
+				},
+			})
+		}),
+
 	delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input: { id }, ctx }) => {
 		return await ctx.db.employee.delete({ where: { id, userId: ctx.session.user.id } })
 	}),

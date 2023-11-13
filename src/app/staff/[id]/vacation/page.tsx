@@ -8,7 +8,7 @@ import Vacation from '@/app/_components/staff/absence'
 import { PalmtreeIcon } from 'lucide-react'
 
 export default async function StaffVacation({ params }: { params: { id: string } }) {
-	const employee = await api.staff.getId.query({ id: params.id })
+	const employee = await api.staff.getVacations.query({ id: params.id })
 	const [pastVacations, currentVacation, upcomingVacations] = checkAbsences(employee?.vacations as Absence[])
 	return (
 		<>

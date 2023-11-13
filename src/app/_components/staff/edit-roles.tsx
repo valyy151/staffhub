@@ -16,9 +16,9 @@ export default function EditRoles({ employee }: { employee: StaffRolesOutput }) 
 
 	const router = useRouter()
 
-	const { data: allRoles } = api.roles.get.useQuery()
+	const { data: allRoles } = api.role.get.useQuery()
 
-	const updateRoles = api.roles.update.useMutation({
+	const updateRoles = api.role.update.useMutation({
 		onSuccess: () => {
 			toast({ title: 'Roles updated' })
 			setShowEdit(false)
@@ -40,7 +40,7 @@ export default function EditRoles({ employee }: { employee: StaffRolesOutput }) 
 				<AlertDialog open>
 					<AlertDialogContent>
 						<AlertDialogHeader>
-							<AlertDialogTitle>Edit Staff Roles</AlertDialogTitle>
+							<AlertDialogTitle>Roles for {employee?.name}</AlertDialogTitle>
 							<AlertDialogDescription>
 								{allRoles?.map((role) => (
 									<div

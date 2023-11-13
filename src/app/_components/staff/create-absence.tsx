@@ -1,7 +1,7 @@
 'use client'
 import { HeartPulseIcon } from 'lucide-react'
 import { Button } from '../ui/button'
-import type { StaffIdOutput } from '@/trpc/shared'
+import type { StaffAbsenceOutput } from '@/trpc/shared'
 import { useState } from 'react'
 import { addDays, differenceInDays } from 'date-fns'
 import type { DateRange } from 'react-day-picker'
@@ -11,7 +11,7 @@ import { api } from '@/trpc/react'
 import { useToast } from '../ui/use-toast'
 import { useRouter } from 'next/navigation'
 
-export default function NewAbsence({ employee, type }: { employee: StaffIdOutput; type: 'vacation' | 'sick' }) {
+export default function NewAbsence({ employee, type }: { employee: StaffAbsenceOutput; type: 'vacation' | 'sick' }) {
 	const [showCreate, setShowCreate] = useState(false)
 
 	const [date, setDate] = useState<DateRange | undefined>({

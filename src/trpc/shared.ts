@@ -34,3 +34,7 @@ export type StaffOutput = RouterOutputs['staff']['get']
 export type StaffIdOutput = RouterOutputs['staff']['getId']
 
 export type StaffRolesOutput = RouterOutputs['staff']['getRoles']
+
+export type StaffPreferenceOutput = RouterOutputs['staff']['getPreference']
+
+export type StaffAbsenceOutput = RouterOutputs['staff']['getSickLeaves'] | RouterOutputs['staff']['getVacations']

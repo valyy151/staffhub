@@ -131,3 +131,7 @@ export const howManyDays = (sickLeave: Absence) => {
 	const days = (sickLeave.end - sickLeave.start) / BigInt(86400000)
 	return Number(days)
 }
+
+export const formatTime = (unix: number) => {
+	return new Date(unix).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+}

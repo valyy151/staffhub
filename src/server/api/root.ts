@@ -2,8 +2,9 @@ import { createTRPCRouter } from '@/server/api/trpc'
 import { staffRouter } from '@/server/api/routers/staff'
 import { staffNoteRouter } from '@/server/api/routers/staffNote'
 import { sickLeaveRouter } from './routers/sickLeave'
-import { rolesRouter } from './routers/roles'
+import { roleRouter } from './routers/role'
 import { vacationRouter } from './routers/vacation'
+import { shiftModelRouter } from './routers/shiftModel'
 
 /**
  * This is the primary router for your server.
@@ -12,10 +13,11 @@ import { vacationRouter } from './routers/vacation'
  */
 export const appRouter = createTRPCRouter({
 	staff: staffRouter,
-	roles: rolesRouter,
+	role: roleRouter,
 	vacation: vacationRouter,
 	sickLeave: sickLeaveRouter,
 	staffNote: staffNoteRouter,
+	shiftModel: shiftModelRouter,
 })
 
 // export type definition of API
