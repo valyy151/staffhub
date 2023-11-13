@@ -1,6 +1,6 @@
 import type { Absence, Shift } from '@/app/lib/types'
 import { PhoneIcon, MailIcon, HomeIcon } from 'lucide-react'
-import { calculateHours, checkAbsence, findAbsences } from '@/app/lib/utils'
+import { calculateHours, checkAbsence, getNumberOfSickDays } from '@/app/lib/utils'
 import { Card, CardTitle, CardContent, CardDescription, CardFooter, CardHeader } from '@/app/_components/ui/card'
 import type { StaffIdOutput } from '@/trpc/shared'
 
@@ -8,7 +8,7 @@ export default function ProfileCards({ employee }: { employee: StaffIdOutput }) 
 	const hours = calculateHours(employee?.shifts as Shift[])
 	const currentMonth = new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
 
-	const sickDays = findAbsences(employee?.sickLeaves as Absence[])
+	const sickDays = getNumberOfSickDays(employee?.sickLeaves as Absence[])
 	const absence = checkAbsence(employee?.sickLeaves as Absence[], employee?.vacations as Absence[])
 
 	return (

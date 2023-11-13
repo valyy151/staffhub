@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react'
 import 'react-calendar/dist/Calendar.css'
 import { api } from '@/trpc/react'
 import Spinner from '../ui/spinner'
+import ShiftRow from './shift-row'
+import Link from 'next/link'
 
 // const PDFButton = dynamic(() => import('@/app/_components/PDFButton'), {
 // 	ssr: false,
@@ -25,11 +27,13 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 		{ id: employee?.id as string, month: value },
 		{
 			enabled: false,
-			refetchOnMount: false,
 		}
 	)
 
 	useEffect(() => {
+		if (value.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) === month) {
+			return
+		}
 		refetch().then(({ data }) => {
 			if (data) {
 				setShifts(data)
@@ -68,7 +72,15 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 												weekday: 'short',
 											}) === 'Sun' &&
 												'font-bold text-rose-500')
-										}`}></TableCell>
+										}`}>
+										<Link
+											href={`/days/${shift.workDayId}/shifts`}
+											className={`py-3 pr-2 underline-offset-2 hover:underline`}>
+											{new Date(shift.date * 1000).toLocaleDateString('en-GB', {
+												weekday: 'short',
+											})}
+										</Link>
+									</TableCell>
 									<TableCell
 										className={`border-r font-medium  ${
 											(new Date(shift.date * 1000).toLocaleDateString('en-GB', {
@@ -79,12 +91,22 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 												weekday: 'short',
 											}) === 'Sun' &&
 												'font-bold text-rose-500')
-										}`}></TableCell>
+										}`}>
+										<Link
+											href={`/days/${shift.workDayId}/shifts`}
+											className={`py-3 pr-2 underline-offset-2 hover:underline`}>
+											{new Date(shift.date * 1000).toLocaleDateString('en-GB', {
+												month: 'long',
+												day: 'numeric',
+												year: 'numeric',
+											})}
+										</Link>
+									</TableCell>
 
-									{/* <Shift
+									<ShiftRow
+										shift={shift}
 										employee={employee}
-										day={day}
-									/> */}
+									/>
 								</TableRow>
 							))}
 						</TableBody>

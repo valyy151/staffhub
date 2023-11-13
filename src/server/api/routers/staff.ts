@@ -151,7 +151,7 @@ export const staffRouter = createTRPCRouter({
 	getSchedule: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
 		const [startOfMonth, endOfMonth] = getMonth(new Date())
 
-		const [employee, workDays] = await Promise.all([
+		const [employee, workDays, vacations, sickLeaves] = await Promise.all([
 			db.employee.findUnique({
 				where: { id, userId: ctx.session.user.id },
 				select: {
@@ -168,6 +168,14 @@ export const staffRouter = createTRPCRouter({
 				where: { date: { gte: startOfMonth, lte: endOfMonth } },
 				select: { id: true, date: true },
 			}),
+			db.vacation.findMany({
+				where: { employeeId: id, start: { gte: startOfMonth * 1000, lte: endOfMonth * 1000 }, userId: ctx.session.user.id },
+				select: { id: true, start: true, end: true },
+			}),
+			db.sickLeave.findMany({
+				where: { employeeId: id, start: { gte: startOfMonth, lte: endOfMonth }, userId: ctx.session.user.id },
+				select: { id: true, start: true, end: true },
+			}),
 		])
 
 		const newShifts = workDays.map((workDay) => {
@@ -180,7 +188,30 @@ export const staffRouter = createTRPCRouter({
 			return { date: workDay.date, workDayId: workDay.id, start: 0, end: 0 }
 		})
 
-		return { ...employee, shifts: newShifts }
+		const schedule = newShifts.map((shift) => {
+			const sickLeave = sickLeaves.find((sickLeave) => {
+				return shift.date * 1000 >= sickLeave.start && shift.date * 1000 <= sickLeave.end
+			})
+
+			const vacation = vacations.find((vacation) => {
+				return shift.date * 1000 >= vacation.start && shift.date * 1000 <= vacation.end
+			})
+
+			if (sickLeave) {
+				return { ...shift, sickLeave: true }
+			}
+
+			if (vacation) {
+				return { ...shift, vacation: true }
+			}
+
+			return { ...shift }
+		})
+
+		return {
+			...employee,
+			shifts: schedule,
+		}
 	}),
 
 	getPreference: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {

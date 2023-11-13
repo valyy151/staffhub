@@ -57,7 +57,7 @@ export const checkAbsence = (sickLeaves: Absence[], vacations: Absence[]) => {
 	return 'Currently working'
 }
 
-export const findAbsences = (sickLeaves: Absence[]) => {
+export const getNumberOfSickDays = (sickLeaves: Absence[]): number => {
 	let days = 0
 
 	const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime()
@@ -101,7 +101,7 @@ export const calculateHours = (shifts: Shift[]): string => {
 	return hours + 'h ' + (minutes % 60) + 'm'
 }
 
-export const getMonth = (date: Date) => {
+export const getMonth = (date: Date): [number, number] => {
 	date.setDate(1)
 	date.setHours(0, 0, 0, 0)
 	const startOfMonth = Math.floor(date.getTime() / 1000)
@@ -138,5 +138,26 @@ export const howManyDays = (sickLeave: Absence) => {
 }
 
 export const formatTime = (unix: number) => {
+	if (!unix) return ''
 	return new Date(unix).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+}
+
+export const formatTotal = (start: number, end: number) => {
+	if (start && end) {
+		const totalSeconds = end - start
+		const hours = Math.floor(totalSeconds / 3600)
+		const minutes = Math.floor((totalSeconds % 3600) / 60)
+
+		let result = ''
+
+		if (hours > 0) {
+			result += `${hours}h `
+		}
+
+		if (minutes > 0) {
+			result += `${minutes}min`
+		}
+
+		return result
+	} else return `${0}h ${0}min`
 }

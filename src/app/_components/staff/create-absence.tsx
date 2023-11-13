@@ -3,7 +3,7 @@ import { HeartPulseIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import type { StaffAbsenceOutput } from '@/trpc/shared'
 import { useState } from 'react'
-import { addDays, differenceInDays } from 'date-fns'
+import { addDays, differenceInDays, startOfToday } from 'date-fns'
 import type { DateRange } from 'react-day-picker'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 import { DatePickerWithRange } from '../ui/date-range-picker'
@@ -15,7 +15,7 @@ export default function NewAbsence({ employee, type }: { employee: StaffAbsenceO
 	const [showCreate, setShowCreate] = useState(false)
 
 	const [date, setDate] = useState<DateRange | undefined>({
-		from: new Date(),
+		from: startOfToday(),
 		to: addDays(new Date(), 5),
 	})
 
