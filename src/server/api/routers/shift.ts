@@ -5,6 +5,64 @@ import { db } from '@/server/db'
 import { getMonth } from '@/app/lib/utils'
 
 export const shiftRouter = createTRPCRouter({
+	create: protectedProcedure
+		.input(
+			z.object({
+				end: z.number(),
+				date: z.number(),
+				start: z.number(),
+				employeeId: z.string(),
+				roleId: z.string().optional(),
+			})
+		)
+		.mutation(async ({ input: { end, date, roleId, start, employeeId }, ctx }) => {
+			const modifiedDate = new Date(date * 1000)
+
+			modifiedDate.setHours(0, 0, 0, 0)
+			const midnightUnixCode = Math.floor(modifiedDate.getTime() / 1000)
+
+			return await db.shift.create({
+				data: {
+					end,
+					start,
+					employeeId,
+					roleId: roleId || '',
+					date: midnightUnixCode,
+					userId: ctx.session.user.id,
+				},
+			})
+		}),
+
+	update: protectedProcedure
+		.input(
+			z.object({
+				shiftId: z.string(),
+				shift: z.object({
+					end: z.number(),
+					start: z.number(),
+					roleId: z.string().optional(),
+				}),
+			})
+		)
+		.mutation(async ({ input: { shift, shiftId }, ctx }) => {
+			return await db.shift.update({
+				where: { id: shiftId, userId: ctx.session.user.id },
+				data: { ...shift },
+			})
+		}),
+
+	delete: protectedProcedure
+		.input(
+			z.object({
+				shiftId: z.string(),
+			})
+		)
+		.mutation(async ({ input: { shiftId }, ctx }) => {
+			return await db.shift.delete({
+				where: { id: shiftId, userId: ctx.session.user.id },
+			})
+		}),
+
 	schedule: protectedProcedure.input(z.object({ id: z.string(), month: z.date() })).query(async ({ input: { id, month }, ctx }) => {
 		const [startOfMonth, endOfMonth] = getMonth(month)
 

@@ -3,14 +3,14 @@ import type { StaffScheduleOutput } from '@/trpc/shared'
 import Heading from '../ui/heading'
 import { Calendar } from 'react-calendar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import { calculateHours } from '@/app/lib/utils'
+import { calculateHours, formatDate, formatDay } from '@/app/lib/utils'
 import { Shift } from '@/app/lib/types'
 import { useEffect, useState } from 'react'
-import 'react-calendar/dist/Calendar.css'
 import { api } from '@/trpc/react'
 import Spinner from '../ui/spinner'
 import ShiftRow from './shift-row'
 import Link from 'next/link'
+import 'react-calendar/dist/Calendar.css'
 
 // const PDFButton = dynamic(() => import('@/app/_components/PDFButton'), {
 // 	ssr: false,
@@ -34,6 +34,7 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 		if (value.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) === month) {
 			return
 		}
+
 		refetch().then(({ data }) => {
 			if (data) {
 				setShifts(data)
@@ -43,19 +44,21 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 	}, [value])
 
 	return (
-		<div className='flex'>
-			<section>
+		<section className='flex'>
+			<div>
 				<Heading
 					size={'xs'}
 					className='mb-4 ml-2'>
 					{employee?.name}, {month} - {calculateHours(shifts as Shift[])}
 				</Heading>
-				<div className='border max-h-[49.3rem] overflow-y-auto'>
+				<div className='border max-h-[49.3rem] overflow-y-scroll'>
 					<Table className='min-w-[40vw]'>
 						<TableHeader className='sticky top-0 bg-background shadow shadow-border dark:shadow-md dark:shadow-border'>
-							<TableHead className='border-r'>Day</TableHead>
-							<TableHead className='border-r'>Date</TableHead>
-							<TableHead className='text-right'>Shift</TableHead>
+							<TableRow className='hover:bg-inherit'>
+								<TableHead className='border-r'>Day</TableHead>
+								<TableHead className='border-r'>Date</TableHead>
+								<TableHead className='text-right'>Shift</TableHead>
+							</TableRow>
 						</TableHeader>
 						<TableBody>
 							{shifts.map((shift) => (
@@ -63,43 +66,21 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 									key={shift.workDayId}
 									className='hover:bg-inherit'>
 									<TableCell
-										className={`border-r ${
-											(new Date(shift.date * 1000).toLocaleDateString('en-GB', {
-												weekday: 'short',
-											}) === 'Sat' &&
-												'font-bold text-rose-500') ||
-											(new Date(shift.date * 1000).toLocaleDateString('en-GB', {
-												weekday: 'short',
-											}) === 'Sun' &&
-												'font-bold text-rose-500')
-										}`}>
+										className={`border-r ${(formatDay(shift.date, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date, 'short') === 'Sun' && 'font-bold text-rose-500')}`}>
 										<Link
 											href={`/days/${shift.workDayId}/shifts`}
 											className={`py-3 pr-2 underline-offset-2 hover:underline`}>
-											{new Date(shift.date * 1000).toLocaleDateString('en-GB', {
-												weekday: 'short',
-											})}
+											{formatDay(shift.date, 'short')}
 										</Link>
 									</TableCell>
 									<TableCell
 										className={`border-r font-medium  ${
-											(new Date(shift.date * 1000).toLocaleDateString('en-GB', {
-												weekday: 'short',
-											}) === 'Sat' &&
-												'font-bold text-rose-500') ||
-											(new Date(shift.date * 1000).toLocaleDateString('en-GB', {
-												weekday: 'short',
-											}) === 'Sun' &&
-												'font-bold text-rose-500')
+											(formatDay(shift.date, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date, 'short') === 'Sun' && 'font-bold text-rose-500')
 										}`}>
 										<Link
 											href={`/days/${shift.workDayId}/shifts`}
 											className={`py-3 pr-2 underline-offset-2 hover:underline`}>
-											{new Date(shift.date * 1000).toLocaleDateString('en-GB', {
-												month: 'long',
-												day: 'numeric',
-												year: 'numeric',
-											})}
+											{formatDate(shift.date, 'long')}
 										</Link>
 									</TableCell>
 
@@ -112,7 +93,7 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 						</TableBody>
 					</Table>
 				</div>
-			</section>
+			</div>
 
 			<div className='relative ml-8 mt-12'>
 				<Calendar
@@ -125,6 +106,7 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 					activeStartDate={value}
 					onChange={(value) => setValue(value as Date)}
 				/>
+
 				{/* <PDFButton
 					employee={employee}
 					value={value}
@@ -137,6 +119,6 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 					</div>
 				)}
 			</div>
-		</div>
+		</section>
 	)
 }

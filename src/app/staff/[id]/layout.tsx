@@ -49,7 +49,7 @@ export default function StaffProfileLayout({ children }: { children: React.React
 					</Link>
 					<Link
 						href={`/staff/${id}/schedule`}
-						className={`flex w-full items-center space-x-2 rounded-lg px-2 py-2 hover:bg-accent ${path.endsWith('schedule') && 'bg-secondary'}`}>
+						className={`flex w-full items-center space-x-2 rounded-lg px-2 py-2 hover:bg-accent ${path.includes('schedule') && 'bg-secondary'}`}>
 						<CalendarSearch />
 						<span className='text-sm font-medium'>Monthly Schedules</span>
 					</Link>

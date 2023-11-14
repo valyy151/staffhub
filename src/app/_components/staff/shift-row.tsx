@@ -1,8 +1,10 @@
+'use client'
 import { Shift } from '@/app/lib/types'
 import { StaffScheduleOutput } from '@/trpc/shared'
 import { TableCell } from '../ui/table'
 import { useState } from 'react'
-import { formatTime, formatTotal } from '@/app/lib/utils'
+import { formatDay, formatTime, formatTotal } from '@/app/lib/utils'
+import EditShift from '../ui/edit-shift'
 
 export default function ShiftRow({ shift, employee }: { shift: Shift; employee: StaffScheduleOutput }) {
 	const [edit, setEdit] = useState(false)
@@ -17,7 +19,7 @@ export default function ShiftRow({ shift, employee }: { shift: Shift; employee: 
 		if (shift.start) {
 			return (
 				<span className='py-3 pl-2'>
-					{formatTime(shift?.start! * 1000)} - {formatTime(shift?.end! * 1000)} <span className='font-medium'>[{formatTotal(shift?.start!, shift?.end!)}]</span>
+					{formatTime(shift?.start)} - {formatTime(shift?.end)} <span className='font-medium'>[{formatTotal(shift?.start, shift?.end)}]</span>
 				</span>
 			)
 		}
@@ -29,26 +31,17 @@ export default function ShiftRow({ shift, employee }: { shift: Shift; employee: 
 				title='Click to edit shift'
 				onClick={() => setEdit(!edit)}
 				className={`cursor-pointer text-right hover:bg-accent min-w-[6rem] ${
-					(new Date(shift.date).toLocaleDateString('en-GB', {
-						weekday: 'short',
-					}) === 'Sat' &&
-						'font-bold text-rose-500') ||
-					(new Date(shift.date * 1000).toLocaleDateString('en-GB', {
-						weekday: 'short',
-					}) === 'Sun' &&
-						'font-bold text-rose-500')
+					(formatDay(shift.date, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date, 'short') === 'Sun' && 'font-bold text-rose-500')
 				}`}>
 				{renderShift()}
 			</TableCell>
-			{/* {edit && (
+			{edit && (
 				<EditShift
-					date={day.date}
-					shift={day.shift}
+					shift={shift}
 					setEdit={setEdit}
 					employee={employee}
-					shiftModels={day.shiftModels}
 				/>
-			)} */}
+			)}
 		</>
 	)
 }

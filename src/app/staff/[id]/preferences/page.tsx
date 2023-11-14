@@ -25,7 +25,7 @@ export default async function StaffPreferences({ params }: { params: { id: strin
 								key={shiftModel.id}
 								className='hover:bg-inherit'>
 								<TableCell>
-									{formatTime(shiftModel.start * 1000)} - {formatTime(shiftModel.end * 1000)}
+									{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}
 								</TableCell>
 							</TableRow>
 						))}

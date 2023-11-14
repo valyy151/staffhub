@@ -159,9 +159,10 @@ export const staffRouter = createTRPCRouter({
 					name: true,
 					shifts: {
 						orderBy: { start: 'desc' },
-						select: { id: true, date: true, start: true, end: true },
+						select: { id: true, date: true, start: true, end: true, role: { select: { id: true, name: true } } },
 						where: { start: { gte: startOfMonth, lte: endOfMonth } },
 					},
+					roles: { select: { id: true, name: true } },
 				},
 			}),
 			db.workDay.findMany({

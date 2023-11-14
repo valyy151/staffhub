@@ -139,7 +139,15 @@ export const howManyDays = (sickLeave: Absence) => {
 
 export const formatTime = (unix: number) => {
 	if (!unix) return ''
-	return new Date(unix).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+	return new Date(unix * 1000).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+}
+
+export const formatDay = (date: number, length: 'long' | 'short') => {
+	return new Date(date * 1000).toLocaleDateString('en-GB', { weekday: length })
+}
+
+export const formatDate = (date: number, length: 'long' | 'short') => {
+	return new Date(date * 1000).toLocaleDateString('en-GB', { dateStyle: length })
 }
 
 export const formatTotal = (start: number, end: number) => {
