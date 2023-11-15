@@ -1,4 +1,4 @@
-import { SignInButton, GetStartedButton } from '../_components/auth-buttons'
+import { SignInButton, GetStartedButton } from './_components/auth-buttons'
 import { getServerAuthSession } from '@/server/auth'
 import { CalendarClock, Cog, FileSearch, Forward, Palmtree, Users } from 'lucide-react'
 import { redirect } from 'next/navigation'

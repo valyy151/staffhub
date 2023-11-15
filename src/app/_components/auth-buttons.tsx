@@ -10,7 +10,10 @@ export function SignInButton({ text }: { text?: string }) {
 
 export function GetStartedButton() {
 	return (
-		<Link target='_blank' href='https://staffhub-docs.vercel.app' className={buttonVariants({ variant: 'secondary' })}>
+		<Link
+			target='_blank'
+			href='https://staffhub-docs.vercel.app'
+			className={buttonVariants({ variant: 'secondary' })}>
 			How to use
 		</Link>
 	)
