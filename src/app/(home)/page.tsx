@@ -1,4 +1,4 @@
-import { SignInButton, GetStartedButton } from './_components/auth-buttons'
+import { SignInButton, GetStartedButton } from '../_components/auth-buttons'
 import { getServerAuthSession } from '@/server/auth'
 import { CalendarClock, Cog, FileSearch, Forward, Palmtree, Users } from 'lucide-react'
 import { redirect } from 'next/navigation'
@@ -11,7 +11,7 @@ export default async function Home() {
 	}
 
 	return (
-		<main className='mt-4 flex   flex-col items-center px-2 sm:px-0'>
+		<main className='mt-4 flex flex-col items-center px-2 sm:px-0'>
 			<section className='w-full py-12'>
 				<div className='container px-4 md:px-6'>
 					<div className='grid items-center gap-6'>

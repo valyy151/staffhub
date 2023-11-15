@@ -4,7 +4,7 @@ import { UserPlus } from 'lucide-react'
 import Search from '@/app/_components/staff/search'
 import Heading from '@/app/_components/ui/heading'
 import Pagination from '@/app/_components/ui/pagination'
-import { StaffTable } from '../_components/staff/staff-table'
+import { StaffTable } from '../../_components/staff/staff-table'
 
 export default async function Staff({ searchParams }: { searchParams?: { query?: string; page?: string } }) {
 	const query = searchParams?.query || ''
@@ -20,7 +20,7 @@ export default async function Staff({ searchParams }: { searchParams?: { query?:
 	const totalPages = Math.ceil(numberOfStaff / 10)
 
 	return (
-		<main className='p-4 pb-8'>
+		<main className='px-36 py-8'>
 			<div className='flex w-full justify-between pb-2 pt-8'>
 				<div className='flex items-baseline space-x-4'>
 					<Heading>Your Staff</Heading>

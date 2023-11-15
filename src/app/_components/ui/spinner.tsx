@@ -22,7 +22,7 @@ const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(({ noMargin, className,
 			<div role='status'>
 				<svg
 					aria-hidden='true'
-					className='mr-2 h-8 w-8 animate-spin fill-gray-800 text-gray-300 dark:fill-gray-200 dark:text-gray-600'
+					className='mr-2 h-7 w-7 animate-spin fill-gray-800 text-gray-300 dark:fill-gray-200 dark:text-gray-600'
 					viewBox='0 0 100 101'
 					fill='none'
 					xmlns='http://www.w3.org/2000/svg'>

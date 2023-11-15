@@ -8,7 +8,7 @@ import { HeartPulseIcon } from 'lucide-react'
 import CurrentAbsence from '@/app/_components/staff/current-absence'
 
 export default async function StaffSickLeave({ params }: { params: { id: string } }) {
-	const employee = await api.staff.getSickLeaves.query({ id: params.id })
+	const employee = await api.staff.getId.query({ id: params.id })
 	const [pastSickLeaves, currentSickLeave] = checkAbsences(employee?.sickLeaves as Absence[])
 	return (
 		<>
