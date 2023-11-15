@@ -17,28 +17,28 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 // })
 
 export default function StaffSchedule({ employee }: { employee: StaffScheduleOutput }) {
-	const [value, setValue] = useState(new Date())
+	const [value, setValue] = useState({ date: new Date(), refetch: false })
 
-	const [month, setMonth] = useState(value.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }))
+	const [month, setMonth] = useState(value.date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }))
 
 	const [shifts, setShifts] = useState(employee?.shifts)
 
 	const { refetch, isFetching } = api.shift.schedule.useQuery(
-		{ id: employee?.id as string, month: value },
+		{ id: employee?.id as string, month: value.date },
 		{
 			enabled: false,
 		}
 	)
 
 	useEffect(() => {
-		if (value.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) === month) {
+		if (value.date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) === month && !value.refetch) {
 			return
 		}
 
 		refetch().then(({ data }) => {
 			if (data) {
 				setShifts(data)
-				setMonth(value.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }))
+				setMonth(value.date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }))
 			}
 		})
 	}, [value])
@@ -51,9 +51,9 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 					className='mb-4 ml-2'>
 					{employee?.name}, {month} - {calculateHours(shifts as Shift[])}
 				</Heading>
-				<div className='border max-h-[49.3rem] overflow-y-scroll'>
+				<div className='border max-h-[46.2rem] overflow-y-scroll'>
 					<Table className='min-w-[40vw]'>
-						<TableHeader className='sticky top-0 bg-background shadow shadow-border dark:shadow-md dark:shadow-border'>
+						<TableHeader className='sticky top-0 bg-card shadow shadow-border'>
 							<TableRow className='hover:bg-inherit'>
 								<TableHead className='border-r'>Day</TableHead>
 								<TableHead className='border-r'>Date</TableHead>
@@ -86,6 +86,7 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 
 									<ShiftRow
 										shift={shift}
+										setValue={setValue}
 										employee={employee}
 									/>
 								</TableRow>
@@ -97,14 +98,14 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 
 			<div className='relative ml-8 mt-12'>
 				<Calendar
-					value={value}
+					value={value.date}
 					view={'month'}
 					maxDetail='year'
 					className='h-fit'
 					next2Label={null}
 					prev2Label={null}
-					activeStartDate={value}
-					onChange={(value) => setValue(value as Date)}
+					activeStartDate={value.date}
+					onChange={(value) => setValue({ date: value as Date, refetch: false })}
 				/>
 
 				{/* <PDFButton

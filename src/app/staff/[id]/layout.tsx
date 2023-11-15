@@ -9,13 +9,15 @@ export default function StaffProfileLayout({ children }: { children: React.React
 
 	const segment = useSelectedLayoutSegment()
 
+	console.log(segment)
+
 	return (
 		<main className='flex'>
 			<aside className='sticky top-0 mr-4 h-screen w-fit border-r p-4'>
 				<nav className='space-y-2'>
 					<Link
 						href={`/staff/${id as string}`}
-						className={`flex w-52 items-center space-x-2 rounded-lg px-2 py-2 hover:bg-accent ${!segment && 'bg-secondary'}`}>
+						className={`flex w-52 items-center space-x-2 rounded-lg px-2 py-2 hover:bg-accent ${segment === '(overview)' && 'bg-secondary'}`}>
 						<BarChart3 />
 						<span className='text-sm font-medium'>Overview</span>
 					</Link>

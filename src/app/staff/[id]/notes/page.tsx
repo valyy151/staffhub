@@ -8,7 +8,11 @@ export default async function StaffNotes({ params }: { params: { id: string } })
 	return (
 		<div>
 			<div className='flex justify-between items-center'>
-				<Heading size={'xs'}>Notes for {employee?.name}</Heading>
+				<Heading
+					size={'xs'}
+					className='min-w-[28rem]'>
+					Notes for {employee?.name}
+				</Heading>
 				<CreateNote employeeId={employee?.id!!} />
 			</div>
 

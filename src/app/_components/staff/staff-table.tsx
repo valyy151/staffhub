@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 
 export function StaffTable({ staff }: { staff: StaffOutput }) {
 	const router = useRouter()
+
 	return (
 		<Table className='border'>
 			<TableHeader>
@@ -19,7 +20,7 @@ export function StaffTable({ staff }: { staff: StaffOutput }) {
 				{staff.map((employee) => (
 					<TableRow
 						key={employee.id}
-						onClick={() => router.push(`/staff/${employee.id}`)}
+						onClick={() => router.replace(`/staff/${employee.id}`)}
 						onMouseOver={() => router.prefetch(`/staff/${employee.id}`)}
 						className='cursor-pointer'>
 						<TableCell className='cursor-pointer whitespace-nowrap font-medium'>{employee.name}</TableCell>

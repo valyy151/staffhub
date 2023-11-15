@@ -38,9 +38,9 @@ export default function Note({ note, employeeId }: NoteProps) {
 	return (
 		<Card className='mb-2'>
 			<CardDescription className='flex w-full min-w-[28rem] flex-col rounded-md border py-1 shadow bg-card'>
-				<p className='px-2 text-justify font-medium'>{note.content}</p>
+				<span className='px-2 text-justify font-medium'>{note.content}</span>
 
-				<p className='border-b px-2 pb-2 text-xs font-light'>
+				<span className='border-b px-2 pb-2 text-xs font-light'>
 					Added{' '}
 					{note.createdAt.toLocaleString('en-GB', {
 						day: 'numeric',
@@ -49,7 +49,7 @@ export default function Note({ note, employeeId }: NoteProps) {
 						hour: 'numeric',
 						minute: 'numeric',
 					})}
-				</p>
+				</span>
 
 				<Button
 					onClick={() => setShowModal(true)}

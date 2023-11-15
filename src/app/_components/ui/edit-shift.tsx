@@ -1,4 +1,4 @@
-import { Shift } from '@/app/lib/types'
+import { Shift, ShiftModel } from '@/app/lib/types'
 import { StaffScheduleOutput } from '@/trpc/shared'
 import { useState } from 'react'
 import { useToast } from './use-toast'
@@ -11,12 +11,22 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import RolesDropdown from './roles-dropdown'
 import FormModal from './form-modal'
 
-export default function EditShift({ shift, setEdit, employee }: { shift: Shift; setEdit: (edit: boolean) => void; employee: StaffScheduleOutput }) {
+export default function EditShift({
+	shift,
+	setEdit,
+	employee,
+	setValue,
+	shiftModels,
+}: {
+	shift: Shift
+	setEdit: (edit: boolean) => void
+	employee: StaffScheduleOutput
+	shiftModels: ShiftModel[] | undefined
+	setValue: ({ date, refetch }: { date: Date; refetch: boolean }) => void
+}) {
 	const [end, setEnd] = useState(shift?.end ?? 0)
 	const [start, setStart] = useState(shift?.start ?? 0)
 	const [role, setRole] = useState({ id: shift?.role?.id ?? '', name: shift?.role?.name ?? '' })
-
-	const { data: shiftModels } = api.shiftModel.get.useQuery()
 
 	const [showDelete, setShowDelete] = useState(false)
 
@@ -34,6 +44,7 @@ export default function EditShift({ shift, setEdit, employee }: { shift: Shift; 
 
 	const createShiftMutation = api.shift.create.useMutation({
 		onSuccess: () => {
+			setValue({ date: new Date(shift.date * 1000), refetch: true })
 			setEdit(false)
 			toast({
 				title: 'Shift created successfully.',
@@ -50,6 +61,7 @@ export default function EditShift({ shift, setEdit, employee }: { shift: Shift; 
 
 	const updateShiftMutation = api.shift.update.useMutation({
 		onSuccess: () => {
+			setValue({ date: new Date(shift.date * 1000), refetch: true })
 			setEdit(false)
 			toast({
 				title: 'Shift updated successfully.',
@@ -66,6 +78,7 @@ export default function EditShift({ shift, setEdit, employee }: { shift: Shift; 
 
 	const deleteShiftMutation = api.shift.delete.useMutation({
 		onSuccess: () => {
+			setValue({ date: new Date(shift.date * 1000), refetch: true })
 			setEdit(false)
 			toast({
 				title: 'Shift deleted successfully.',
@@ -166,8 +179,8 @@ export default function EditShift({ shift, setEdit, employee }: { shift: Shift; 
 						</div>
 					</div>
 					<div>
-						<Heading size={'xs'}>Choose a shift:</Heading>
-						<div className='mt-1 flex flex-col'>
+						<Heading size={'xxs'}>Choose a shift:</Heading>
+						<div className='mt-1 flex w-96 flex-wrap'>
 							{shiftModels?.map((shiftModel) => (
 								<Heading
 									size={'xxs'}
@@ -175,7 +188,7 @@ export default function EditShift({ shift, setEdit, employee }: { shift: Shift; 
 										handleTimeChange(formatTime(shiftModel.start)!!, 'start')
 										handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end)!!, 'end')
 									}}
-									className='cursor-pointer font-medium hover:text-sky-500'>
+									className='cursor-pointer mr-auto font-medium w-fit hover:text-sky-500'>
 									{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}
 								</Heading>
 							))}

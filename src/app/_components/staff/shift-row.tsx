@@ -1,13 +1,15 @@
-'use client'
 import { Shift } from '@/app/lib/types'
 import { StaffScheduleOutput } from '@/trpc/shared'
 import { TableCell } from '../ui/table'
 import { useState } from 'react'
 import { formatDay, formatTime, formatTotal } from '@/app/lib/utils'
 import EditShift from '../ui/edit-shift'
+import { api } from '@/trpc/react'
 
-export default function ShiftRow({ shift, employee }: { shift: Shift; employee: StaffScheduleOutput }) {
+export default function ShiftRow({ shift, employee, setValue }: { shift: Shift; employee: StaffScheduleOutput; setValue: ({ date, refetch }: { date: Date; refetch: boolean }) => void }) {
 	const [edit, setEdit] = useState(false)
+
+	const { data: shiftModels } = api.shiftModel.get.useQuery()
 
 	const renderShift = () => {
 		if (shift.sickLeave) {
@@ -39,7 +41,9 @@ export default function ShiftRow({ shift, employee }: { shift: Shift; employee: 
 				<EditShift
 					shift={shift}
 					setEdit={setEdit}
+					setValue={setValue}
 					employee={employee}
+					shiftModels={shiftModels}
 				/>
 			)}
 		</>
