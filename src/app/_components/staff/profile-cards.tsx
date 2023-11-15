@@ -1,8 +1,8 @@
 import type { Absence, Shift } from '@/app/lib/types'
-import { PhoneIcon, MailIcon, HomeIcon } from 'lucide-react'
 import { calculateHours, checkAbsence, getNumberOfSickDays } from '@/app/lib/utils'
-import { Card, CardTitle, CardContent, CardDescription, CardFooter, CardHeader } from '@/app/_components/ui/card'
+import { Card, CardTitle, CardContent, CardDescription, CardHeader } from '@/app/_components/ui/card'
 import type { StaffIdOutput } from '@/trpc/shared'
+import PersonalInfoCard from './personal-info-card'
 
 export default function ProfileCards({ employee }: { employee: StaffIdOutput }) {
 	const hours = calculateHours(employee?.shifts as Shift[])
@@ -14,40 +14,7 @@ export default function ProfileCards({ employee }: { employee: StaffIdOutput }) 
 	return (
 		<>
 			<section className='mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-				<Card className='min-w-[24rem]'>
-					<CardHeader>
-						<CardTitle>Personal Info</CardTitle>
-					</CardHeader>
-
-					<CardContent>
-						<CardDescription>
-							<span className='flex items-center'>
-								<PhoneIcon
-									size={16}
-									className='mr-2'
-								/>
-								Phone: {employee?.phoneNumber}
-							</span>
-							<span className='flex items-center'>
-								<MailIcon
-									size={16}
-									className='mr-2'
-								/>
-								Email: {employee?.email}
-							</span>
-							<span className='flex items-center'>
-								<HomeIcon
-									size={16}
-									className='mr-2'
-								/>
-								Address: {employee?.address}
-							</span>
-						</CardDescription>
-					</CardContent>
-					<CardFooter>
-						<button>Edit</button>
-					</CardFooter>
-				</Card>
+				<PersonalInfoCard employee={employee} />
 
 				<Card>
 					<CardHeader>

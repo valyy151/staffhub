@@ -7,17 +7,22 @@ import { useRouter } from 'next/navigation'
 import { Input } from '@/app/_components/ui/input'
 import { useToast } from '@/app/_components/ui/use-toast'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/app/_components/ui/card'
+import { InfoIcon } from 'lucide-react'
+import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/app/_components/ui/hover-card'
 
 export default function CreateStaffForm() {
 	const [email, setEmail] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [firstName, setFirstName] = useState('')
 
+	const [phone, setPhone] = useState('')
+	const [address, setAddress] = useState('')
+
 	const { toast } = useToast()
 
 	const router = useRouter()
 
-	const createStaff = api.staff.create.useMutation({
+	const createStaff = api.staff.createOrUpdate.useMutation({
 		onSettled(_, error) {
 			if (error) {
 				toast({
@@ -42,7 +47,7 @@ export default function CreateStaffForm() {
 			})
 		}
 
-		createStaff.mutate({ email, firstName, lastName })
+		createStaff.mutate({ email, firstName, lastName, phone, address })
 	}
 
 	return (
@@ -90,27 +95,42 @@ export default function CreateStaffForm() {
 								onChange={(e) => setEmail(e.target.value)}
 							/>
 						</div>
-
-						{/* {roles?.length! > 0 && (
-            <div className="space-y-2">
-              <label htmlFor="role">Role</label>
-              <Select onValueChange={(value) => setRole(value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Role</SelectLabel>
-                    {roles?.map((role) => (
-                      <SelectItem key={role.id} value={role.id}>
-                        {role.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          )} */}
+						<h2 className='border-t pt-2 font-bold flex items-center'>
+							Optional Fields
+							<HoverCard>
+								<HoverCardTrigger>
+									<InfoIcon
+										size={18}
+										className='ml-2 cursor-pointer'
+									/>
+								</HoverCardTrigger>
+								<HoverCardContent className='text-sm'>You can fill out these fields later if you want.</HoverCardContent>
+							</HoverCard>
+						</h2>
+						<div className='flex space-x-2'>
+							<div className='space-y-2 w-full'>
+								<label htmlFor='address'>Address</label>
+								<Input
+									id='address'
+									name='address'
+									type='string'
+									value={address}
+									placeholder='123 Main St.'
+									onChange={(e) => setAddress(e.target.value)}
+								/>
+							</div>
+							<div className='space-y-2 w-full'>
+								<label htmlFor='phone'>Phone</label>
+								<Input
+									id='phone'
+									name='phone'
+									type='string'
+									value={phone}
+									placeholder='(555) 555-5555'
+									onChange={(e) => setPhone(e.target.value)}
+								/>
+							</div>
+						</div>
 					</div>
 				</CardContent>
 				<CardFooter>

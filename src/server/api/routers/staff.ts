@@ -52,22 +52,35 @@ export const staffRouter = createTRPCRouter({
 		})
 	}),
 
-	create: protectedProcedure
+	createOrUpdate: protectedProcedure
 		.input(
 			z.object({
+				id: z.string().optional(),
 				address: z.string().optional().default(''),
-				phoneNumber: z.string().optional().default(''),
+				phone: z.string().optional().default(''),
 				email: z.string().email('Invalid email address'),
 				lastName: z.string().min(2, 'Last name must be at least 2 characters'),
 				firstName: z.string().min(2, 'First name must be at least 2 characters'),
 			})
 		)
-		.mutation(async ({ input: { firstName, lastName, email, address, phoneNumber }, ctx }) => {
+		.mutation(async ({ input: { id, firstName, lastName, email, address, phone }, ctx }) => {
+			if (id) {
+				return await db.employee.update({
+					where: { id, userId: ctx.session.user.id },
+					data: {
+						email,
+						address: address,
+						phoneNumber: phone,
+						name: `${firstName} ${lastName}`,
+					},
+				})
+			}
+
 			return await db.employee.create({
 				data: {
 					email,
 					address: address,
-					phoneNumber: phoneNumber,
+					phoneNumber: phone,
 					userId: ctx.session.user.id,
 					name: `${firstName} ${lastName}`,
 				},
