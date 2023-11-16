@@ -29,7 +29,7 @@ export type RouterInputs = inferRouterInputs<AppRouter>
  */
 export type RouterOutputs = inferRouterOutputs<AppRouter>
 
-export type StaffOutput = RouterOutputs['staff']['get']
+export type StaffOutput = RouterOutputs['staff']['get'][number]
 
 export type StaffIdOutput = RouterOutputs['staff']['getId']
 
@@ -40,5 +40,7 @@ export type StaffRolesOutput = RouterOutputs['staff']['getRoles']
 export type StaffScheduleOutput = RouterOutputs['staff']['getSchedule']
 
 export type StaffPreferenceOutput = RouterOutputs['staff']['getPreference']
+
+export type StaffDropdownOutput = RouterOutputs['staff']['getDropdown'][number]
 
 export type StaffAbsenceOutput = RouterOutputs['staff']['getSickLeaves'] | RouterOutputs['staff']['getVacations']

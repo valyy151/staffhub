@@ -44,6 +44,24 @@ export const staffRouter = createTRPCRouter({
 			})
 		}),
 
+	getDropdown: protectedProcedure.query(async ({ ctx }) => {
+		return await db.employee.findMany({
+			where: {
+				userId: ctx.session.user.id,
+			},
+			select: {
+				id: true,
+				name: true,
+				schedulePreference: { select: { hoursPerMonth: true, shiftModels: { select: { id: true, start: true, end: true } } } },
+				vacations: { orderBy: { start: 'desc' }, select: { id: true, start: true, end: true } },
+				sickLeaves: { orderBy: { start: 'desc' }, select: { id: true, start: true, end: true } },
+			},
+			orderBy: {
+				name: 'asc',
+			},
+		})
+	}),
+
 	getNumberOfStaff: protectedProcedure.query(async ({ ctx }) => {
 		return await db.employee.count({
 			where: {

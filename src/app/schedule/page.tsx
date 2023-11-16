@@ -1,3 +1,5 @@
+import SchedulePlanner from '../_components/schedule/schedule-planner'
+
 export default function SchedulePage() {
-	return <div className='text-center mt-4'>Schedule Page</div>
+	return <SchedulePlanner />
 }

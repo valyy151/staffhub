@@ -135,4 +135,37 @@ export const shiftRouter = createTRPCRouter({
 				])
 			})
 		}),
+
+	createMany: protectedProcedure
+		.input(
+			z.object({
+				employeeId: z.string(),
+				schedule: z.array(
+					z.object({
+						end: z.number(),
+						date: z.number(),
+						start: z.number(),
+					})
+				),
+			})
+		)
+		.mutation(async ({ input: { schedule, employeeId }, ctx }) => {
+			return await db.shift.createMany({
+				data: schedule.map((shift) => {
+					const modifiedDate = new Date(shift.date * 1000)
+
+					modifiedDate.setHours(0, 0, 0, 0)
+
+					const midnightUnixCode = Math.floor(modifiedDate.getTime() / 1000)
+
+					return {
+						employeeId,
+						end: shift.end,
+						start: shift.start,
+						date: midnightUnixCode,
+						userId: ctx.session.user.id,
+					}
+				}),
+			})
+		}),
 })
