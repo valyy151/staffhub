@@ -115,4 +115,24 @@ export const shiftRouter = createTRPCRouter({
 			return { ...shift }
 		})
 	}),
+
+	updateAbsences: protectedProcedure
+		.input(
+			z.array(
+				z.object({
+					id: z.string(),
+					approved: z.boolean(),
+				})
+			)
+		)
+		.mutation(async ({ input }) => {
+			input.map(async (absence) => {
+				await Promise.all([
+					db.absence.update({
+						where: { shiftId: absence.id },
+						data: { approved: absence.approved },
+					}),
+				])
+			})
+		}),
 })

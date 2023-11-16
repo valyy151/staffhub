@@ -6,6 +6,7 @@ import { roleRouter } from './routers/role'
 import { vacationRouter } from './routers/vacation'
 import { shiftModelRouter } from './routers/shiftModel'
 import { shiftRouter } from './routers/shift'
+import { dashboardRouter } from './routers/dashboard'
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
 	staff: staffRouter,
 	vacation: vacationRouter,
 	sickLeave: sickLeaveRouter,
+	dashboard: dashboardRouter,
 	staffNote: staffNoteRouter,
 	shiftModel: shiftModelRouter,
 })

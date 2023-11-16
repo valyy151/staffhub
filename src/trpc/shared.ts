@@ -33,6 +33,8 @@ export type StaffOutput = RouterOutputs['staff']['get']
 
 export type StaffIdOutput = RouterOutputs['staff']['getId']
 
+export type DashboardOutput = RouterOutputs['dashboard']['find']
+
 export type StaffRolesOutput = RouterOutputs['staff']['getRoles']
 
 export type StaffScheduleOutput = RouterOutputs['staff']['getSchedule']
