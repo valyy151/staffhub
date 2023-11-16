@@ -1,6 +1,6 @@
 'use client'
 
-import { generateYearArray, changeMonth, calculateHours, formatTime, findVacationDays, findSickLeaveDays } from '@/app/lib/utils'
+import { generateYearArray, changeMonth, calculateHours, formatTime, findAbsenceDays } from '@/app/lib/utils'
 import { api } from '@/trpc/react'
 import { useState } from 'react'
 import { useToast } from '../ui/use-toast'
@@ -91,7 +91,7 @@ export default function SchedulePlanner() {
 				createDay.mutate(yearArray)
 			}
 
-			const filteredSchedule: any = schedule.filter((shift) => shift.start && shift.end)
+			const filteredSchedule = schedule.filter((shift) => shift.start && shift.end)
 
 			if (filteredSchedule.length === 0) {
 				return toast({
@@ -101,13 +101,12 @@ export default function SchedulePlanner() {
 
 			createShift.mutate({
 				employeeId: employee.id,
-				schedule: filteredSchedule,
+				schedule: filteredSchedule as { start: number; end: number; date: number }[],
 			})
 		})
 	}
 
-	const sickDays = findSickLeaveDays(employee?.sickLeaves, schedule)
-	const vacationDays = findVacationDays(employee?.vacations, schedule)
+	const { sickDays, vacationDays } = findAbsenceDays([...employee?.vacations!, ...employee?.sickLeaves!], schedule)
 
 	return (
 		<main

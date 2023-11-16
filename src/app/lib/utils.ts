@@ -204,22 +204,19 @@ export const changeMonth = (date: Date) => {
 	return data
 }
 
-export const findVacationDays = (vacations: { id: string; end: bigint; start: bigint }[] | undefined, schedule: any[] | undefined) => {
+export const findAbsenceDays = (absences: { id: string; end: bigint; start: bigint }[] | undefined, schedule: any[] | undefined) => {
 	const vacationDays: any[] = []
-	vacations?.forEach((vacation) => {
+	const sickDays: any[] = []
+	absences?.forEach((absence) => {
 		schedule?.forEach((day) => {
-			if (day.date * 1000 >= vacation.start && day.date * 1000 <= vacation.end) vacationDays.push(day.date)
+			if (day.date * 1000 >= absence.start && day.date * 1000 <= absence.end) {
+				if (absence.id.startsWith('vacation')) {
+					vacationDays.push(day.date)
+				} else if (absence.id.startsWith('sickLeave')) {
+					sickDays.push(day.date)
+				}
+			}
 		})
 	})
-	return vacationDays
-}
-
-export const findSickLeaveDays = (sickLeaves: { id: string; end: bigint; start: bigint }[] | undefined, schedule: any[] | undefined) => {
-	const sickLeaveDays: any[] = []
-	sickLeaves?.forEach((sickLeave) => {
-		schedule?.forEach((day) => {
-			if (day.date * 1000 >= sickLeave.start && day.date * 1000 <= sickLeave.end) sickLeaveDays.push(day.date)
-		})
-	})
-	return sickLeaveDays
+	return { vacationDays, sickDays }
 }

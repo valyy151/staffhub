@@ -24,7 +24,7 @@ export default function ShiftRow({ data, item, index, shift, setData, sickDays, 
 	const endRef = useRef<HTMLInputElement>(null)
 	const startRef = useRef<HTMLInputElement>(null)
 
-	function handleTimeChange(index: number, newTime: string, field: 'start' | 'end') {
+	const handleTimeChange = (index: number, newTime: string, field: 'start' | 'end') => {
 		if (newTime === '') {
 			//clear the value
 			const newData = data.map((d, i) => (i === index ? { ...d, [field]: '' } : d))
@@ -49,7 +49,7 @@ export default function ShiftRow({ data, item, index, shift, setData, sickDays, 
 	}
 
 	//function like handleTimeChange but it will apply it for both start and end
-	function handleTimeWithClick(index: number) {
+	const handleTimeWithClick = (index: number) => {
 		const [start, end] = shift?.split('-') as string[]
 
 		if (!start || !end) {
