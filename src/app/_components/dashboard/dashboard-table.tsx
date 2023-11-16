@@ -21,18 +21,15 @@ export default function DashboardTable() {
 	const router = useRouter()
 	const searchParams = useSearchParams()
 
-	const [page, setPage] = useState<number>(0)
-	const [value, setValue] = useState<Date>(new Date())
-	const [showCalendar, setShowCalendar] = useState<boolean>(false)
-	const [workDays, setWorkDays] = useState<DashboardOutput | null>(null)
+	const pageParams = Number(searchParams.get('page'))
+	const monthParams = new Date(String(searchParams.get('month')).split('/').reverse().join('-'))
+
+	const [page, setPage] = useState<number>(pageParams)
+	const [value, setValue] = useState<Date>(monthParams)
 
 	useEffect(() => {
 		router.push(`/dashboard?page=${page}&month=${value.toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' })}`)
 	}, [page, value])
-
-	useEffect(() => {
-		setPage(0)
-	}, [value])
 
 	const { data: firstAndLastDays } = api.dashboard.findFirstAndLastDay.useQuery()
 
@@ -40,6 +37,8 @@ export default function DashboardTable() {
 		page: Number(searchParams.get('page')),
 		month: new Date(String(searchParams.get('month')).split('/').reverse().join('-')),
 	})
+
+	const [workDays, setWorkDays] = useState<DashboardOutput | null>(null)
 
 	useEffect(() => {
 		if (data && data.length > 0) {
@@ -86,6 +85,8 @@ export default function DashboardTable() {
 			}
 		})
 	)
+
+	const [showCalendar, setShowCalendar] = useState<boolean>(false)
 
 	return (
 		<div className='flex min-h-screen flex-col'>
@@ -148,7 +149,7 @@ export default function DashboardTable() {
 				</aside>
 				<main className='flex-1 p-4'>
 					<div className='grid gap-4'>
-						{workDays && (
+						{workDays ? (
 							<Heading
 								size={'sm'}
 								className='ml-2'>
@@ -164,67 +165,73 @@ export default function DashboardTable() {
 									day: 'numeric',
 								})}{' '}
 							</Heading>
+						) : (
+							<div className='h-8 w-96 rounded bg-muted animate-pulse' />
 						)}
-						<div className='flex min-h-[24rem] rounded-lg border-b border-t  '>
-							{workDays?.map((day, index) => {
-								return (
-									<div
-										key={day.id}
-										className={`flex w-full flex-col items-center border-x  ${index === 0 && 'rounded-s-lg'} ${index === 6 && 'rounded-e-lg'}`}>
-										<Link
-											href={`/days/${day.id}/shifts`}
-											className='group w-full text-center'>
-											<Heading
-												size={'xs'}
-												className='px-3 pt-6'>
-												{formatDay(day.date, 'long')}
-											</Heading>
-											<Paragraph className='w-full border-b-2 py-2 text-center duration-150 group-hover:border-primary'>{day && formatDate(day.date, 'short')}</Paragraph>
-										</Link>
-										<div className='mt-4 flex w-full flex-col items-center'>
-											{day.shifts.length > 0 ? (
-												day.shifts
-													.sort((a, b) => a.start - b.start)
-													.map((shift) => {
-														return (
-															<div
-																key={shift.id}
-																title={shift.employee.name}
-																className='w-full'>
-																<p className='text-md flex items-center'>
-																	<User className={`ml-1 ${shift.absence?.absent && 'text-rose-500'}`} />
-																	<Link
-																		href={`/staff/${shift.employee.id}`}
-																		className={`text-left hover:underline ${shift.absence?.absent && 'text-muted-foreground'}`}>
-																		{shift.employee.name.split(' ')[0]}
-																	</Link>
+						{workDays ? (
+							<div className='flex min-h-[24rem] rounded-lg border-b border-t'>
+								{workDays?.map((day, index) => {
+									return (
+										<div
+											key={day.id}
+											className={`flex w-full flex-col items-center border-x  ${index === 0 && 'rounded-s-lg'} ${index === 6 && 'rounded-e-lg'}`}>
+											<Link
+												href={`/days/${day.id}/shifts`}
+												className='group w-full text-center'>
+												<Heading
+													size={'xs'}
+													className='px-3 pt-6'>
+													{formatDay(day.date, 'long')}
+												</Heading>
+												<Paragraph className='w-full border-b-2 py-2 text-center duration-150 group-hover:border-primary'>{day && formatDate(day.date, 'short')}</Paragraph>
+											</Link>
+											<div className='mt-4 flex w-full flex-col items-center'>
+												{day.shifts.length > 0 ? (
+													day.shifts
+														.sort((a, b) => a.start - b.start)
+														.map((shift) => {
+															return (
+																<div
+																	key={shift.id}
+																	title={shift.employee.name}
+																	className='w-full'>
+																	<p className='text-md flex items-center'>
+																		<User className={`ml-1 ${shift.absence?.absent && 'text-rose-500'}`} />
+																		<Link
+																			href={`/staff/${shift.employee.id}`}
+																			className={`text-left hover:underline ${shift.absence?.absent && 'text-muted-foreground'}`}>
+																			{shift.employee.name.split(' ')[0]}
+																		</Link>
 
-																	<span className={`ml-auto ${shift.absence?.absent && 'text-muted-foreground'}`}>{formatTime(shift.start)}</span>
-																	<span className={`mx-0.5 ${shift.absence?.absent && 'text-muted-foreground'}`}>-</span>
-																	<span className={`mr-2 ${shift.absence?.absent && 'text-muted-foreground'}`}>{formatTime(shift.end)}</span>
-																</p>
-															</div>
-														)
-													})
-											) : (
-												<Paragraph className='flex items-center'>
-													<CalendarOff className='mr-2' />
-													No Shifts
-												</Paragraph>
-											)}
+																		<span className={`ml-auto ${shift.absence?.absent && 'text-muted-foreground'}`}>{formatTime(shift.start)}</span>
+																		<span className={`mx-0.5 ${shift.absence?.absent && 'text-muted-foreground'}`}>-</span>
+																		<span className={`mr-2 ${shift.absence?.absent && 'text-muted-foreground'}`}>{formatTime(shift.end)}</span>
+																	</p>
+																</div>
+															)
+														})
+												) : (
+													<Paragraph className='flex items-center'>
+														<CalendarOff className='mr-2' />
+														No Shifts
+													</Paragraph>
+												)}
+											</div>
+
+											<Link
+												href={`/days/${day.id}/notes`}
+												title={`${day.notes.length} ${day.notes.length === 1 ? 'note' : 'notes'}`}
+												className='mt-auto flex items-center border-b-2 border-transparent px-3 py-2 text-2xl duration-150 hover:border-primary'>
+												{day.notes.length}
+												{day.notes.length > 0 ? <ScrollText className='ml-2 h-6 w-6' /> : <Scroll className='ml-2 h-6 w-6' />}
+											</Link>
 										</div>
-
-										<Link
-											href={`/days/${day.id}/notes`}
-											title={`${day.notes.length} ${day.notes.length === 1 ? 'note' : 'notes'}`}
-											className='mt-auto flex items-center border-b-2 border-transparent px-3 py-2 text-2xl duration-150 hover:border-primary'>
-											{day.notes.length}
-											{day.notes.length > 0 ? <ScrollText className='ml-2 h-6 w-6' /> : <Scroll className='ml-2 h-6 w-6' />}
-										</Link>
-									</div>
-								)
-							})}
-						</div>
+									)
+								})}
+							</div>
+						) : (
+							<div className='h-96 w-full rounded bg-muted animate-pulse' />
+						)}
 
 						{absencesArray.length > 0 && (
 							<>
