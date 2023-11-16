@@ -11,10 +11,11 @@ import { useEffect, useState } from 'react'
 import type { StaffScheduleOutput } from '@/trpc/shared'
 import { calculateHours, formatDate, formatDay } from '@/app/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
+import dynamic from 'next/dynamic'
 
-// const PDFButton = dynamic(() => import('@/app/_components/PDFButton'), {
-// 	ssr: false,
-// })
+const PDFButton = dynamic(() => import('@/app/_components/PDFButton'), {
+	ssr: false,
+})
 
 export default function StaffSchedule({ employee }: { employee: StaffScheduleOutput }) {
 	const [value, setValue] = useState({ date: new Date(), refetch: false })
@@ -108,11 +109,11 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 					onChange={(value) => setValue({ date: value as Date, refetch: false })}
 				/>
 
-				{/* <PDFButton
-					employee={employee}
-					value={value}
+				<PDFButton
 					month={month}
-				/> */}
+					shifts={shifts}
+					employee={employee}
+				/>
 
 				{isFetching && (
 					<div className='mt-4'>

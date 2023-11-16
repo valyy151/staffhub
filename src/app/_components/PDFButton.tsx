@@ -1,32 +1,41 @@
-// import { Download } from 'lucide-react'
-// import { EmployeeProfile } from '~/utils/api'
-// import { formatMonth } from '~/utils/dateFormatting'
+import { Download } from 'lucide-react'
 
-// import { Button } from '@/components/ui/button'
-// import { PDFDownloadLink } from '@react-pdf/renderer'
+import { Button } from '@/app/_components/ui/button'
+import { PDFDownloadLink } from '@react-pdf/renderer'
 
-// import { SchedulePDF } from './SchedulePDF'
+import { SchedulePDF } from './SchedulePDF'
+import { StaffScheduleOutput } from '@/trpc/shared'
 
-// type PDFButtonProps = {
-// 	value: Date
-// 	month: string
-// 	employee: EmployeeProfile
-// }
+type Shift = {
+	end: number
+	date: number
+	start: number
+	workDayId: string
+	vacation?: boolean
+	sickLeave?: boolean
+}
 
-// export default function PDFButton({ employee, value, month }: PDFButtonProps) {
-// 	return (
-// 		<Button className='mt-2'>
-// 			<Download className='mr-2' />
-// 			<PDFDownloadLink
-// 				document={
-// 					<SchedulePDF
-// 						employee={employee}
-// 						month={month}
-// 					/>
-// 				}
-// 				fileName={`${employee?.name} - ${formatMonth(value.getTime() / 1000)}`}>
-// 				Save as PDF
-// 			</PDFDownloadLink>
-// 		</Button>
-// 	)
-// }
+type PDFButtonProps = {
+	month: string
+	shifts: Shift[]
+	employee: StaffScheduleOutput
+}
+
+export default function PDFButton({ employee, month, shifts }: PDFButtonProps) {
+	return (
+		<Button className='mt-2'>
+			<Download className='mr-2' />
+			<PDFDownloadLink
+				document={
+					<SchedulePDF
+						month={month}
+						shifts={shifts}
+						employee={employee}
+					/>
+				}
+				fileName={`${employee?.name} - ${month}`}>
+				Save as PDF
+			</PDFDownloadLink>
+		</Button>
+	)
+}
