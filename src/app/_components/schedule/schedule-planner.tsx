@@ -16,6 +16,8 @@ import SelectStaff from '../staff/select-staff'
 import { StaffDropdownOutput } from '@/trpc/shared'
 import ScheduleTable from './schedule-table'
 
+type ShiftModel = { id: string; end: number; start: number }
+
 const sentences = {
 	data: [
 		'Start by selecting a staff member on the left and choosing which month you want to make a schedule for.',
@@ -27,7 +29,7 @@ const sentences = {
 	],
 }
 
-export default function SchedulePlanner() {
+export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftModel[] }) {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 
 	const [value, setValue] = useState<Date>(new Date())
@@ -44,8 +46,6 @@ export default function SchedulePlanner() {
 	const [showModal, setShowModal] = useState(false)
 
 	const { data: staff } = api.staff.getDropdown.useQuery()
-
-	const { data: shiftModels } = api.shiftModel.get.useQuery()
 
 	const { toast } = useToast()
 
@@ -106,7 +106,7 @@ export default function SchedulePlanner() {
 		})
 	}
 
-	const { sickDays, vacationDays } = findAbsenceDays([...employee?.vacations!, ...employee?.sickLeaves!], schedule)
+	const { sickDays, vacationDays } = findAbsenceDays([...(employee?.vacations ?? []), ...(employee?.sickLeaves ?? [])], schedule)
 
 	return (
 		<main
