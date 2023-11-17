@@ -30,67 +30,33 @@ export const workDayRouter = createTRPCRouter({
 		})
 	}),
 
-	find: protectedProcedure.query(async () => {
+	get: protectedProcedure.query(async () => {
 		return await db.workDay.findMany()
 	}),
 
-	findOne: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
-		const hasEmployees = await db.employee.findFirst({
-			where: { userId: ctx.session.user.id },
-		})
-
-		const workDayPromise = db.workDay.findUnique({
+	getShifts: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		const workDay = await db.workDay.findUnique({
 			where: { id },
+			select: { id: true, date: true },
 		})
 
-		const shiftsPromise = workDayPromise.then((workDay) => {
-			return db.shift.findMany({
-				where: { date: workDay?.date, userId: ctx.session.user.id },
-				include: {
-					employee: {
-						select: {
-							id: true,
-							name: true,
-							roles: {
-								select: { id: true, name: true },
-							},
-							schedulePreference: {
-								select: {
-									shiftModels: { select: { start: true, end: true } },
-								},
-							},
-						},
-					},
-					role: {
-						select: { id: true, name: true },
-					},
-					absence: true,
-				},
-			})
-		})
+		if (!workDay) {
+			throw new Error('Workday not found')
+		}
 
-		const notesPromise = db.workDayNote.findMany({
-			where: { workDayId: id, userId: ctx.session.user.id },
-			select: { id: true, content: true, createdAt: true },
-			orderBy: { createdAt: 'desc' },
-		})
-
-		const rolesPromise = db.staffRole.findMany({
-			where: { userId: ctx.session.user.id },
-			select: { id: true, name: true, numberPerDay: true },
-		})
-
-		const shiftModelsPromise = db.shiftModel.findMany({
-			where: { userId: ctx.session.user.id },
+		const shifts = await db.shift.findMany({
+			where: { date: workDay?.date, userId: ctx.session.user.id },
 			select: {
 				id: true,
 				end: true,
+				date: true,
 				start: true,
+				role: { select: { id: true, name: true } },
+				employee: { select: { id: true, name: true } },
+				absence: { select: { id: true, absent: true, approved: true } },
 			},
 		})
 
-		const [notes, roles, shifts, workDay, shiftModels] = await Promise.all([notesPromise, rolesPromise, shiftsPromise, workDayPromise, shiftModelsPromise])
-
-		return { ...workDay, roles, notes, shifts, shiftModels, hasEmployees }
+		return { ...workDay, shifts }
 	}),
 })

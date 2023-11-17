@@ -168,4 +168,42 @@ export const shiftRouter = createTRPCRouter({
 				}),
 			})
 		}),
+
+	createOrUpdateAbsence: protectedProcedure
+		.input(
+			z.object({
+				reason: z.string(),
+				absent: z.boolean(),
+				shiftId: z.string(),
+				approved: z.boolean(),
+			})
+		)
+		.mutation(async ({ input: { reason, approved, absent, shiftId }, ctx }) => {
+			const absence = await db.absence.findUnique({
+				where: { shiftId: shiftId, userId: ctx.session.user.id },
+			})
+
+			if (!absence) {
+				return await db.absence.create({
+					data: {
+						absent,
+						reason,
+						shiftId,
+						userId: ctx.session.user.id,
+					},
+				})
+			}
+			return await db.shift.update({
+				where: { id: shiftId, userId: ctx.session.user.id },
+				data: {
+					absence: {
+						update: {
+							absent,
+							reason,
+							approved,
+						},
+					},
+				},
+			})
+		}),
 })

@@ -21,7 +21,7 @@ export default function ShiftRow({ shift, employee, setValue }: { shift: Shift; 
 		if (shift.start) {
 			return (
 				<span className='py-3 pl-2'>
-					{formatTime(shift?.start)} - {formatTime(shift?.end)} <span className='font-medium'>[{formatTotal(shift?.start, shift?.end)}]</span>
+					{formatTime(shift?.start!)} - {formatTime(shift?.end!)} <span className='font-medium'>[{formatTotal(shift?.start, shift?.end!)}]</span>
 				</span>
 			)
 		}
@@ -33,7 +33,7 @@ export default function ShiftRow({ shift, employee, setValue }: { shift: Shift; 
 				title='Click to edit shift'
 				onClick={() => setEdit(!edit)}
 				className={`cursor-pointer text-right hover:bg-accent min-w-[6rem] ${
-					(formatDay(shift.date, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date, 'short') === 'Sun' && 'font-bold text-rose-500')
+					(formatDay(shift.date!, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date!, 'short') === 'Sun' && 'font-bold text-rose-500')
 				}`}>
 				{renderShift()}
 			</TableCell>

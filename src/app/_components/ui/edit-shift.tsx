@@ -22,7 +22,7 @@ export default function EditShift({
 	setEdit: (edit: boolean) => void
 	employee: StaffScheduleOutput
 	shiftModels: ShiftModel[] | undefined
-	setValue: ({ date, refetch }: { date: Date; refetch: boolean }) => void
+	setValue?: ({ date, refetch }: { date: Date; refetch: boolean }) => void
 }) {
 	const [end, setEnd] = useState(shift?.end ?? 0)
 	const [start, setStart] = useState(shift?.start ?? 0)
@@ -33,18 +33,22 @@ export default function EditShift({
 	const { toast } = useToast()
 
 	const handleTimeChange = (newTime: string, field: 'start' | 'end'): void => {
-		const [hour, minute]: string[] = newTime.split(':')
-		const newDate: Date = new Date(shift.date * 1000)
-		newDate.setHours(Number(hour))
-		newDate.setMinutes(Number(minute))
-		const newUnixTime = Math.floor(newDate.getTime() / 1000)
+		try {
+			const [hour, minute]: string[] = newTime.split(':')
+			const newDate: Date = new Date(shift.date! * 1000)
+			newDate.setHours(Number(hour))
+			newDate.setMinutes(Number(minute))
+			const newUnixTime = Math.floor(newDate.getTime() / 1000)
 
-		field === 'start' ? setStart(newUnixTime) : setEnd(newUnixTime)
+			field === 'start' ? setStart(newUnixTime) : setEnd(newUnixTime)
+		} catch (e) {
+			console.error(e)
+		}
 	}
 
 	const createShiftMutation = api.shift.create.useMutation({
 		onSuccess: () => {
-			setValue({ date: new Date(shift.date * 1000), refetch: true })
+			setValue && setValue({ date: new Date(shift.date! * 1000), refetch: true })
 			setEdit(false)
 			toast({
 				title: 'Shift created successfully.',
@@ -61,7 +65,7 @@ export default function EditShift({
 
 	const updateShiftMutation = api.shift.update.useMutation({
 		onSuccess: () => {
-			setValue({ date: new Date(shift.date * 1000), refetch: true })
+			setValue && setValue({ date: new Date(shift.date! * 1000), refetch: true })
 			setEdit(false)
 			toast({
 				title: 'Shift updated successfully.',
@@ -78,7 +82,7 @@ export default function EditShift({
 
 	const deleteShiftMutation = api.shift.delete.useMutation({
 		onSuccess: () => {
-			setValue({ date: new Date(shift.date * 1000), refetch: true })
+			setValue && setValue({ date: new Date(shift.date! * 1000), refetch: true })
 			setEdit(false)
 			toast({
 				title: 'Shift deleted successfully.',
@@ -99,7 +103,7 @@ export default function EditShift({
 				end,
 				start,
 				roleId: role.id,
-				date: shift.date,
+				date: shift.date!,
 				employeeId: employee.id!,
 			})
 			return
@@ -123,7 +127,7 @@ export default function EditShift({
 					<AlertDialogHeader>
 						<AlertDialogTitle>
 							{employee.name} -{'  '}
-							{new Date(shift.date * 1000).toLocaleDateString('en-GB', {
+							{new Date(shift.date! * 1000).toLocaleDateString('en-GB', {
 								weekday: 'long',
 								year: 'numeric',
 								month: 'long',
@@ -183,10 +187,11 @@ export default function EditShift({
 						<div className='mt-1 flex w-96 flex-wrap'>
 							{shiftModels?.map((shiftModel) => (
 								<Heading
+									key={shiftModel.id}
 									size={'xxs'}
 									onClick={() => {
-										handleTimeChange(formatTime(shiftModel.start)!!, 'start')
-										handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end)!!, 'end')
+										handleTimeChange(formatTime(shiftModel.start), 'start')
+										handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end), 'end')
 									}}
 									className='cursor-pointer mr-auto font-medium w-fit hover:text-sky-500'>
 									{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}

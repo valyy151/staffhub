@@ -53,6 +53,7 @@ export const staffRouter = createTRPCRouter({
 				id: true,
 				name: true,
 				schedulePreference: { select: { hoursPerMonth: true, shiftModels: { select: { id: true, start: true, end: true } } } },
+				roles: { select: { id: true, name: true } },
 				vacations: { orderBy: { start: 'desc' }, select: { id: true, start: true, end: true } },
 				sickLeaves: { orderBy: { start: 'desc' }, select: { id: true, start: true, end: true } },
 			},

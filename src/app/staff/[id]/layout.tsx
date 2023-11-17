@@ -9,8 +9,6 @@ export default function StaffProfileLayout({ children }: { children: React.React
 
 	const segment = useSelectedLayoutSegment()
 
-	console.log(segment)
-
 	return (
 		<main className='flex'>
 			<aside className='sticky top-0 mr-4 h-screen w-fit border-r p-4'>
