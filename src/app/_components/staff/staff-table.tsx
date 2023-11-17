@@ -3,7 +3,7 @@ import type { StaffOutput } from '@/trpc/shared'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { useRouter } from 'next/navigation'
 
-export function StaffTable({ staff }: { staff: StaffOutput }) {
+export function StaffTable({ staff }: { staff: StaffOutput[] }) {
 	const router = useRouter()
 
 	return (
