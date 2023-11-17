@@ -160,57 +160,63 @@ export default function AddShift({ date }: AddShiftProps) {
 									roles={employee.roles}
 								/>
 							)}
-							<div>
-								<label>Start Time</label>
-								<Input
-									type='text'
-									value={formatTime(start)}
-									onKeyDown={(e) => {
-										if (e.key === 'Backspace') {
-											e.currentTarget.select()
-											handleTimeChange('', 'start')
-										}
-									}}
-									onChange={(e) => handleTimeChange(e.target.value, 'start')}
-								/>
-							</div>
-							<div>
-								<label>End Time</label>
-								<Input
-									type='text'
-									value={formatTime(end)}
-									onKeyDown={(e) => {
-										if (e.key === 'Backspace') {
-											e.currentTarget.select()
-											handleTimeChange('', 'end')
-										}
-									}}
-									onChange={(e) => handleTimeChange(e.target.value, 'end')}
-								/>
+							<div className='mt-4 flex space-x-1'>
+								<div>
+									<label className='ml-2'>Start</label>
+									<Input
+										value={formatTime(start)}
+										className='w-36 text-lg'
+										onKeyDown={(e) => {
+											if (e.key === 'Backspace') {
+												e.currentTarget.select()
+												handleTimeChange('', 'start')
+											}
+										}}
+										onChange={(e) => handleTimeChange(e.target.value, 'start')}
+									/>
+								</div>
+								<div>
+									<label className='ml-2'>End</label>
+									<Input
+										value={formatTime(end)}
+										className='w-36 text-lg'
+										onKeyDown={(e) => {
+											if (e.key === 'Backspace') {
+												e.currentTarget.select()
+												handleTimeChange('', 'end')
+											}
+										}}
+										onChange={(e) => handleTimeChange(e.target.value, 'end')}
+									/>
+								</div>
+								<div>
+									<label className='ml-4'>Total</label>
+									<Heading
+										size={'xs'}
+										className='h-14 border-none px-4 py-1 text-2xl disabled:cursor-default'>
+										{formatTotal(start, end)}
+									</Heading>
+								</div>
 							</div>
 
-							<Heading
-								size={'xxs'}
-								className='font-normal'>
-								Total hours: <span className='font-semibold'>{formatTotal(start, end)}</span>
-							</Heading>
-							{shiftModels?.length! > 1 && (
-								<div>
-									<Heading size={'xxs'}>Select a shift:</Heading>
-									<div className='flex flex-col'>
-										{shiftModels?.map((shift) => (
+							{shiftModels?.length! > 0 && (
+								<>
+									<Heading size={'xxs'}>Choose a shift:</Heading>
+									<div className='mt-1 flex w-96 flex-wrap'>
+										{shiftModels?.map((shiftModel) => (
 											<Heading
+												key={shiftModel.id}
 												size={'xxs'}
 												onClick={() => {
-													handleTimeChange(formatTime(shift.start)!!, 'start')
-													handleTimeChange(formatTime(shift.end) === '00:00' ? '24:00' : formatTime(shift.end)!!, 'end')
+													handleTimeChange(formatTime(shiftModel.start), 'start')
+													handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end), 'end')
 												}}
-												className='mt-2 cursor-pointer font-normal underline-offset-8 hover:text-sky-500'>
-												{formatTime(shift.start)} - {formatTime(shift.end)}
+												className='cursor-pointer mr-auto font-medium w-fit hover:text-sky-500'>
+												{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}
 											</Heading>
 										))}
 									</div>
-								</div>
+								</>
 							)}
 
 							{isSick && (

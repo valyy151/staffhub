@@ -182,23 +182,25 @@ export default function EditShift({
 							</div>
 						</div>
 					</div>
-					<div>
-						<Heading size={'xxs'}>Choose a shift:</Heading>
-						<div className='mt-1 flex w-96 flex-wrap'>
-							{shiftModels?.map((shiftModel) => (
-								<Heading
-									key={shiftModel.id}
-									size={'xxs'}
-									onClick={() => {
-										handleTimeChange(formatTime(shiftModel.start), 'start')
-										handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end), 'end')
-									}}
-									className='cursor-pointer mr-auto font-medium w-fit hover:text-sky-500'>
-									{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}
-								</Heading>
-							))}
-						</div>
-					</div>
+					{shiftModels?.length! > 0 && (
+						<>
+							<Heading size={'xxs'}>Choose a shift:</Heading>
+							<div className='mt-1 flex w-96 flex-wrap'>
+								{shiftModels?.map((shiftModel) => (
+									<Heading
+										key={shiftModel.id}
+										size={'xxs'}
+										onClick={() => {
+											handleTimeChange(formatTime(shiftModel.start), 'start')
+											handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end), 'end')
+										}}
+										className='cursor-pointer mr-auto font-medium w-fit hover:text-sky-500'>
+										{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}
+									</Heading>
+								))}
+							</div>
+						</>
+					)}
 
 					<AlertDialogFooter className='mt-2'>
 						{shift.start ? (

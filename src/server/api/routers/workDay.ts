@@ -35,6 +35,7 @@ export const workDayRouter = createTRPCRouter({
 	}),
 
 	getShifts: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		await new Promise((resolve) => setTimeout(resolve, 2000))
 		const workDay = await db.workDay.findUnique({
 			where: { id },
 			select: { id: true, date: true },
