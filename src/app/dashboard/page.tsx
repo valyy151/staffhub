@@ -1,5 +1,5 @@
 import DashboardTable from '../_components/dashboard/dashboard-table'
 
-export default async function Dashboard() {
+export default function Dashboard() {
 	return <DashboardTable />
 }

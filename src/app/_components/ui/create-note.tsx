@@ -7,7 +7,7 @@ import { Button } from './button'
 import { ScrollTextIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
-export default function CreateNote({ employeeId }: { employeeId: string }) {
+export default function CreateNote({ id, type }: { id: string; type: 'employee' | 'workDay' }) {
 	const [content, setContent] = useState('')
 	const [showAddNote, setShowAddNote] = useState(false)
 
@@ -15,7 +15,9 @@ export default function CreateNote({ employeeId }: { employeeId: string }) {
 
 	const { toast } = useToast()
 
-	const createNoteMutation = api.staffNote.create.useMutation({
+	const mutation = type === 'employee' ? api.staffNote.create : api.workDayNote.create
+
+	const createNoteMutation = mutation.useMutation({
 		onSuccess: () => {
 			toast({
 				title: 'Note created successfully',
@@ -37,8 +39,11 @@ export default function CreateNote({ employeeId }: { employeeId: string }) {
 		<>
 			<Button
 				onClick={() => setShowAddNote(true)}
-				className='mt-2 w-fit'>
-				<ScrollTextIcon className='mr-2' />
+				className='w-fit'>
+				<ScrollTextIcon
+					size={18}
+					className='mr-2'
+				/>
 				New Note
 			</Button>
 			{showAddNote && (
@@ -60,7 +65,7 @@ export default function CreateNote({ employeeId }: { employeeId: string }) {
 							<AlertDialogAction
 								disabled={createNoteMutation.isLoading}
 								aria-disabled={createNoteMutation.isLoading}
-								onClick={() => createNoteMutation.mutate({ content, employeeId })}>
+								onClick={() => createNoteMutation.mutateAsync({ content, id })}>
 								Continue
 							</AlertDialogAction>
 						</AlertDialogFooter>

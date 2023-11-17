@@ -35,7 +35,6 @@ export const workDayRouter = createTRPCRouter({
 	}),
 
 	getShifts: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
-		await new Promise((resolve) => setTimeout(resolve, 2000))
 		const workDay = await db.workDay.findUnique({
 			where: { id },
 			select: { id: true, date: true },
@@ -56,8 +55,28 @@ export const workDayRouter = createTRPCRouter({
 				employee: { select: { id: true, name: true } },
 				absence: { select: { id: true, absent: true, approved: true } },
 			},
+			orderBy: { start: 'asc' },
 		})
 
 		return { ...workDay, shifts }
+	}),
+
+	getNotes: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		const workDay = await db.workDay.findUnique({
+			where: { id },
+			select: { id: true, date: true },
+		})
+
+		if (!workDay) {
+			throw new Error('Workday not found')
+		}
+
+		const notes = await db.workDayNote.findMany({
+			where: { workDayId: workDay.id, userId: ctx.session.user.id },
+			select: { id: true, content: true, createdAt: true },
+			orderBy: { createdAt: 'desc' },
+		})
+
+		return { ...workDay, notes }
 	}),
 })

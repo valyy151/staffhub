@@ -8,6 +8,7 @@ import { shiftModelRouter } from './routers/shiftModel'
 import { shiftRouter } from './routers/shift'
 import { dashboardRouter } from './routers/dashboard'
 import { workDayRouter } from './routers/workDay'
+import { workDayNoteRouter } from './routers/workDayNote'
 
 /**
  * This is the primary router for your server.
@@ -24,6 +25,7 @@ export const appRouter = createTRPCRouter({
 	dashboard: dashboardRouter,
 	staffNote: staffNoteRouter,
 	shiftModel: shiftModelRouter,
+	workDayNote: workDayNoteRouter,
 })
 
 // export type definition of API

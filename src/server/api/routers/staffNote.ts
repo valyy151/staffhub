@@ -7,34 +7,23 @@ export const staffNoteRouter = createTRPCRouter({
 	create: protectedProcedure
 		.input(
 			z.object({
+				id: z.string(),
 				content: z.string(),
-				employeeId: z.string(),
 			})
 		)
-		.mutation(async ({ input, ctx }) => {
+		.mutation(async ({ input: { content, id }, ctx }) => {
 			return await db.employeeNote.create({
 				data: {
-					content: input.content,
+					employeeId: id,
+					content: content,
 					userId: ctx.session.user.id,
-					employeeId: input.employeeId,
 				},
 			})
 		}),
 
-	delete: protectedProcedure
-		.input(
-			z.object({
-				id: z.string(),
-				employeeId: z.string(),
-			})
-		)
-		.mutation(async ({ input, ctx }) => {
-			return await db.employeeNote.delete({
-				where: {
-					id: input.id,
-					userId: ctx.session.user.id,
-					employeeId: input.employeeId,
-				},
-			})
-		}),
+	delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input: { id }, ctx }) => {
+		return await db.employeeNote.delete({
+			where: { id, userId: ctx.session.user.id },
+		})
+	}),
 })

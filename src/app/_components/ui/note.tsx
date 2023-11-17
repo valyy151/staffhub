@@ -9,18 +9,20 @@ import { useRouter } from 'next/navigation'
 import { Card, CardDescription } from './card'
 
 type NoteProps = {
-	employeeId: string
+	type: 'employee' | 'workDay'
 	note: { id: string; content: string; createdAt: Date }
 }
 
-export default function Note({ note, employeeId }: NoteProps) {
+export default function Note({ note, type }: NoteProps) {
 	const [showModal, setShowModal] = useState(false)
 
 	const { toast } = useToast()
 
 	const router = useRouter()
 
-	const deleteNoteMutation = api.staffNote.delete.useMutation({
+	const mutation = type === 'employee' ? api.staffNote.delete : api.workDayNote.delete
+
+	const deleteNote = mutation.useMutation({
 		onSuccess: () => {
 			router.refresh()
 			setShowModal(false)
@@ -36,8 +38,8 @@ export default function Note({ note, employeeId }: NoteProps) {
 	})
 
 	return (
-		<Card className='mb-2'>
-			<CardDescription className='flex w-full min-w-[28rem] flex-col rounded-md border py-1 shadow bg-card'>
+		<Card className='mb-2 min-w-[28rem]'>
+			<CardDescription className='flex flex-col rounded-md border py-1 shadow bg-card'>
 				<span className='px-2 text-justify font-medium'>{note.content}</span>
 
 				<span className='border-b px-2 pb-2 text-xs font-light'>
@@ -70,10 +72,10 @@ export default function Note({ note, employeeId }: NoteProps) {
 				<FormModal
 					showModal={showModal}
 					heading={'Delete note?'}
+					pending={deleteNote.isLoading}
 					cancel={() => setShowModal(false)}
-					pending={deleteNoteMutation.isLoading}
 					text={'Are you sure you want to delete this note?'}
-					submit={() => deleteNoteMutation.mutate({ employeeId, id: note.id })}
+					submit={() => deleteNote.mutateAsync({ id: note.id })}
 				/>
 			)}
 		</Card>

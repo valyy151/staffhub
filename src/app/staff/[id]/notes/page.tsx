@@ -13,7 +13,10 @@ export default async function StaffNotes({ params }: { params: { id: string } })
 					className='min-w-[28rem]'>
 					Notes for {employee?.name}
 				</Heading>
-				<CreateNote employeeId={employee?.id!!} />
+				<CreateNote
+					id={employee?.id as string}
+					type='employee'
+				/>
 			</div>
 
 			{employee?.notes.length! > 0 ? (
@@ -22,7 +25,7 @@ export default async function StaffNotes({ params }: { params: { id: string } })
 						<Note
 							note={note}
 							key={note.id}
-							employeeId={employee.id}
+							type='employee'
 						/>
 					))}
 				</div>

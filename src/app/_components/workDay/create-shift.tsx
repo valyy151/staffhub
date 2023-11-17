@@ -14,6 +14,7 @@ import RolesDropdown from '../ui/roles-dropdown'
 import { formatTime, formatTotal } from '@/app/lib/utils'
 import { StaffDropdownOutput } from '@/trpc/shared'
 import { Button } from '../ui/button'
+import { ClockIcon } from 'lucide-react'
 
 type AddShiftProps = {
 	date: number
@@ -133,7 +134,13 @@ export default function AddShift({ date }: AddShiftProps) {
 
 	return (
 		<>
-			<Button onClick={() => setShowAddShift(true)}>Create Shift</Button>
+			<Button onClick={() => setShowAddShift(true)}>
+				<ClockIcon
+					size={18}
+					className='mr-2'
+				/>
+				Create Shift
+			</Button>
 			{showAddShift && (
 				<AlertDialog open>
 					<AlertDialogContent>

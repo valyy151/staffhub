@@ -7,7 +7,7 @@ export default function ShiftsTable({ shifts }: { shifts: any }) {
 	const { data: shiftModels } = api.shiftModel.get.useQuery()
 
 	return (
-		<Table className='min-w-full'>
+		<Table className='min-w-full border'>
 			<TableHeader>
 				<TableRow className='hover:bg-inherit'>
 					<TableHead>Employee</TableHead>
