@@ -19,12 +19,11 @@ import { Switch } from '@/app/_components/ui/switch'
 import { TableCell, TableRow } from '@/app/_components/ui/table'
 import { useToast } from '@/app/_components/ui/use-toast'
 import { Popover, PopoverTrigger } from '@radix-ui/react-popover'
-import { useQueryClient } from '@tanstack/react-query'
-
 import FormModal from '../ui/form-modal'
 import { api } from '@/trpc/react'
 import { formatDate, formatDay, formatTime, formatTotal } from '@/app/lib/utils'
 import EditShift from '../ui/edit-shift'
+import { useRouter } from 'next/navigation'
 
 type ShiftProps = {
 	shift: any
@@ -46,7 +45,7 @@ export default function Shift({ shift, shiftModels }: ShiftProps) {
 
 	const { toast } = useToast()
 
-	const queryClient = useQueryClient()
+	const router = useRouter()
 
 	const updateAbsenceMutation = api.shift.createOrUpdateAbsence.useMutation({
 		onSuccess: () => {
@@ -54,7 +53,7 @@ export default function Shift({ shift, shiftModels }: ShiftProps) {
 				title: 'Absence updated successfully.',
 			})
 			setEditAbsence(false)
-			void queryClient.invalidateQueries()
+			router.refresh()
 		},
 
 		onError: () => {
@@ -67,10 +66,11 @@ export default function Shift({ shift, shiftModels }: ShiftProps) {
 
 	const deleteShiftMutation = api.shift.delete.useMutation({
 		onSuccess: () => {
-			void queryClient.invalidateQueries()
 			toast({
 				title: 'Shift deleted successfully.',
 			})
+			setShowModal(false)
+			router.refresh()
 		},
 
 		onError: () => {
@@ -80,11 +80,6 @@ export default function Shift({ shift, shiftModels }: ShiftProps) {
 			})
 		},
 	})
-
-	function deleteShift() {
-		deleteShiftMutation.mutate({ shiftId: shift.id })
-		setShowModal(false)
-	}
 
 	return (
 		<>
@@ -221,11 +216,11 @@ export default function Shift({ shift, shiftModels }: ShiftProps) {
 			{showModal && (
 				<FormModal
 					heading='Delete Shift?'
-					submit={deleteShift}
 					showModal={showModal}
-					pending={deleteShiftMutation.isLoading}
 					cancel={() => setShowModal(false)}
+					pending={deleteShiftMutation.isLoading}
 					text='Are you sure you want to delete this shift?'
+					submit={() => deleteShiftMutation.mutate({ shiftId: shift.id })}
 				/>
 			)}
 		</>

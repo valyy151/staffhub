@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 
 import { Input } from '@/app/_components/ui/input'
 import { useToast } from '@/app/_components/ui/use-toast'
-import { useQueryClient } from '@tanstack/react-query'
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 import Heading from '../ui/heading'
@@ -15,6 +14,7 @@ import { formatTime, formatTotal } from '@/app/lib/utils'
 import { StaffDropdownOutput } from '@/trpc/shared'
 import { Button } from '../ui/button'
 import { ClockIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 type AddShiftProps = {
 	date: number
@@ -96,15 +96,15 @@ export default function AddShift({ date }: AddShiftProps) {
 
 	const { toast } = useToast()
 
-	const queryClient = useQueryClient()
+	const router = useRouter()
 
 	const createShift = api.shift.create.useMutation({
 		onSuccess: () => {
-			setShowAddShift(false)
-			void queryClient.invalidateQueries()
 			toast({
 				title: 'Shift created successfully.',
 			})
+			setShowAddShift(false)
+			router.refresh()
 		},
 		onError: () => {
 			toast({
@@ -265,7 +265,12 @@ export default function AddShift({ date }: AddShiftProps) {
 						</div>
 						<AlertDialogFooter>
 							<AlertDialogCancel onClick={() => setShowAddShift(false)}>Cancel</AlertDialogCancel>
-							<AlertDialogAction onClick={handleSubmit}>Continue</AlertDialogAction>
+							<AlertDialogAction
+								onClick={handleSubmit}
+								disabled={createShift.isLoading}
+								aria-disabled={createShift.isLoading}>
+								Continue
+							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>
