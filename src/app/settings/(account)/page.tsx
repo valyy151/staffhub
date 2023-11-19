@@ -1,10 +1,12 @@
 import Image from 'next/image'
-import { getServerAuthSession } from '@/server/auth'
-import { Card, CardFooter, CardHeader, CardTitle } from '@/app/_components/ui/card'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import DeleteAccount from '@/app/_components/delete-account'
+import { api } from '@/trpc/server'
 
 export default async function AccountSettings() {
-	const session = await getServerAuthSession()
+	const user = await api.user.get.query()
+
+	console.log(user)
 	return (
 		<main className='flex flex-col items-center mt-4'>
 			<Card className='flex flex-col items-center px-8'>
@@ -13,11 +15,14 @@ export default async function AccountSettings() {
 						width={30}
 						height={30}
 						className='rounded-full'
-						alt={session?.user.name as string}
-						src={session?.user.image as string}
+						alt={user?.name as string}
+						src={user?.image as string}
 					/>
-					<CardTitle className='text-xl'>{session?.user.name}</CardTitle>
+					<CardTitle className='text-xl'>{user?.name}</CardTitle>
 				</CardHeader>
+				<CardContent>
+					<CardDescription className='text-md'>Staff Members: {user?.staff}</CardDescription>
+				</CardContent>
 				<CardFooter>
 					<DeleteAccount />
 				</CardFooter>
