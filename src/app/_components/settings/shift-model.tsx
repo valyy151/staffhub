@@ -56,9 +56,9 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 
 	const handleTimeChange = (newTime: string, field: 'start' | 'end') => {
 		const [hour, minute]: string[] = newTime.split(':')
-		const newDate: any = new Date(shiftModel.start * 1000)
-		newDate.setHours(hour)
-		newDate.setMinutes(minute)
+		const newDate = new Date(shiftModel.start * 1000)
+		newDate.setHours(Number(hour))
+		newDate.setMinutes(Number(minute))
 		const newUnixTime = Math.floor(newDate.getTime() / 1000)
 
 		field === 'start' ? setStart(newUnixTime) : setEnd(newUnixTime)
@@ -104,6 +104,12 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 								<Input
 									type='text'
 									value={formatTime(start)}
+									onKeyDown={(e) => {
+										if (e.key === 'Backspace') {
+											e.currentTarget.select()
+											handleTimeChange('', 'start')
+										}
+									}}
 									onChange={(e) => handleTimeChange(e.target.value, 'start')}
 								/>
 							</div>
@@ -112,6 +118,12 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 								<Input
 									type='text'
 									value={formatTime(end)}
+									onKeyDown={(e) => {
+										if (e.key === 'Backspace') {
+											e.currentTarget.select()
+											handleTimeChange('', 'end')
+										}
+									}}
 									onChange={(e) => handleTimeChange(e.target.value, 'end')}
 								/>
 							</div>

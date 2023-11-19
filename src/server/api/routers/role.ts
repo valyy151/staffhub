@@ -1,16 +1,25 @@
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { db } from '@/server/db'
+import { protectedProcedure, createTRPCRouter } from './../trpc'
 import { z } from 'zod'
 
 export const roleRouter = createTRPCRouter({
+	create: protectedProcedure.input(z.object({ name: z.string(), numberPerDay: z.number().optional() })).mutation(async ({ input: { name, numberPerDay }, ctx }) => {
+		return await db.staffRole.create({
+			data: {
+				name,
+				numberPerDay,
+				userId: ctx.session.user.id,
+			},
+		})
+	}),
+
 	get: protectedProcedure.query(async ({ ctx }) => {
 		return await db.staffRole.findMany({
 			where: {
 				userId: ctx.session.user.id,
 			},
-			select: {
-				id: true,
-				name: true,
+			orderBy: {
+				name: 'asc',
 			},
 		})
 	}),
@@ -18,21 +27,46 @@ export const roleRouter = createTRPCRouter({
 	update: protectedProcedure
 		.input(
 			z.object({
-				id: z.string(),
+				name: z.string(),
+				staffRoleId: z.string(),
+				numberPerDay: z.number().optional(),
+			})
+		)
+		.mutation(async ({ input: { staffRoleId, name, numberPerDay }, ctx }) => {
+			return await db.staffRole.update({
+				where: {
+					id: staffRoleId,
+					userId: ctx.session.user.id,
+				},
+				data: {
+					name,
+					numberPerDay,
+				},
+			})
+		}),
+
+	delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input: { id }, ctx }) => {
+		return await db.staffRole.delete({
+			where: { id, userId: ctx.session.user.id },
+		})
+	}),
+
+	assignToEmployee: protectedProcedure
+		.input(
+			z.object({
+				employeeId: z.string(),
 				roleIds: z.array(z.string()),
 			})
 		)
-		.mutation(async ({ input: { id, roleIds }, ctx }) => {
+		.mutation(async ({ input: { employeeId, roleIds }, ctx }) => {
 			return await db.employee.update({
 				where: {
-					id,
+					id: employeeId,
 					userId: ctx.session.user.id,
 				},
 				data: {
 					roles: {
-						set: roleIds.map((id) => ({
-							id,
-						})),
+						set: roleIds.map((id) => ({ id })),
 					},
 				},
 			})
