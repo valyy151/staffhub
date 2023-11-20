@@ -18,7 +18,7 @@ export default function EditRoles({ employee }: { employee: StaffRolesOutput }) 
 
 	const { data: allRoles } = api.role.get.useQuery()
 
-	const updateRoles = api.role.update.useMutation({
+	const updateRoles = api.role.assignToEmployee.useMutation({
 		onSuccess: () => {
 			toast({ title: 'Roles updated' })
 			setShowEdit(false)
@@ -78,7 +78,7 @@ export default function EditRoles({ employee }: { employee: StaffRolesOutput }) 
 								disabled={updateRoles.isLoading}
 								aria-disabled={updateRoles.isLoading}
 								onClick={() => {
-									updateRoles.mutate({ id: employee?.id as string, roleIds: roles.map((r) => r.id) })
+									updateRoles.mutate({ employeeId: employee?.id as string, roleIds: roles.map((r) => r.id) })
 								}}>
 								Continue
 							</AlertDialogAction>
