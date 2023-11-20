@@ -170,6 +170,29 @@ export const formatTotal = (start: number, end: number) => {
 	} else return `${0}h ${0}min`
 }
 
+export const renderTotal = (start: string, end: string) => {
+	const date = new Date()
+
+	const [startHour, startMinute] = start.split(':')
+	const [endHour, endMinute] = end.split(':')
+
+	date.setHours(Number(startHour))
+	date.setMinutes(Number(startMinute))
+
+	const startUnixTime = Math.floor(date.getTime() / 1000)
+
+	if (endHour === '00') {
+		date.setDate(date.getDate() + 1)
+	}
+
+	date.setHours(Number(endHour))
+	date.setMinutes(Number(endMinute))
+
+	const endUnixTime = Math.floor(date.getTime() / 1000)
+
+	return formatTotal(startUnixTime, endUnixTime)
+}
+
 export const generateYearArray = (year: number) => {
 	const daysInYear = 365 + (isLeapYear(year) ? 1 : 0)
 	const startOfYear = new Date(year, 0, 1)

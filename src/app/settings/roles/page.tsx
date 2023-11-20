@@ -6,26 +6,28 @@ import { api } from '@/trpc/server'
 export default async function RolesSettings() {
 	const roles = await api.role.get.query()
 	return (
-		<main className='p-4'>
-			<section className='mt-4'>
-				<Heading
-					size={'sm'}
-					className='mb-2'>
-					Add and manage Staff Roles
-				</Heading>
-				<CreateRole />
-				{roles.length > 0 && (
-					<div>
-						<Heading className='mt-4 border-b   py-1'>My Staff Roles</Heading>
-						{roles.map((role) => (
-							<StaffRole
-								role={role}
-								key={role.id}
-							/>
-						))}
-					</div>
-				)}
-			</section>
-		</main>
+		<section className='p-4'>
+			<Heading
+				size={'xs'}
+				className='mb-2'>
+				Add and manage Staff Roles
+			</Heading>
+			<CreateRole />
+			<Heading
+				size={'xxs'}
+				className='mt-8 mb-2'>
+				My Staff Roles
+			</Heading>
+			{roles.length > 0 && (
+				<div className='flex gap-4 flex-wrap max-w-4xl'>
+					{roles.map((role) => (
+						<StaffRole
+							role={role}
+							key={role.id}
+						/>
+					))}
+				</div>
+			)}
+		</section>
 	)
 }

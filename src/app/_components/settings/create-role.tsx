@@ -63,13 +63,10 @@ export default function CreateRole() {
 	return (
 		<>
 			<div className='space-x-1'>
-				<Button
-					size={'lg'}
-					onClick={() => setShowCreate(true)}>
+				<Button onClick={() => setShowCreate(true)}>
 					<UserCogIcon className='mr-2' /> New Staff Role
 				</Button>
 				<Button
-					size={'lg'}
 					variant={'secondary'}
 					onClick={() => setShowModal(true)}>
 					<InfoIcon className='mr-2' /> What are Staff Roles?
@@ -89,21 +86,26 @@ export default function CreateRole() {
 						<AlertDialogHeader>
 							<AlertDialogTitle> New Staff Role</AlertDialogTitle>
 						</AlertDialogHeader>
-						<label>Staff Role</label>
-						<Input
-							value={role}
-							className='mb-4'
-							placeholder='Enter the role name...'
-							onChange={(e) => setRole(e.target.value)}
-						/>
-						<label className='leading-5'>How many staff members with this role do you need in one work day? (Leave blank if not sure)</label>
-						<Input
-							type='number'
-							value={number}
-							placeholder='Enter the number...'
-							onChange={(e) => setNumber(parseInt(e.target.value).toString())}
-							className='[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
-						/>
+						<div className='flex flex-col space-y-4'>
+							<div>
+								<label>Staff Role</label>
+								<Input
+									value={role}
+									placeholder='Enter the role name...'
+									onChange={(e) => setRole(e.target.value)}
+								/>
+							</div>
+							<div>
+								<label className='leading-5'>How many of this role do you need in one day? (Leave blank if not sure)</label>
+								<Input
+									type='number'
+									value={number}
+									placeholder='Enter the number...'
+									onChange={(e) => setNumber(parseInt(e.target.value).toString())}
+									className='[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+								/>
+							</div>
+						</div>
 						<AlertDialogFooter>
 							<AlertDialogCancel onClick={() => setShowCreate(false)}>Cancel</AlertDialogCancel>
 							<AlertDialogAction

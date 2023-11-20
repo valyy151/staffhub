@@ -33,7 +33,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
 					</Link>
 				</nav>
 			</aside>
-			<main className='pt-4 w-full'>{children}</main>
+			<main className='w-full'>{children}</main>
 		</div>
 	)
 }

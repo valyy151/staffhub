@@ -7,33 +7,30 @@ import { api } from '@/trpc/server'
 export default async function ShiftModelsSettings() {
 	const shiftModels = await api.shiftModel.get.query()
 	return (
-		<>
-			<section className='p-4'>
-				<Heading
-					size={'sm'}
-					className='mb-2'>
-					Add and manage Shift Models
-				</Heading>
-				<CreateModel />
-
-				{shiftModels.length > 0 ? (
-					<>
-						<Heading
-							size={'xs'}
-							className='mt-4'>
-							My Shift Models
-						</Heading>
-						{shiftModels.map((shiftModel) => (
-							<ShiftModel
-								key={shiftModel.id}
-								shiftModel={shiftModel}
-							/>
-						))}
-					</>
-				) : (
-					<Paragraph className='mt-4'>You don't have any shift models yet.</Paragraph>
-				)}
-			</section>
-		</>
+		<section className='p-4'>
+			<Heading
+				size={'xs'}
+				className='mb-2'>
+				Add and manage Shift Models
+			</Heading>
+			<CreateModel />
+			<Heading
+				size={'xxs'}
+				className='mt-8 mb-2'>
+				My Shift Models
+			</Heading>
+			{shiftModels.length > 0 ? (
+				<div className='flex gap-4 flex-wrap max-w-4xl'>
+					{shiftModels.map((shiftModel) => (
+						<ShiftModel
+							key={shiftModel.id}
+							shiftModel={shiftModel}
+						/>
+					))}
+				</div>
+			) : (
+				<Paragraph className='mt-4'>You don't have any shift models yet.</Paragraph>
+			)}
+		</section>
 	)
 }

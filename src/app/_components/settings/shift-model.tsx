@@ -4,12 +4,13 @@ import { api } from '@/trpc/react'
 import { useToast } from '../ui/use-toast'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Heading from '../ui/heading'
-import { formatTime, formatTotal } from '@/app/lib/utils'
+import { formatTime, renderTotal } from '@/app/lib/utils'
 import { Button } from '../ui/button'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 import { Input } from '../ui/input'
 import FormModal from '../ui/form-modal'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
+import Heading from '../ui/heading'
 
 export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; start: number; end: number } }) {
 	const router = useRouter()
@@ -18,8 +19,8 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 	const [edit, setEdit] = useState(false)
 	const [showModal, setShowModal] = useState(false)
 
-	const [end, setEnd] = useState<number>(shiftModel.end)
-	const [start, setStart] = useState<number>(shiftModel.start)
+	const [end, setEnd] = useState<string>(formatTime(shiftModel.end))
+	const [start, setStart] = useState<string>(formatTime(shiftModel.start))
 
 	const editShiftModel = api.shiftModel.update.useMutation({
 		onSuccess: () => {
@@ -55,61 +56,94 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 	})
 
 	const handleTimeChange = (newTime: string, field: 'start' | 'end') => {
-		const [hour, minute]: string[] = newTime.split(':')
-		const newDate = new Date(shiftModel.start * 1000)
-		newDate.setHours(Number(hour))
-		newDate.setMinutes(Number(minute))
-		const newUnixTime = Math.floor(newDate.getTime() / 1000)
+		if (newTime.length > 5) {
+			return
+		}
 
-		field === 'start' ? setStart(newUnixTime) : setEnd(newUnixTime)
+		field === 'start' ? setStart(newTime) : setEnd(newTime)
+
+		if (newTime.length === 2) {
+			if (Number(newTime) > 23) {
+				field === 'start' ? setStart('00:') : setEnd('00:')
+			} else {
+				field === 'start' ? setStart(`${newTime}:`) : setEnd(`${newTime}:`)
+			}
+		}
+
+		if (Number(newTime.split(':')[1]) > 59) {
+			field === 'start' ? setStart(`${newTime.split(':')[0]}:00`) : setEnd(`${newTime.split(':')[0]}:00`)
+		}
+
+		const date = new Date()
+
+		const [hour, minute] = newTime.split(':')
+
+		date.setHours(Number(hour))
+		date.setMinutes(Number(minute))
+
+		const newUnixTime = Math.floor(date.getTime() / 1000)
+
+		if (minute?.length === 5) {
+			field === 'start' ? setStart(formatTime(newUnixTime)) : setEnd(formatTime(newUnixTime))
+		}
+	}
+
+	const handleSubmit = () => {
+		const date = new Date()
+
+		const [hour, minute] = start.split(':')
+
+		date.setHours(Number(hour))
+
+		date.setMinutes(Number(minute))
+
+		const startUnixTime = Math.floor(date.getTime() / 1000)
+
+		date.setHours(Number(end.split(':')[0]))
+
+		date.setMinutes(Number(end.split(':')[1]))
+
+		const endUnixTime = Math.floor(date.getTime() / 1000)
+
+		editShiftModel.mutate({ id: shiftModel.id, start: startUnixTime, end: endUnixTime })
 	}
 
 	return (
-		<div className='flex h-20 items-center w-fit justify-between border-b py-2'>
-			<div className='flex space-x-2'>
-				<Heading size={'xs'}>{formatTime(shiftModel.start)}</Heading>
-				<Heading size={'xs'}>-</Heading>
-				<Heading size={'xs'}>{formatTime(shiftModel.end)}</Heading>
-			</div>
-			<div>
-				<Heading
-					size={'xs'}
-					className='mx-12'>
-					{formatTotal(shiftModel.start, shiftModel.end)}
-				</Heading>
-			</div>
-			<div className='space-x-2'>
-				<Button
-					size={'lg'}
-					onClick={() => setEdit(true)}>
-					Edit
-				</Button>
-				<Button
-					size={'lg'}
-					variant={'secondary'}
-					onClick={() => setShowModal(true)}>
-					Delete
-				</Button>
-			</div>
+		<>
+			<Card className='w-fit'>
+				<CardHeader>
+					<CardTitle>
+						{start} - {end}
+					</CardTitle>
+					<CardDescription className='text-lg'>Total hours: {renderTotal(start, end)}</CardDescription>
+				</CardHeader>
 
+				<CardFooter className='space-x-2'>
+					<Button
+						size={'lg'}
+						onClick={() => setEdit(true)}>
+						Edit
+					</Button>
+					<Button
+						size={'lg'}
+						variant={'secondary'}
+						onClick={() => setShowModal(true)}>
+						Delete
+					</Button>
+				</CardFooter>
+			</Card>
 			{edit && (
 				<AlertDialog open>
-					<AlertDialogContent>
+					<AlertDialogContent className='min-w-[35rem]'>
 						<AlertDialogHeader>
 							<AlertDialogTitle> Edit Shift Model</AlertDialogTitle>
 						</AlertDialogHeader>
-						<div className='mt-4 flex flex-col space-y-4'>
+						<div className='flex items-center space-x-4'>
 							<div>
 								<label>Start Time</label>
 								<Input
 									type='text'
-									value={formatTime(start)}
-									onKeyDown={(e) => {
-										if (e.key === 'Backspace') {
-											e.currentTarget.select()
-											handleTimeChange('', 'start')
-										}
-									}}
+									value={start}
 									onChange={(e) => handleTimeChange(e.target.value, 'start')}
 								/>
 							</div>
@@ -117,23 +151,30 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 								<label>End Time</label>
 								<Input
 									type='text'
-									value={formatTime(end)}
-									onKeyDown={(e) => {
-										if (e.key === 'Backspace') {
-											e.currentTarget.select()
-											handleTimeChange('', 'end')
-										}
-									}}
+									value={end}
 									onChange={(e) => handleTimeChange(e.target.value, 'end')}
 								/>
+							</div>
+							<div>
+								<label
+									htmlFor='end'
+									className='ml-2'>
+									Total
+								</label>
+
+								<Heading
+									size={'xxs'}
+									className='ml-2 mt-2'>
+									{renderTotal(start, end)}
+								</Heading>
 							</div>
 						</div>
 						<AlertDialogFooter>
 							<AlertDialogCancel onClick={() => setEdit(false)}>Cancel</AlertDialogCancel>
 							<AlertDialogAction
+								onClick={handleSubmit}
 								disabled={editShiftModel.isLoading}
-								aria-disabled={editShiftModel.isLoading}
-								onClick={() => editShiftModel.mutate({ id: shiftModel.id, start, end })}>
+								aria-disabled={editShiftModel.isLoading}>
 								Continue
 							</AlertDialogAction>
 						</AlertDialogFooter>
@@ -150,6 +191,6 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 					submit={() => deleteShiftModel.mutate({ id: shiftModel.id })}
 				/>
 			)}
-		</div>
+		</>
 	)
 }

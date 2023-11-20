@@ -4,10 +4,13 @@ import { useState } from 'react'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/app/_components/ui/alert-dialog'
 import { Input } from '@/app/_components/ui/input'
 import Heading from '@/app/_components/ui/heading'
-import { formatTime, formatTotal } from '@/app/lib/utils'
+import { formatTime, renderTotal } from '@/app/lib/utils'
 import { Button } from '../ui/button'
 import { InfoIcon, UserCogIcon } from 'lucide-react'
 import InfoModal from '../ui/info-modal'
+import { api } from '@/trpc/react'
+import { useToast } from '../ui/use-toast'
+import { useRouter } from 'next/navigation'
 
 const sentences = {
 	data: [
@@ -18,33 +21,95 @@ const sentences = {
 }
 
 export default function CreateModel() {
-	const [end, setEnd] = useState(0)
-	const [start, setStart] = useState(0)
+	const router = useRouter()
+	const { toast } = useToast()
+
+	const [end, setEnd] = useState('')
+	const [start, setStart] = useState('')
+
 	const [showModal, setShowModal] = useState(false)
 	const [showCreate, setShowCreate] = useState(false)
 
-	const handleSubmit = () => {}
+	const handleSubmit = () => {
+		const date = new Date()
+
+		const [hour, minute] = start.split(':')
+
+		date.setHours(Number(hour))
+
+		date.setMinutes(Number(minute))
+
+		const startUnixTime = Math.floor(date.getTime() / 1000)
+
+		date.setHours(Number(end.split(':')[0]))
+
+		date.setMinutes(Number(end.split(':')[1]))
+
+		const endUnixTime = Math.floor(date.getTime() / 1000)
+
+		createModel.mutate({
+			end: endUnixTime,
+			start: startUnixTime,
+		})
+	}
+
+	const createModel = api.shiftModel.create.useMutation({
+		onSuccess: () => {
+			toast({
+				title: `Shift Model created`,
+			})
+			setShowCreate(false)
+			router.refresh()
+		},
+
+		onError: () => {
+			toast({
+				title: `Error creating Shift Model`,
+				variant: 'destructive',
+			})
+		},
+	})
 
 	const handleTimeChange = (newTime: string, field: 'start' | 'end') => {
-		const [hour, minute]: string[] = newTime.split(':')
-		const newDate: any = new Date()
-		newDate.setHours(hour)
-		newDate.setMinutes(minute)
-		const newUnixTime = Math.floor(newDate.getTime() / 1000)
+		if (newTime.length > 5) {
+			return
+		}
 
-		field === 'start' ? setStart(newUnixTime) : setEnd(newUnixTime)
+		field === 'start' ? setStart(newTime) : setEnd(newTime)
+
+		if (newTime.length === 2) {
+			if (Number(newTime) > 23) {
+				field === 'start' ? setStart('00:') : setEnd('00:')
+			} else {
+				field === 'start' ? setStart(`${newTime}:`) : setEnd(`${newTime}:`)
+			}
+		}
+
+		if (Number(newTime.split(':')[1]) > 59) {
+			field === 'start' ? setStart(`${newTime.split(':')[0]}:00`) : setEnd(`${newTime.split(':')[0]}:00`)
+		}
+
+		const date = new Date()
+
+		const [hour, minute] = newTime.split(':')
+
+		date.setHours(Number(hour))
+		date.setMinutes(Number(minute))
+
+		const newUnixTime = Math.floor(date.getTime() / 1000)
+
+		if (minute?.length === 5) {
+			field === 'start' ? setStart(formatTime(newUnixTime)) : setEnd(formatTime(newUnixTime))
+		}
 	}
 
 	return (
 		<>
 			<div className='space-x-2'>
-				<Button
-					size={'lg'}
-					onClick={() => setShowCreate(true)}>
+				<Button onClick={() => setShowCreate(true)}>
 					<UserCogIcon className='mr-2' /> New Shift Model
 				</Button>
 				<Button
-					size={'lg'}
 					variant={'secondary'}
 					onClick={() => setShowModal(true)}>
 					<InfoIcon className='mr-2' /> What are Shift Models?
@@ -52,26 +117,20 @@ export default function CreateModel() {
 			</div>
 			{showCreate && (
 				<AlertDialog open>
-					<AlertDialogContent>
+					<AlertDialogContent className='min-w-[35rem]'>
 						<AlertDialogHeader>
 							<AlertDialogTitle> New Shift Model</AlertDialogTitle>
 						</AlertDialogHeader>
-						<div className='flex space-x-2'>
+						<div className='flex items-center space-x-4'>
 							<div>
 								<label htmlFor='start'>Start</label>
 
 								<Input
 									type='text'
 									name='start'
+									value={start}
 									className='w-44'
 									placeholder='Start time'
-									value={formatTime(start)}
-									onKeyDown={(e) => {
-										if (e.key === 'Backspace') {
-											e.currentTarget.select()
-											handleTimeChange('', 'start')
-										}
-									}}
 									onChange={(e) => handleTimeChange(e.target.value, 'start')}
 								/>
 							</div>
@@ -82,15 +141,9 @@ export default function CreateModel() {
 								<Input
 									name='end'
 									type='text'
+									value={end}
 									className='w-44'
 									placeholder='End time'
-									value={formatTime(end)}
-									onKeyDown={(e) => {
-										if (e.key === 'Backspace') {
-											e.currentTarget.select()
-											handleTimeChange('', 'end')
-										}
-									}}
 									onChange={(e) => handleTimeChange(e.target.value, 'end')}
 								/>
 							</div>
@@ -104,13 +157,18 @@ export default function CreateModel() {
 								<Heading
 									size={'xxs'}
 									className='ml-2 mt-2'>
-									{formatTotal(start, end)}
+									{renderTotal(start, end)}
 								</Heading>
 							</div>
 						</div>
 						<AlertDialogFooter>
 							<AlertDialogCancel onClick={() => setShowCreate(false)}>Cancel</AlertDialogCancel>
-							<AlertDialogAction onClick={handleSubmit}>Continue</AlertDialogAction>
+							<AlertDialogAction
+								onClick={handleSubmit}
+								disabled={createModel.isLoading}
+								aria-disabled={createModel.isLoading}>
+								Continue
+							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>

@@ -35,8 +35,6 @@ export default function DeleteAccount() {
 	return (
 		<>
 			<Button
-				size={'lg'}
-				className='text-lg'
 				variant={'destructive'}
 				onClick={() => setShowModal(true)}>
 				Delete my Account

@@ -6,10 +6,9 @@ import { api } from '@/trpc/server'
 export default async function AccountSettings() {
 	const user = await api.user.get.query()
 
-	console.log(user)
 	return (
-		<main className='flex flex-col items-center mt-4'>
-			<Card className='flex flex-col items-center px-8'>
+		<main className='p-4'>
+			<Card className='flex w-fit flex-col min-w-[20rem]'>
 				<CardHeader className='flex flex-row items-center space-x-2'>
 					<Image
 						width={30}

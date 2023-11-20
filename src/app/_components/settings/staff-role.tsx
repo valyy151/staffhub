@@ -5,12 +5,11 @@ import { useToast } from '../ui/use-toast'
 import { api } from '@/trpc/react'
 import { useRouter } from 'next/navigation'
 import { UserCogIcon } from 'lucide-react'
-import Heading from '../ui/heading'
-import Paragraph from '../ui/paragraph'
 import { Button } from '../ui/button'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
 import { Input } from '../ui/input'
 import FormModal from '../ui/form-modal'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
 
 type Role = {
 	id: string
@@ -72,21 +71,15 @@ export default function StaffRole({ role }: { role: Role }) {
 	}
 
 	return (
-		<div className='flex h-20 items-center justify-between border-b   py-2'>
-			<div className='flex items-center space-x-2'>
-				<UserCogIcon size={28} />
-				<Heading size={'xxs'}>{role.name}</Heading>
-			</div>
-
-			<div className='flex items-center'>
-				{role.numberPerDay !== null && role.numberPerDay > 0 && (
-					<>
-						<Paragraph className='ml-8 '>Minimum</Paragraph>
-						<Paragraph className='ml-2  font-bold'>{role.numberPerDay}</Paragraph>
-						<Paragraph className='ml-2 '>per work day</Paragraph>
-					</>
-				)}
-				<div className='space-x-2 pl-2'>
+		<>
+			<Card className='w-fit'>
+				<CardHeader>
+					<CardTitle className='flex items-center text-lg'>
+						<UserCogIcon className='mr-2' /> {role.name}
+					</CardTitle>
+				</CardHeader>
+				<CardContent>Minimum per day: {role.numberPerDay}</CardContent>
+				<CardFooter className='space-x-2'>
 					<Button
 						size={'lg'}
 						onClick={() => setEdit(true)}>
@@ -99,41 +92,40 @@ export default function StaffRole({ role }: { role: Role }) {
 						onClick={() => setShowModal(true)}>
 						Delete
 					</Button>
-				</div>
-			</div>
-
+				</CardFooter>
+			</Card>
 			{edit && (
 				<AlertDialog open>
 					<AlertDialogContent>
 						<AlertDialogHeader>
 							<AlertDialogTitle> Edit Staff Role</AlertDialogTitle>
 						</AlertDialogHeader>
+						<div className='flex items-center space-x-4'>
+							<div>
+								<label htmlFor='name'>Name</label>
 
-						<div className='mt-4'>
-							<label htmlFor='name'>Name</label>
+								<Input
+									type='text'
+									name='name'
+									placeholder='Name'
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+								/>
+							</div>
 
-							<Input
-								type='text'
-								name='name'
-								placeholder='Name'
-								value={name}
-								onChange={(e) => setName(e.target.value)}
-							/>
+							<div>
+								<label htmlFor='numberPerDay'>Minimum per day</label>
+
+								<Input
+									type='number'
+									name='numberPerDay'
+									placeholder='Minimum'
+									value={numberPerDay}
+									className='[appearance:textfield]  [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+									onChange={(e) => setNumberPerDay(e.target.value)}
+								/>
+							</div>
 						</div>
-
-						<div className='mt-4'>
-							<label htmlFor='numberPerDay'>Minimum per day</label>
-
-							<Input
-								type='number'
-								name='numberPerDay'
-								placeholder='Minimum'
-								value={numberPerDay}
-								className='[appearance:textfield]  [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
-								onChange={(e) => setNumberPerDay(e.target.value)}
-							/>
-						</div>
-
 						<AlertDialogFooter>
 							<AlertDialogCancel onClick={() => setEdit(false)}>Cancel</AlertDialogCancel>
 							<AlertDialogAction onClick={handleSubmit}>Continue</AlertDialogAction>
@@ -151,6 +143,6 @@ export default function StaffRole({ role }: { role: Role }) {
 					text={`Are you sure you want to delete the ${role.name} staff role?`}
 				/>
 			)}
-		</div>
+		</>
 	)
 }
