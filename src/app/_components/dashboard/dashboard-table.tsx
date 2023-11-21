@@ -46,6 +46,10 @@ export default function DashboardTable() {
 		}
 	}, [data])
 
+	useEffect(() => {
+		setPage(0)
+	}, [value])
+
 	const notesArray: Note[] = workDays?.map((day) => day.notes.map((note) => ({ ...note, date: day.date }))).flat() ?? []
 
 	const absencesArray: DashboardAbsence[] | null = []

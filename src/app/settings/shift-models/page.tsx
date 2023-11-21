@@ -21,12 +21,14 @@ export default async function ShiftModelsSettings() {
 			</Heading>
 			{shiftModels.length > 0 ? (
 				<div className='flex gap-4 flex-wrap max-w-4xl'>
-					{shiftModels.map((shiftModel) => (
-						<ShiftModel
-							key={shiftModel.id}
-							shiftModel={shiftModel}
-						/>
-					))}
+					{shiftModels
+						.sort((a, b) => Number(b.start) - Number(a.start))
+						.map((shiftModel) => (
+							<ShiftModel
+								key={shiftModel.id}
+								shiftModel={shiftModel}
+							/>
+						))}
 				</div>
 			) : (
 				<Paragraph className='mt-4'>You don't have any shift models yet.</Paragraph>

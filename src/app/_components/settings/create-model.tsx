@@ -36,13 +36,11 @@ export default function CreateModel() {
 		const [hour, minute] = start.split(':')
 
 		date.setHours(Number(hour))
-
 		date.setMinutes(Number(minute))
 
 		const startUnixTime = Math.floor(date.getTime() / 1000)
 
 		date.setHours(Number(end.split(':')[0]))
-
 		date.setMinutes(Number(end.split(':')[1]))
 
 		const endUnixTime = Math.floor(date.getTime() / 1000)
