@@ -22,8 +22,6 @@ export const metadata = {
 	icons: [{ rel: 'icon', url: '/favicon.ico' }],
 }
 
-export const dynamic = 'force-dynamic'
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang='en'>
