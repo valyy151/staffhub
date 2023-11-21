@@ -4,6 +4,38 @@ import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { db } from '@/server/db'
 import { getMonth } from '@/app/lib/utils'
 
+const getStaff = async (userId: string, page?: number, query?: string) => {
+	return await db.employee.findMany({
+		where: {
+			userId,
+			OR: [
+				{
+					name: {
+						contains: query,
+					},
+				},
+				{
+					email: {
+						contains: query,
+					},
+				},
+			],
+		},
+		select: {
+			id: true,
+			name: true,
+			email: true,
+			address: true,
+			phoneNumber: true,
+		},
+		skip: page ? (page - 1) * 10 : 0,
+		take: 10,
+		orderBy: {
+			name: 'asc',
+		},
+	})
+}
+
 export const staffRouter = createTRPCRouter({
 	get: protectedProcedure
 		.input(
@@ -13,35 +45,7 @@ export const staffRouter = createTRPCRouter({
 			})
 		)
 		.query(async ({ input, ctx }) => {
-			return await db.employee.findMany({
-				where: {
-					userId: ctx.session.user.id,
-					OR: [
-						{
-							name: {
-								contains: input.query,
-							},
-						},
-						{
-							email: {
-								contains: input.query,
-							},
-						},
-					],
-				},
-				select: {
-					id: true,
-					name: true,
-					email: true,
-					address: true,
-					phoneNumber: true,
-				},
-				skip: input.page ? (input.page - 1) * 10 : 0,
-				take: 10,
-				orderBy: {
-					name: 'asc',
-				},
-			})
+			return await getStaff(ctx.session.user.id, input.page, input.query)
 		}),
 
 	getDropdown: protectedProcedure.query(async ({ ctx }) => {
