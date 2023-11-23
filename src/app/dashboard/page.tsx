@@ -4,7 +4,6 @@ import Heading from '../_components/ui/heading'
 import Link from 'next/link'
 
 export default async function Dashboard() {
-	await new Promise((resolve) => setTimeout(resolve, 2000))
 	const numberOfStaff = await api.staff.getNumberOfStaff.query()
 
 	return (
