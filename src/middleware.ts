@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
 		return NextResponse.redirect(new URL('/', request.url))
 	}
 
-	if (request.nextUrl.pathname === '/dashboard' && request.nextUrl.searchParams.get('page') === null && request.nextUrl.searchParams.get('month') === null) {
+	if (request.nextUrl.pathname === '/dashboard' && !request.nextUrl.searchParams.get('page') && !request.nextUrl.searchParams.get('month')) {
 		return NextResponse.redirect(new URL(`/dashboard?page=${0}&month=${new Date().toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' })}`, request.url))
 	}
 }

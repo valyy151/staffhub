@@ -8,7 +8,7 @@ export function SignInButton({ text }: { text?: string }) {
 	return (
 		<Button
 			className={`${!text && 'ml-1'}`}
-			onClick={() => signIn('google')}>
+			onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
 			{text ?? 'Sign In'}
 		</Button>
 	)
