@@ -1,61 +1,20 @@
 'use client'
 
 import Link from 'next/link'
-import { api } from '@/trpc/react'
-import Calendar from 'react-calendar'
 import AbsenceCard from './absence-card'
-import 'react-calendar/dist/Calendar.css'
-import { useEffect, useState } from 'react'
 import { DashboardOutput } from '@/trpc/shared'
 import Heading from '@/app/_components/ui/heading'
-import { Button } from '@/app/_components/ui/button'
 import Paragraph from '@/app/_components/ui/paragraph'
 import { DashboardAbsence, Note } from '@/app/lib/types'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { formatDay, formatDate, formatTime } from '@/app/lib/utils'
 import { CalendarOff, Scroll, ScrollText, User } from 'lucide-react'
-import { Select, SelectContent, SelectTrigger, SelectValue } from '@/app/_components/ui/select'
-import Spinner from '../ui/spinner'
 
-export default function DashboardTable() {
-	const router = useRouter()
-	const searchParams = useSearchParams()
-
-	const pageParams = Number(searchParams.get('page'))
-	const monthParams = new Date(String(searchParams.get('month')).split('/').reverse().join('-'))
-
-	const [page, setPage] = useState<number>(pageParams)
-	const [value, setValue] = useState<Date>(monthParams)
-
-	useEffect(() => {
-		router.push(`/dashboard?page=${page}&month=${value.toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' })}`)
-	}, [page, value])
-
-	const { data: firstAndLastDays } = api.dashboard.findFirstAndLastDay.useQuery()
-
-	const { data, isFetching } = api.dashboard.find.useQuery({
-		page: Number(searchParams.get('page')),
-		month: new Date(String(searchParams.get('month')).split('/').reverse().join('-')),
-	})
-
-	const [workDays, setWorkDays] = useState<DashboardOutput | null>(null)
-
-	useEffect(() => {
-		if (data && data.length > 0) {
-			setWorkDays(data)
-		}
-	}, [data])
-
-	useEffect(() => {
-		setPage(0)
-	}, [value])
-
-	const notesArray: Note[] = workDays?.map((day) => day.notes.map((note) => ({ ...note, date: day.date }))).flat() ?? []
-
+export default function DashboardTable({ shifts }: { shifts: DashboardOutput }) {
 	const absencesArray: DashboardAbsence[] | null = []
+	const notesArray: Note[] = shifts?.map((day) => day.notes.map((note) => ({ ...note, date: day.date }))).flat() ?? []
 
 	//calculate amount of absences for each employee then push to absencesArray
-	workDays?.map((day) =>
+	shifts?.map((day) =>
 		day.shifts.map((shift) => {
 			if (shift.absence?.absent) {
 				const index = absencesArray.findIndex((absence) => absence.employee.id === shift.employee.id)
@@ -90,80 +49,22 @@ export default function DashboardTable() {
 		})
 	)
 
-	const [showCalendar, setShowCalendar] = useState<boolean>(false)
-
 	return (
 		<div className='flex min-h-screen flex-col'>
 			<div className='flex flex-1 overflow-hidden'>
-				<aside className='w-64 overflow-auto border-r '>
-					<nav className='flex flex-col gap-4 p-4'>
-						<h2 className='text-lg font-semibold'>Filters</h2>
-						<div className='space-y-4'>
-							<Select
-								open={showCalendar}
-								onOpenChange={() => setShowCalendar(!showCalendar)}>
-								<SelectTrigger
-									onClick={() => setShowCalendar(!showCalendar)}
-									className='focus:ring-0 focus:ring-offset-0'>
-									<SelectValue
-										placeholder={new Date(value).toLocaleDateString('en-GB', {
-											year: 'numeric',
-											month: 'long',
-										})}
-									/>
-								</SelectTrigger>
-								<SelectContent>
-									<Calendar
-										view='month'
-										maxDetail='year'
-										next2Label={null}
-										prev2Label={null}
-										activeStartDate={value!}
-										onChange={(value) => {
-											setValue(value as Date)
-											setShowCalendar(false)
-										}}
-										maxDate={new Date(1000 * firstAndLastDays?.[1]?.date!)}
-										minDate={new Date(1000 * firstAndLastDays?.[0]?.date!)}
-									/>
-								</SelectContent>
-							</Select>
-							<div className='flex space-x-1'>
-								<Button
-									variant={'outline'}
-									title='Previous Week'
-									disabled={isFetching}
-									aria-disabled={isFetching}
-									onClick={() => setPage(page - 1)}>
-									Prev Week
-								</Button>
-
-								<Button
-									variant={'outline'}
-									title='Next Week'
-									disabled={isFetching}
-									aria-disabled={isFetching}
-									onClick={() => setPage(page + 1)}>
-									Next Week
-								</Button>
-							</div>
-							<div className='flex justify-center pt-6'>{isFetching && <Spinner noMargin />}</div>
-						</div>
-					</nav>
-				</aside>
 				<main className='flex-1 p-4'>
 					<div className='grid gap-4'>
-						{workDays && (
+						{shifts && (
 							<Heading
 								size={'sm'}
 								className='ml-2'>
-								{new Date(workDays[0]!.date * 1000).toLocaleDateString('en-GB', {
+								{new Date(shifts[0]!.date * 1000).toLocaleDateString('en-GB', {
 									year: 'numeric',
 									month: 'long',
 									day: 'numeric',
 								})}{' '}
 								-{' '}
-								{new Date(workDays[6]!.date * 1000).toLocaleDateString('en-GB', {
+								{new Date(shifts[6]!.date * 1000).toLocaleDateString('en-GB', {
 									year: 'numeric',
 									month: 'long',
 									day: 'numeric',
@@ -171,9 +72,9 @@ export default function DashboardTable() {
 							</Heading>
 						)}
 
-						{workDays && (
+						{shifts && (
 							<div className='flex min-h-[24rem] rounded-lg border-b border-t'>
-								{workDays?.map((day, index) => {
+								{shifts?.map((day, index) => {
 									return (
 										<div
 											key={day.id}
