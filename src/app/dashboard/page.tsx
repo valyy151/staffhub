@@ -3,6 +3,12 @@ import DashboardTable from '../_components/dashboard/dashboard-table'
 import Heading from '../_components/ui/heading'
 import Link from 'next/link'
 
+export const metadata = {
+	title: 'Dashboard | StaffHub',
+	description: 'Dashboard for StaffHub',
+	icons: [{ rel: 'icon', url: '/favicon.ico' }],
+}
+
 export default async function Dashboard() {
 	const numberOfStaff = await api.staff.getNumberOfStaff.query()
 

@@ -31,7 +31,7 @@ export default function DashboardTable() {
 
 	const { data: firstAndLastDays } = api.dashboard.findFirstAndLastDay.useQuery()
 
-	const { data, refetch, isLoading } = api.dashboard.find.useQuery({
+	const { data, refetch, isFetching } = api.dashboard.find.useQuery({
 		page: pageParams,
 		month: monthParams,
 	})
@@ -126,8 +126,8 @@ export default function DashboardTable() {
 							<Button
 								variant={'outline'}
 								title='Previous Week'
-								disabled={isLoading}
-								aria-disabled={isLoading}
+								disabled={isFetching}
+								aria-disabled={isFetching}
 								className='active:scale-95'
 								onClick={() => setPage(page - 1)}>
 								Prev Week
@@ -136,8 +136,8 @@ export default function DashboardTable() {
 							<Button
 								variant={'outline'}
 								title='Next Week'
-								disabled={isLoading}
-								aria-disabled={isLoading}
+								disabled={isFetching}
+								aria-disabled={isFetching}
 								className='active:scale-95'
 								onClick={() => setPage(page + 1)}>
 								Next Week
@@ -145,7 +145,7 @@ export default function DashboardTable() {
 						</div>
 					</div>
 				</nav>
-				{isLoading && (
+				{isFetching && (
 					<div className='flex justify-center'>
 						<Spinner noMargin />
 					</div>

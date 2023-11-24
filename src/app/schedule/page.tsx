@@ -3,6 +3,12 @@ import SchedulePlanner from '../_components/schedule/schedule-planner'
 import Heading from '../_components/ui/heading'
 import Link from 'next/link'
 
+export const metadata = {
+	title: 'New Schedule | StaffHub',
+	description: 'Create a new schedule.',
+	icons: [{ rel: 'icon', url: '/favicon.ico' }],
+}
+
 export default async function SchedulePage() {
 	const shiftModels = await api.shiftModel.get.query()
 	const numberOfStaff = await api.staff.getNumberOfStaff.query()

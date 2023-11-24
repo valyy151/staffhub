@@ -3,6 +3,12 @@ import StaffRole from '@/app/_components/settings/staff-role'
 import Heading from '@/app/_components/ui/heading'
 import { api } from '@/trpc/server'
 
+export const metadata = {
+	title: 'Settings | StaffHub',
+	description: 'Manage your account settings.',
+	icons: [{ rel: 'icon', url: '/favicon.ico' }],
+}
+
 export default async function RolesSettings() {
 	const roles = await api.role.get.query()
 	return (

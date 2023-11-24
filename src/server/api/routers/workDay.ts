@@ -79,4 +79,19 @@ export const workDayRouter = createTRPCRouter({
 
 		return { ...workDay, notes }
 	}),
+
+	getDate: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id } }) => {
+		const workDay = await db.workDay.findUnique({
+			where: { id },
+			select: { date: true },
+		})
+
+		return {
+			date: new Date(workDay?.date! * 1000).toLocaleDateString('en-GB', {
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric',
+			}),
+		}
+	}),
 })

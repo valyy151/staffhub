@@ -4,6 +4,12 @@ import Heading from '@/app/_components/ui/heading'
 import Paragraph from '@/app/_components/ui/paragraph'
 import { api } from '@/trpc/server'
 
+export const metadata = {
+	title: 'Settings | StaffHub',
+	description: 'Manage your account settings.',
+	icons: [{ rel: 'icon', url: '/favicon.ico' }],
+}
+
 export default async function ShiftModelsSettings() {
 	const shiftModels = await api.shiftModel.get.query()
 	return (

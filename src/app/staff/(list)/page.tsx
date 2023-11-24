@@ -6,6 +6,12 @@ import Heading from '@/app/_components/ui/heading'
 import Pagination from '@/app/_components/ui/pagination'
 import { StaffTable } from '../../_components/staff/staff-table'
 
+export const metadata = {
+	title: 'Your Staff | StaffHub',
+	description: 'Manage your staff and their shifts.',
+	icons: [{ rel: 'icon', url: '/favicon.ico' }],
+}
+
 export default async function Staff({ searchParams }: { searchParams?: { query?: string; page?: string } }) {
 	const query = searchParams?.query || ''
 	const currentPage = Number(searchParams?.page) || 1

@@ -133,6 +133,15 @@ export const staffRouter = createTRPCRouter({
 		})
 	}),
 
+	getName: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
+		return await db.employee.findUnique({
+			where: { id, userId: ctx.session.user.id },
+			select: {
+				name: true,
+			},
+		})
+	}),
+
 	getNotes: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input: { id }, ctx }) => {
 		return await db.employee.findUnique({
 			where: { id, userId: ctx.session.user.id },

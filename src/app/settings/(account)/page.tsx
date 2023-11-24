@@ -3,6 +3,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import DeleteAccount from '@/app/_components/delete-account'
 import { api } from '@/trpc/server'
 
+export const metadata = {
+	title: 'Settings | StaffHub',
+	description: 'Manage your account settings.',
+	icons: [{ rel: 'icon', url: '/favicon.ico' }],
+}
+
 export default async function AccountSettings() {
 	const user = await api.user.get.query()
 

@@ -2,6 +2,18 @@ import { api } from '@/trpc/server'
 import Note from '@/app/_components/ui/note'
 import { formatDate, formatDay } from '@/app/lib/utils'
 import CreateNote from '@/app/_components/ui/create-note'
+import type { Metadata } from 'next/types'
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+	const id = params.id
+	const data = await api.workDay.getDate.query({ id })
+
+	return {
+		title: `Notes | ${data?.date}`,
+		openGraph: { images: ['/favicon.ico'] },
+		description: `Notes for ${data?.date}`,
+	}
+}
 
 export default async function WorkDayNotes({ params }: { params: { id: string } }) {
 	const workDay = await api.workDay.getNotes.query({ id: params.id })
