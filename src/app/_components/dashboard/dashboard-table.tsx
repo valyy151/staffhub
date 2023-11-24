@@ -2,14 +2,52 @@
 
 import Link from 'next/link'
 import AbsenceCard from './absence-card'
-import { DashboardOutput } from '@/trpc/shared'
 import Heading from '@/app/_components/ui/heading'
 import Paragraph from '@/app/_components/ui/paragraph'
 import { DashboardAbsence, Note } from '@/app/lib/types'
 import { formatDay, formatDate, formatTime } from '@/app/lib/utils'
 import { CalendarOff, Scroll, ScrollText, User } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { api } from '@/trpc/react'
+import { Button } from '../ui/button'
 
-export default function DashboardTable({ shifts }: { shifts: DashboardOutput }) {
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
+import { Select, SelectContent, SelectTrigger, SelectValue } from '@/app/_components/ui/select'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import Spinner from '../ui/spinner'
+
+export default function DashboardTable() {
+	const router = useRouter()
+	const searchParams = useSearchParams()
+
+	const pathname = usePathname()
+
+	const pageParams = Number(searchParams.get('page'))
+	const monthParams = new Date(String(searchParams.get('month')).split('/').reverse().join('-'))
+
+	const [page, setPage] = useState<number>(pageParams)
+	const [value, setValue] = useState<Date>(new Date(String(monthParams).split('/').reverse().join('-')))
+
+	const { data: firstAndLastDays } = api.dashboard.findFirstAndLastDay.useQuery()
+
+	const { data, refetch, isLoading } = api.dashboard.find.useQuery({
+		page: pageParams,
+		month: monthParams,
+	})
+
+	const [shifts, setShifts] = useState(data)
+
+	const [showCalendar, setShowCalendar] = useState<boolean>(false)
+
+	useEffect(() => {
+		router.push(`${pathname}?page=${page}&month=${value.toLocaleDateString('en-GB', { year: 'numeric', month: 'numeric' })}`)
+	}, [page, value])
+
+	useEffect(() => {
+		refetch().then(({ data }) => data && setShifts(data))
+	}, [searchParams.get('page'), searchParams.get('month')])
+
 	const absencesArray: DashboardAbsence[] | null = []
 	const notesArray: Note[] = shifts?.map((day) => day.notes.map((note) => ({ ...note, date: day.date }))).flat() ?? []
 
@@ -50,11 +88,73 @@ export default function DashboardTable({ shifts }: { shifts: DashboardOutput }) 
 	)
 
 	return (
-		<div className='flex min-h-screen flex-col'>
+		<main className='flex'>
+			<aside className='overflow-auto border-r h-screen'>
+				<nav className='flex flex-col gap-4 p-4'>
+					<h2 className='text-lg font-semibold'>Filters</h2>
+					<div className='space-y-4'>
+						<Select
+							open={showCalendar}
+							onOpenChange={() => setShowCalendar(!showCalendar)}>
+							<SelectTrigger
+								onClick={() => setShowCalendar(!showCalendar)}
+								className='focus:ring-0 focus:ring-offset-0'>
+								<SelectValue
+									placeholder={new Date(value).toLocaleDateString('en-GB', {
+										year: 'numeric',
+										month: 'long',
+									})}
+								/>
+							</SelectTrigger>
+							<SelectContent>
+								<Calendar
+									view='month'
+									maxDetail='year'
+									next2Label={null}
+									prev2Label={null}
+									activeStartDate={value!}
+									onChange={(value) => {
+										setValue(value as Date)
+										setShowCalendar(false)
+									}}
+									maxDate={new Date(1000 * firstAndLastDays?.[1]?.date!)}
+									minDate={new Date(1000 * firstAndLastDays?.[0]?.date!)}
+								/>
+							</SelectContent>
+						</Select>
+						<div className='flex space-x-1'>
+							<Button
+								variant={'outline'}
+								title='Previous Week'
+								disabled={isLoading}
+								aria-disabled={isLoading}
+								className='active:scale-95'
+								onClick={() => setPage(page - 1)}>
+								Prev Week
+							</Button>
+
+							<Button
+								variant={'outline'}
+								title='Next Week'
+								disabled={isLoading}
+								aria-disabled={isLoading}
+								className='active:scale-95'
+								onClick={() => setPage(page + 1)}>
+								Next Week
+							</Button>
+						</div>
+					</div>
+				</nav>
+				{isLoading && (
+					<div className='flex justify-center'>
+						<Spinner noMargin />
+					</div>
+				)}
+			</aside>
 			<div className='flex flex-1 overflow-hidden'>
-				<main className='flex-1 p-4'>
+				<div className='flex-1 p-4'>
 					<div className='grid gap-4'>
-						{shifts && (
+						{shifts ? (
 							<Heading
 								size={'sm'}
 								className='ml-2'>
@@ -70,9 +170,11 @@ export default function DashboardTable({ shifts }: { shifts: DashboardOutput }) 
 									day: 'numeric',
 								})}{' '}
 							</Heading>
+						) : (
+							<div className='h-8 w-96 rounded bg-muted animate-pulse' />
 						)}
 
-						{shifts && (
+						{shifts ? (
 							<div className='flex min-h-[24rem] rounded-lg border-b border-t'>
 								{shifts?.map((day, index) => {
 									return (
@@ -133,6 +235,8 @@ export default function DashboardTable({ shifts }: { shifts: DashboardOutput }) 
 									)
 								})}
 							</div>
+						) : (
+							<div className='h-96 w-full rounded bg-muted animate-pulse' />
 						)}
 
 						{absencesArray.length > 0 && (
@@ -188,8 +292,8 @@ export default function DashboardTable({ shifts }: { shifts: DashboardOutput }) 
 							</>
 						)}
 					</div>
-				</main>
+				</div>
 			</div>
-		</div>
+		</main>
 	)
 }
