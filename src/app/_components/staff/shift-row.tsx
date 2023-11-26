@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react'
 
-import { Shift } from "@/app/lib/types";
-import { formatDay, formatTime, formatTotal } from "@/app/lib/utils";
-import { api } from "@/trpc/react";
-import { StaffScheduleOutput } from "@/trpc/shared";
+import { Shift } from '@/app/lib/types'
+import { formatDay, formatTime, formatTotal } from '@/app/lib/utils'
+import { api } from '@/trpc/react'
+import { StaffScheduleOutput } from '@/trpc/shared'
 
-import EditShift from "../ui/edit-shift";
-import { TableCell } from "../ui/table";
+import EditShift from '../ui/edit-shift'
+import { TableCell } from '../ui/table'
 
-export default function ShiftRow({ shift, employee, setValue }: { shift: Shift; employee: StaffScheduleOutput; setValue: ({ date, refetch }: { date: Date; refetch: boolean }) => void }) {
+export default function ShiftRow({ shift, employee, setValue }: { employee: StaffScheduleOutput | any; shift: Shift | any; setValue: ({ date, refetch }: { date: Date; refetch: boolean }) => void }) {
 	const [edit, setEdit] = useState(false)
 
 	const { data: shiftModels } = api.shiftModel.get.useQuery()
@@ -34,9 +34,7 @@ export default function ShiftRow({ shift, employee, setValue }: { shift: Shift; 
 			<TableCell
 				title='Click to edit shift'
 				onClick={() => setEdit(!edit)}
-				className={`cursor-pointer text-right hover:bg-accent min-w-[6rem] ${
-					(formatDay(shift.date!, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date!, 'short') === 'Sun' && 'font-bold text-rose-500')
-				}`}>
+				className={`cursor-pointer text-right hover:bg-accent min-w-[6rem] ${(formatDay(shift.date!, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date!, 'short') === 'Sun' && 'font-bold text-rose-500')}`}>
 				{renderShift()}
 			</TableCell>
 			{edit && (

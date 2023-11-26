@@ -1,7 +1,7 @@
-import CreateRole from "@/app/_components/settings/create-role";
-import StaffRole from "@/app/_components/settings/staff-role";
-import Heading from "@/app/_components/ui/heading";
-import { api } from "@/trpc/server";
+import CreateRole from '@/app/_components/settings/create-role'
+import StaffRole from '@/app/_components/settings/staff-role'
+import Heading from '@/app/_components/ui/heading'
+import { api } from '@/trpc/server'
 
 export const metadata = {
 	title: 'Settings | StaffHub',

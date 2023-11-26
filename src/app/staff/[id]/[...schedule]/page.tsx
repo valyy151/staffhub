@@ -1,5 +1,5 @@
-import Schedule from "@/app/_components/staff/staff-schedule";
-import { api } from "@/trpc/server";
+import Schedule from '@/app/_components/staff/staff-schedule'
+import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
 

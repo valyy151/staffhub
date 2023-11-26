@@ -1,10 +1,11 @@
-import { Download } from "lucide-react";
+// @ts-nocheck
+import { Download } from 'lucide-react'
 
-import { Button } from "@/app/_components/ui/button";
-import { StaffScheduleOutput } from "@/trpc/shared";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Button } from '@/app/_components/ui/button'
+import { StaffScheduleOutput } from '@/trpc/shared'
+import { PDFDownloadLink } from '@react-pdf/renderer'
 
-import { SchedulePDF } from "./SchedulePDF";
+import { SchedulePDF } from './SchedulePDF'
 
 type Shift = {
 	end: number

@@ -1,21 +1,22 @@
 'use client'
-import "react-calendar/dist/Calendar.css";
+import 'react-calendar/dist/Calendar.css'
 
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Calendar } from "react-calendar";
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { Calendar } from 'react-calendar'
 
-import { Shift } from "@/app/lib/types";
-import { calculateHours, formatDate, formatDay } from "@/app/lib/utils";
-import { api } from "@/trpc/react";
+import { Shift } from '@/app/lib/types'
+import { calculateHours, formatDate, formatDay } from '@/app/lib/utils'
+import { api } from '@/trpc/react'
 
-import Heading from "../ui/heading";
-import Spinner from "../ui/spinner";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-import ShiftRow from "./shift-row";
+import Heading from '../ui/heading'
+import Spinner from '../ui/spinner'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
+import ShiftRow from './shift-row'
 
 import type { StaffScheduleOutput } from '@/trpc/shared'
+
 const PDFButton = dynamic(() => import('@/app/_components/PDFButton'), {
 	ssr: false,
 })
@@ -69,18 +70,14 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 								<TableRow
 									key={shift.workDayId}
 									className='hover:bg-inherit'>
-									<TableCell
-										className={`border-r ${(formatDay(shift.date, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date, 'short') === 'Sun' && 'font-bold text-rose-500')}`}>
+									<TableCell className={`border-r ${(formatDay(shift.date, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date, 'short') === 'Sun' && 'font-bold text-rose-500')}`}>
 										<Link
 											href={`/days/${shift.workDayId}/shifts`}
 											className={`py-3 pr-2 underline-offset-2 hover:underline`}>
 											{formatDay(shift.date, 'short')}
 										</Link>
 									</TableCell>
-									<TableCell
-										className={`border-r font-medium  ${
-											(formatDay(shift.date, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date, 'short') === 'Sun' && 'font-bold text-rose-500')
-										}`}>
+									<TableCell className={`border-r font-medium  ${(formatDay(shift.date, 'short') === 'Sat' && 'font-bold text-rose-500') || (formatDay(shift.date, 'short') === 'Sun' && 'font-bold text-rose-500')}`}>
 										<Link
 											href={`/days/${shift.workDayId}/shifts`}
 											className={`py-3 pr-2 underline-offset-2 hover:underline`}>

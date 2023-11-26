@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from 'next/link'
 
-import { api } from "@/trpc/server";
+import { api } from '@/trpc/server'
 
-import SchedulePlanner from "../_components/schedule/schedule-planner";
-import Heading from "../_components/ui/heading";
+import SchedulePlanner from '../_components/schedule/schedule-planner'
+import Heading from '../_components/ui/heading'
 
 export const metadata = {
 	title: 'New Schedule | StaffHub',
@@ -12,8 +12,7 @@ export const metadata = {
 }
 
 export default async function SchedulePage() {
-	const shiftModels = await api.shiftModel.get.query()
-	const numberOfStaff = await api.staff.getNumberOfStaff.query()
+	const [shiftModels, numberOfStaff] = await Promise.all([api.shiftModel.get.query(), api.staff.getNumberOfStaff.query()])
 
 	return (
 		<>

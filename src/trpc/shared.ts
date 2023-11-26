@@ -1,7 +1,7 @@
-import superjson from "superjson";
+import superjson from 'superjson'
 
-import { AppRouter } from "@/server/api/root";
-import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+import { AppRouter } from '@/server/api/root'
+import { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 
 export const transformer = superjson
 

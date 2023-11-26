@@ -1,7 +1,7 @@
-import EditRoles from "@/app/_components/staff/edit-roles";
-import RolesTable from "@/app/_components/staff/roles-table";
-import Heading from "@/app/_components/ui/heading";
-import { api } from "@/trpc/server";
+import EditRoles from '@/app/_components/staff/edit-roles'
+import RolesTable from '@/app/_components/staff/roles-table'
+import Heading from '@/app/_components/ui/heading'
+import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
 
