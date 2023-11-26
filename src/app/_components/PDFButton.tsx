@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Download } from 'lucide-react'
 
 import { Button } from '@/app/_components/ui/button'

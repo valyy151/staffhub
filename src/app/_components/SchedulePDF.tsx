@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { createTw } from 'react-pdf-tailwind'
 
 import { StaffScheduleOutput } from '@/trpc/shared'

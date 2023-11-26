@@ -1,15 +1,12 @@
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image'
+import React from 'react'
 
-import {
-    NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink,
-    NavigationMenuList, NavigationMenuTrigger
-} from "@/app/_components/ui/navigation-menu";
-import { cn } from "@/app/lib/utils";
-import { getServerAuthSession } from "@/server/auth";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/app/_components/ui/navigation-menu'
+import { cn } from '@/app/lib/utils'
+import { getServerAuthSession } from '@/server/auth'
 
-import { SignInButton } from "./auth-buttons";
-import ThemeToggle from "./theme-toggle";
+import { SignInButton } from './auth-buttons'
+import ThemeToggle from './theme-toggle'
 
 const links: { title: string; href: string; description: string }[] = [
 	{
@@ -129,10 +126,7 @@ const ListItem = React.forwardRef<React.ElementRef<'a'>, React.ComponentPropsWit
 			<NavigationMenuLink asChild>
 				<a
 					ref={ref}
-					className={cn(
-						'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
-						className
-					)}
+					className={cn('hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors', className)}
 					{...props}>
 					<div className='text-sm font-medium leading-none'>{title}</div>
 					<p className='text-muted-foreground line-clamp-2 text-sm leading-snug'>{children}</p>
