@@ -1,12 +1,15 @@
-import Link from 'next/link'
-import { useState } from 'react'
+import Link from "next/link";
+import { useState } from "react";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/app/_components/ui/alert-dialog'
-import Paragraph from '@/app/_components/ui/paragraph'
-import { Switch } from '@/app/_components/ui/switch'
-import { useToast } from '@/app/_components/ui/use-toast'
-import { useQueryClient } from '@tanstack/react-query'
-import { api } from '@/trpc/react'
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle
+} from "@/app/_components/ui/alert-dialog";
+import Paragraph from "@/app/_components/ui/paragraph";
+import { Switch } from "@/app/_components/ui/switch";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { api } from "@/trpc/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
 	absence: {

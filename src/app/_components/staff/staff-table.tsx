@@ -1,7 +1,8 @@
 'use client'
 import type { StaffOutput } from '@/trpc/shared'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next-nprogress-bar";
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 
 export function StaffTable({ staff }: { staff: StaffOutput[] }) {
 	const router = useRouter()
@@ -20,7 +21,7 @@ export function StaffTable({ staff }: { staff: StaffOutput[] }) {
 				{staff.map((employee) => (
 					<TableRow
 						key={employee.id}
-						onClick={() => router.replace(`/staff/${employee.id}`)}
+						onClick={() => router.push(`/staff/${employee.id}`)}
 						onMouseOver={() => router.prefetch(`/staff/${employee.id}`)}
 						className='cursor-pointer'>
 						<TableCell className='cursor-pointer whitespace-nowrap font-medium'>{employee.name}</TableCell>

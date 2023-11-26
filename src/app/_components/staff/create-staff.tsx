@@ -1,14 +1,18 @@
 'use client'
 
-import { useState } from 'react'
-import { api } from '@/trpc/react'
-import { Button } from '../ui/button'
-import { useRouter } from 'next/navigation'
-import { Input } from '@/app/_components/ui/input'
-import { useToast } from '@/app/_components/ui/use-toast'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/app/_components/ui/card'
-import { InfoIcon } from 'lucide-react'
-import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/app/_components/ui/hover-card'
+import { InfoIcon } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import {
+    Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
+} from "@/app/_components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/app/_components/ui/hover-card";
+import { Input } from "@/app/_components/ui/input";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { api } from "@/trpc/react";
+
+import { Button } from "../ui/button";
 
 export default function CreateStaffForm() {
 	const [email, setEmail] = useState('')

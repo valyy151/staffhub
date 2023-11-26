@@ -1,10 +1,12 @@
-import { Shift } from '@/app/lib/types'
-import { StaffScheduleOutput } from '@/trpc/shared'
-import { TableCell } from '../ui/table'
-import { useState } from 'react'
-import { formatDay, formatTime, formatTotal } from '@/app/lib/utils'
-import EditShift from '../ui/edit-shift'
-import { api } from '@/trpc/react'
+import { useState } from "react";
+
+import { Shift } from "@/app/lib/types";
+import { formatDay, formatTime, formatTotal } from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+import { StaffScheduleOutput } from "@/trpc/shared";
+
+import EditShift from "../ui/edit-shift";
+import { TableCell } from "../ui/table";
 
 export default function ShiftRow({ shift, employee, setValue }: { shift: Shift; employee: StaffScheduleOutput; setValue: ({ date, refetch }: { date: Date; refetch: boolean }) => void }) {
 	const [edit, setEdit] = useState(false)

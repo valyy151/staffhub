@@ -1,8 +1,8 @@
-import { useRef } from 'react'
+import { useRef } from "react";
 
-import { Input } from '@/app/_components/ui/input'
-import { TableCell, TableRow } from '@/app/_components/ui/table'
-import { formatDate, formatDay, formatTime, formatTotal } from '@/app/lib/utils'
+import { Input } from "@/app/_components/ui/input";
+import { TableCell, TableRow } from "@/app/_components/ui/table";
+import { formatDate, formatDay, formatTime, formatTotal } from "@/app/lib/utils";
 
 type Props = {
 	data: Data

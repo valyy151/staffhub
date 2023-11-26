@@ -1,6 +1,7 @@
-import { cn } from '@/app/lib/utils'
-import { cva, VariantProps } from 'class-variance-authority'
-import React, { forwardRef, HTMLAttributes } from 'react'
+import { cva, VariantProps } from "class-variance-authority";
+import React, { forwardRef, HTMLAttributes } from "react";
+
+import { cn } from "@/app/lib/utils";
 
 interface HeadingProps extends HTMLAttributes<HTMLHeadingElement>, VariantProps<typeof headingVariants> {}
 

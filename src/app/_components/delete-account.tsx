@@ -1,10 +1,12 @@
 'use client'
-import { useState } from 'react'
-import { Button } from './ui/button'
-import FormModal from './ui/form-modal'
-import { useToast } from './ui/use-toast'
-import { api } from '@/trpc/react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { api } from "@/trpc/react";
+
+import { Button } from "./ui/button";
+import FormModal from "./ui/form-modal";
+import { useToast } from "./ui/use-toast";
 
 export default function DeleteAccount() {
 	const [showModal, setShowModal] = useState(false)

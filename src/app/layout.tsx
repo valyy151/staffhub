@@ -1,14 +1,14 @@
-import '@/styles/globals.css'
+import "@/styles/globals.css";
 
-import { Inter } from 'next/font/google'
-import { cookies } from 'next/headers'
+import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 
-import { TRPCReactProvider } from '@/trpc/react'
-import { ThemeProvider } from './_components/theme-provider'
-import { Toaster } from '@/app/_components/ui/toaster'
+import { Toaster } from "@/app/_components/ui/toaster";
+import { TRPCReactProvider } from "@/trpc/react";
 
-import Navbar from './_components/navbar'
-import ProgressBar from './_components/progress-bar'
+import Navbar from "./_components/navbar";
+import ProgressBar from "./_components/progress-bar";
+import { ThemeProvider } from "./_components/theme-provider";
 
 const inter = Inter({
 	subsets: ['latin'],

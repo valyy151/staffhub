@@ -1,7 +1,9 @@
-import { api } from '@/trpc/server'
-import DashboardTable from '../_components/dashboard/dashboard-table'
-import Heading from '../_components/ui/heading'
-import Link from 'next/link'
+import Link from "next/link";
+
+import { api } from "@/trpc/server";
+
+import DashboardTable from "../_components/dashboard/dashboard-table";
+import Heading from "../_components/ui/heading";
 
 export const metadata = {
 	title: 'Dashboard | StaffHub',

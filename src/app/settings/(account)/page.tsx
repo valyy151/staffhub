@@ -1,7 +1,10 @@
-import Image from 'next/image'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/app/_components/ui/card'
-import DeleteAccount from '@/app/_components/delete-account'
-import { api } from '@/trpc/server'
+import Image from "next/image";
+
+import DeleteAccount from "@/app/_components/delete-account";
+import {
+    Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
+} from "@/app/_components/ui/card";
+import { api } from "@/trpc/server";
 
 export const metadata = {
 	title: 'Settings | StaffHub',

@@ -1,22 +1,20 @@
 'use client'
-import { useState } from 'react'
-import { PhoneIcon, MailIcon, HomeIcon } from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/app/_components/ui/card'
-import { StaffIdOutput } from '@/trpc/shared'
+import { HomeIcon, MailIcon, PhoneIcon } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
 import {
-	AlertDialog,
-	AlertDialogContent,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogCancel,
-	AlertDialogAction,
-} from '@/app/_components/ui/alert-dialog'
-import { api } from '@/trpc/react'
-import { Input } from '@/app/_components/ui/input'
-import { useToast } from '../ui/use-toast'
-import { useRouter } from 'next/navigation'
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
+} from "@/app/_components/ui/alert-dialog";
+import {
+    Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
+} from "@/app/_components/ui/card";
+import { Input } from "@/app/_components/ui/input";
+import { api } from "@/trpc/react";
+import { StaffIdOutput } from "@/trpc/shared";
+
+import { useToast } from "../ui/use-toast";
 
 export default function PersonalInfoCard({ employee }: { employee: StaffIdOutput }) {
 	const [edit, setEdit] = useState(false)

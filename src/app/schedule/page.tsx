@@ -1,7 +1,9 @@
-import { api } from '@/trpc/server'
-import SchedulePlanner from '../_components/schedule/schedule-planner'
-import Heading from '../_components/ui/heading'
-import Link from 'next/link'
+import Link from "next/link";
+
+import { api } from "@/trpc/server";
+
+import SchedulePlanner from "../_components/schedule/schedule-planner";
+import Heading from "../_components/ui/heading";
 
 export const metadata = {
 	title: 'New Schedule | StaffHub',

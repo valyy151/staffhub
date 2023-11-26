@@ -1,5 +1,6 @@
-import { api } from '@/trpc/server'
-import Schedule from '@/app/_components/staff/staff-schedule'
+import Schedule from "@/app/_components/staff/staff-schedule";
+import { api } from "@/trpc/server";
+
 import type { Metadata } from 'next/types'
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {

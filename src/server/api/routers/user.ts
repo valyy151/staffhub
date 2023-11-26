@@ -1,5 +1,6 @@
-import { db } from '@/server/db'
-import { createTRPCRouter, protectedProcedure } from './../trpc'
+import { db } from "@/server/db";
+
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
 	delete: protectedProcedure.mutation(async ({ ctx }) => {

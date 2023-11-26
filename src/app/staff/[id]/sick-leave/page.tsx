@@ -1,11 +1,13 @@
-import CreateAbsence from '@/app/_components/staff/create-absence'
-import SickLeave from '@/app/_components/staff/absence'
-import Heading from '@/app/_components/ui/heading'
+import { HeartPulseIcon } from "lucide-react";
+
+import SickLeave from "@/app/_components/staff/absence";
+import CreateAbsence from "@/app/_components/staff/create-absence";
+import CurrentAbsence from "@/app/_components/staff/current-absence";
+import Heading from "@/app/_components/ui/heading";
+import { checkAbsences } from "@/app/lib/utils";
+import { api } from "@/trpc/server";
+
 import type { Absence } from '@/app/lib/types'
-import { checkAbsences } from '@/app/lib/utils'
-import { api } from '@/trpc/server'
-import { HeartPulseIcon } from 'lucide-react'
-import CurrentAbsence from '@/app/_components/staff/current-absence'
 import type { Metadata } from 'next/types'
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {

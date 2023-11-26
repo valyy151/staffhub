@@ -1,9 +1,12 @@
 import type { Absence, Shift } from '@/app/lib/types'
-import { calculateHours, checkAbsence, getNumberOfSickDays } from '@/app/lib/utils'
-import { Card, CardTitle, CardContent, CardDescription, CardHeader } from '@/app/_components/ui/card'
-import type { StaffIdOutput } from '@/trpc/shared'
-import PersonalInfoCard from './personal-info-card'
+import {
+    Card, CardContent, CardDescription, CardHeader, CardTitle
+} from "@/app/_components/ui/card";
+import { calculateHours, checkAbsence, getNumberOfSickDays } from "@/app/lib/utils";
 
+import PersonalInfoCard from "./personal-info-card";
+
+import type { StaffIdOutput } from '@/trpc/shared'
 export default function ProfileCards({ employee }: { employee: StaffIdOutput }) {
 	const hours = calculateHours(employee?.shifts as Shift[])
 	const currentMonth = new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })

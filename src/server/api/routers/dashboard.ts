@@ -1,6 +1,8 @@
-import { db } from '@/server/db'
-import { createTRPCRouter, protectedProcedure } from './../trpc'
-import { z } from 'zod'
+import { z } from "zod";
+
+import { db } from "@/server/db";
+
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const dashboardRouter = createTRPCRouter({
 	find: protectedProcedure

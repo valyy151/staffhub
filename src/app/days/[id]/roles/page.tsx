@@ -1,4 +1,5 @@
-import { api } from '@/trpc/server'
+import { api } from "@/trpc/server";
+
 import type { Metadata } from 'next/types'
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {

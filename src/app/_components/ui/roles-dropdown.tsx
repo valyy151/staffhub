@@ -1,9 +1,11 @@
-import { useState } from 'react'
-import { Button } from './button'
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
-import { cn } from '@/app/lib/utils'
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from './command'
-import { Popover, PopoverContent, PopoverTrigger } from './popover'
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { useState } from "react";
+
+import { cn } from "@/app/lib/utils";
+
+import { Button } from "./button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "./command";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 export default function RolesDropdown({
 	role,

@@ -1,7 +1,9 @@
 'use client'
-import Link from 'next/link'
-import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
-import { BarChart3, ClipboardList, HeartPulse, UserCog, Palmtree, Sticker, CalendarSearch } from 'lucide-react'
+import {
+    BarChart3, CalendarSearch, ClipboardList, HeartPulse, Palmtree, Sticker, UserCog
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 
 export default function StaffProfileLayout({ children }: { children: React.ReactNode }) {
 	const path = usePathname()

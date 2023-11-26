@@ -1,11 +1,16 @@
 'use client'
-import { useState } from 'react'
-import { Button } from '../ui/button'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { StaffRolesOutput } from '@/trpc/shared'
-import { api } from '@/trpc/react'
-import { useToast } from '../ui/use-toast'
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { api } from "@/trpc/react";
+import { StaffRolesOutput } from "@/trpc/shared";
+
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 
 export default function EditRoles({ employee }: { employee: StaffRolesOutput }) {
 	const [showEdit, setShowEdit] = useState(false)

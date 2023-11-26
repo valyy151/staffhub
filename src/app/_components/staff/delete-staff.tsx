@@ -1,11 +1,13 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useToast } from '../ui/use-toast'
-import { useState } from 'react'
-import { api } from '@/trpc/react'
-import { Button } from '../ui/button'
-import FormModal from '../ui/form-modal'
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { api } from "@/trpc/react";
+
+import { Button } from "../ui/button";
+import FormModal from "../ui/form-modal";
+import { useToast } from "../ui/use-toast";
 
 export default function DeleteStaff({ id }: { id: string }) {
 	const { toast } = useToast()

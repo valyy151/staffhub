@@ -1,16 +1,21 @@
 'use client'
-import { HeartPulseIcon } from 'lucide-react'
-import { Button } from '../ui/button'
-import type { StaffAbsenceOutput } from '@/trpc/shared'
-import { useState } from 'react'
-import { addDays, differenceInDays, startOfToday } from 'date-fns'
-import type { DateRange } from 'react-day-picker'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { DatePickerWithRange } from '../ui/date-range-picker'
-import { api } from '@/trpc/react'
-import { useToast } from '../ui/use-toast'
-import { useRouter } from 'next/navigation'
+import { addDays, differenceInDays, startOfToday } from "date-fns";
+import { HeartPulseIcon } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
 
+import { api } from "@/trpc/react";
+
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import { DatePickerWithRange } from "../ui/date-range-picker";
+import { useToast } from "../ui/use-toast";
+
+import type { StaffAbsenceOutput } from '@/trpc/shared'
+import type { DateRange } from 'react-day-picker'
 export default function NewAbsence({ employee, type }: { employee: StaffAbsenceOutput; type: 'vacation' | 'sick' }) {
 	const [showCreate, setShowCreate] = useState(false)
 

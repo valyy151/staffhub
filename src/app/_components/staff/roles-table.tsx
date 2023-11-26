@@ -1,6 +1,8 @@
 'use client'
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/_components/ui/table'
+import {
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow
+} from "@/app/_components/ui/table";
 
 export default function RolesTable({ roles }: { roles: { id: string; name: string }[] | undefined }) {
 	return (

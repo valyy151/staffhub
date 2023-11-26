@@ -1,15 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import { useToast } from '../ui/use-toast'
-import { api } from '@/trpc/react'
-import { useRouter } from 'next/navigation'
-import { UserCogIcon } from 'lucide-react'
-import { Button } from '../ui/button'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { Input } from '../ui/input'
-import FormModal from '../ui/form-modal'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
+import { UserCogIcon } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { api } from "@/trpc/react";
+
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import FormModal from "../ui/form-modal";
+import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 
 type Role = {
 	id: string

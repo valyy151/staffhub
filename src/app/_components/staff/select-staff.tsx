@@ -1,12 +1,14 @@
-import { Check, ChevronsUpDown } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
-import * as React from 'react'
+import { Check, ChevronsUpDown } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import * as React from "react";
 
-import { Button } from '@/app/_components/ui/button'
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/app/_components/ui/command'
-import { Popover, PopoverContent, PopoverTrigger } from '@/app/_components/ui/popover'
-import { cn } from '@/app/lib/utils'
-import { StaffDropdownOutput } from '@/trpc/shared'
+import { Button } from "@/app/_components/ui/button";
+import {
+    Command, CommandEmpty, CommandGroup, CommandInput, CommandItem
+} from "@/app/_components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/app/_components/ui/popover";
+import { cn } from "@/app/lib/utils";
+import { StaffDropdownOutput } from "@/trpc/shared";
 
 type Props = {
 	links?: boolean

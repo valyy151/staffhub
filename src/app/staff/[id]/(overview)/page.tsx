@@ -1,8 +1,8 @@
-import { api } from '@/trpc/server'
-import type { Metadata } from 'next/types'
-import DeleteStaff from '@/app/_components/staff/delete-staff'
-import ProfileCards from '@/app/_components/staff/profile-cards'
+import DeleteStaff from "@/app/_components/staff/delete-staff";
+import ProfileCards from "@/app/_components/staff/profile-cards";
+import { api } from "@/trpc/server";
 
+import type { Metadata } from 'next/types'
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
 	const id = params.id
 	const employee = await api.staff.getName.query({ id })

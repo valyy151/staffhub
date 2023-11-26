@@ -7,13 +7,13 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC, TRPCError } from '@trpc/server'
-import { type NextRequest } from 'next/server'
-import superjson from 'superjson'
-import { ZodError } from 'zod'
+import { NextRequest } from "next/server";
+import superjson from "superjson";
+import { ZodError } from "zod";
 
-import { getServerAuthSession } from '@/server/auth'
-import { db } from '@/server/db'
+import { getServerAuthSession } from "@/server/auth";
+import { db } from "@/server/db";
+import { initTRPC, TRPCError } from "@trpc/server";
 
 /**
  * 1. CONTEXT

@@ -1,6 +1,8 @@
-import { z } from 'zod'
-import { db } from '@/server/db'
-import { createTRPCRouter, protectedProcedure } from './../trpc'
+import { z } from "zod";
+
+import { db } from "@/server/db";
+
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const workDayNoteRouter = createTRPCRouter({
 	delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input: { id }, ctx }) => {

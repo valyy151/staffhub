@@ -1,8 +1,8 @@
-import CreateModel from '@/app/_components/settings/create-model'
-import ShiftModel from '@/app/_components/settings/shift-model'
-import Heading from '@/app/_components/ui/heading'
-import Paragraph from '@/app/_components/ui/paragraph'
-import { api } from '@/trpc/server'
+import CreateModel from "@/app/_components/settings/create-model";
+import ShiftModel from "@/app/_components/settings/shift-model";
+import Heading from "@/app/_components/ui/heading";
+import Paragraph from "@/app/_components/ui/paragraph";
+import { api } from "@/trpc/server";
 
 export const metadata = {
 	title: 'Settings | StaffHub',

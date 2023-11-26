@@ -1,14 +1,19 @@
 'use client'
 
-import { InfoIcon, UserCogIcon } from 'lucide-react'
-import { useState } from 'react'
-import { Button } from '../ui/button'
-import InfoModal from '../ui/info-modal'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { Input } from '../ui/input'
-import { useToast } from '../ui/use-toast'
-import { api } from '@/trpc/react'
-import { useRouter } from 'next/navigation'
+import { InfoIcon, UserCogIcon } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { api } from "@/trpc/react";
+
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import InfoModal from "../ui/info-modal";
+import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 
 const sentences = {
 	data: [

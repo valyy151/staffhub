@@ -1,14 +1,18 @@
 'use client'
 import type { Absence } from '@/app/lib/types'
-import { useToast } from '../ui/use-toast'
-import { useState } from 'react'
-import { api } from '@/trpc/react'
-import { Trash2Icon, MoreVerticalIcon } from 'lucide-react'
-import FormModal from '../ui/form-modal'
-import { useRouter } from 'next/navigation'
-import { Card, CardTitle, CardHeader } from '@/app/_components/ui/card'
-import { howManyDays } from '@/app/lib/utils'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu'
+import { MoreVerticalIcon, Trash2Icon } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { Card, CardHeader, CardTitle } from "@/app/_components/ui/card";
+import { howManyDays } from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+
+import {
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
+} from "../ui/dropdown-menu";
+import FormModal from "../ui/form-modal";
+import { useToast } from "../ui/use-toast";
 
 export default function Absence({ absence, type }: { absence: Absence; type: 'vacation' | 'sick' }) {
 	const [showModal, setShowModal] = useState<boolean>(false)

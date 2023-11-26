@@ -1,20 +1,23 @@
 'use client'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { ClockIcon } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-import { Input } from '@/app/_components/ui/input'
-import { useToast } from '@/app/_components/ui/use-toast'
+import { Input } from "@/app/_components/ui/input";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { formatTime, formatTotal } from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+import { StaffDropdownOutput } from "@/trpc/shared";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import Heading from '../ui/heading'
-import { api } from '@/trpc/react'
-import SelectStaff from '../staff/select-staff'
-import RolesDropdown from '../ui/roles-dropdown'
-import { formatTime, formatTotal } from '@/app/lib/utils'
-import { StaffDropdownOutput } from '@/trpc/shared'
-import { Button } from '../ui/button'
-import { ClockIcon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import SelectStaff from "../staff/select-staff";
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import Heading from "../ui/heading";
+import RolesDropdown from "../ui/roles-dropdown";
 
 type AddShiftProps = {
 	date: number

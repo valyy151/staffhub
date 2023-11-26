@@ -1,16 +1,21 @@
 'use client'
 
-import { api } from '@/trpc/react'
-import { useToast } from '../ui/use-toast'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { formatTime, renderTotal } from '@/app/lib/utils'
-import { Button } from '../ui/button'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { Input } from '../ui/input'
-import FormModal from '../ui/form-modal'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import Heading from '../ui/heading'
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { formatTime, renderTotal } from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import FormModal from "../ui/form-modal";
+import Heading from "../ui/heading";
+import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 
 export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; start: number; end: number } }) {
 	const router = useRouter()

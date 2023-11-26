@@ -1,7 +1,7 @@
-import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
-import superjson from 'superjson'
+import superjson from "superjson";
 
-import { type AppRouter } from '@/server/api/root'
+import { AppRouter } from "@/server/api/root";
+import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 export const transformer = superjson
 
@@ -37,6 +37,10 @@ export type StaffIdOutput = RouterOutputs['staff']['getId']
 export type DashboardOutput = RouterOutputs['dashboard']['find']
 
 export type StaffRolesOutput = RouterOutputs['staff']['getRoles']
+
+export type WorkDayShiftsOutput = Pick<WorkDayOutput, 'shifts'>
+
+export type WorkDayOutput = RouterOutputs['workDay']['getShifts']
 
 export type StaffScheduleOutput = RouterOutputs['staff']['getSchedule']
 

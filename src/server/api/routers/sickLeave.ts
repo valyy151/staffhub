@@ -1,6 +1,7 @@
-import { z } from 'zod'
-import { db } from '@/server/db'
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
+import { z } from "zod";
+
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { db } from "@/server/db";
 
 export const sickLeaveRouter = createTRPCRouter({
 	delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {

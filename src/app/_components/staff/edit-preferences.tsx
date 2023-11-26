@@ -1,14 +1,19 @@
 'use client'
-import { useState } from 'react'
-import { Button } from '../ui/button'
-import { Sticker } from 'lucide-react'
-import { StaffPreferenceOutput } from '@/trpc/shared'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { Input } from '../ui/input'
-import { formatTime } from '@/app/lib/utils'
-import { api } from '@/trpc/react'
-import { useToast } from '../ui/use-toast'
-import { useRouter } from 'next/navigation'
+import { Sticker } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { formatTime } from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+import { StaffPreferenceOutput } from "@/trpc/shared";
+
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
+} from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 
 export default function EditPreferences({ employee }: { employee: StaffPreferenceOutput }) {
 	const { data: shiftModels } = api.shiftModel.get.useQuery()

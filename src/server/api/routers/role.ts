@@ -1,6 +1,8 @@
-import { db } from '@/server/db'
-import { protectedProcedure, createTRPCRouter } from './../trpc'
-import { z } from 'zod'
+import { z } from "zod";
+
+import { db } from "@/server/db";
+
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const roleRouter = createTRPCRouter({
 	create: protectedProcedure.input(z.object({ name: z.string(), numberPerDay: z.number().optional() })).mutation(async ({ input: { name, numberPerDay }, ctx }) => {

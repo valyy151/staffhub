@@ -1,9 +1,10 @@
 'use client'
 
-import { useDebouncedCallback } from 'use-debounce'
-import { useSearchParams, usePathname, useRouter } from 'next/navigation'
-import { Input } from '@/app/_components/ui/input'
-import { SearchIcon } from 'lucide-react'
+import { SearchIcon } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
+
+import { Input } from "@/app/_components/ui/input";
 
 export default function Search() {
 	const searchParams = useSearchParams()

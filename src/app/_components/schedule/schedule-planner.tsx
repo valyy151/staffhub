@@ -1,20 +1,24 @@
 'use client'
 
-import { generateYearArray, changeMonth, calculateHours, formatTime, findAbsenceDays } from '@/app/lib/utils'
-import { api } from '@/trpc/react'
-import { useState } from 'react'
-import { useToast } from '../ui/use-toast'
-import Calendar from 'react-calendar'
-import Heading from '../ui/heading'
-import Link from 'next/link'
-import { Button } from '../ui/button'
-import { CalendarPlusIcon, InfoIcon, XIcon } from 'lucide-react'
-import { AlertDialog, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { AlertDialogContent } from '@radix-ui/react-alert-dialog'
-import InfoModal from '../ui/info-modal'
-import SelectStaff from '../staff/select-staff'
-import { StaffDropdownOutput } from '@/trpc/shared'
-import ScheduleTable from './schedule-table'
+import { CalendarPlusIcon, InfoIcon, XIcon } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import Calendar from "react-calendar";
+
+import {
+    calculateHours, changeMonth, findAbsenceDays, formatTime, generateYearArray
+} from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+import { StaffDropdownOutput } from "@/trpc/shared";
+import { AlertDialogContent } from "@radix-ui/react-alert-dialog";
+
+import SelectStaff from "../staff/select-staff";
+import { AlertDialog, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
+import { Button } from "../ui/button";
+import Heading from "../ui/heading";
+import InfoModal from "../ui/info-modal";
+import { useToast } from "../ui/use-toast";
+import ScheduleTable from "./schedule-table";
 
 type ShiftModel = { id: string; end: number; start: number }
 

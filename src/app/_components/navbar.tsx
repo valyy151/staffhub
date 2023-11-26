@@ -1,12 +1,15 @@
-import React from 'react'
+import Image from "next/image";
+import React from "react";
 
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/app/_components/ui/navigation-menu'
-import { cn } from '@/app/lib/utils'
+import {
+    NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink,
+    NavigationMenuList, NavigationMenuTrigger
+} from "@/app/_components/ui/navigation-menu";
+import { cn } from "@/app/lib/utils";
+import { getServerAuthSession } from "@/server/auth";
 
-import ThemeToggle from './theme-toggle'
-import Image from 'next/image'
-import { SignInButton } from './auth-buttons'
-import { getServerAuthSession } from '@/server/auth'
+import { SignInButton } from "./auth-buttons";
+import ThemeToggle from "./theme-toggle";
 
 const links: { title: string; href: string; description: string }[] = [
 	{

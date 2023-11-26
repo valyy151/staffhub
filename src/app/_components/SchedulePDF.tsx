@@ -1,8 +1,9 @@
-import { createTw } from 'react-pdf-tailwind'
+import { createTw } from "react-pdf-tailwind";
 
-import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
-import { calculateHours, formatDate, formatTime, formatTotal } from '../lib/utils'
-import { StaffScheduleOutput } from '@/trpc/shared'
+import { StaffScheduleOutput } from "@/trpc/shared";
+import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+
+import { calculateHours, formatDate, formatTime, formatTotal } from "../lib/utils";
 
 type Shift = {
 	end: number

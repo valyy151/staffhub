@@ -1,15 +1,20 @@
-import { Shift, ShiftModel } from '@/app/lib/types'
-import { StaffScheduleOutput } from '@/trpc/shared'
-import { useState } from 'react'
-import { useToast } from './use-toast'
-import { api } from '@/trpc/react'
-import { Input } from './input'
-import { formatTime, formatTotal } from '@/app/lib/utils'
-import Heading from './heading'
-import { Button } from './button'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './alert-dialog'
-import RolesDropdown from './roles-dropdown'
-import FormModal from './form-modal'
+import { useState } from "react";
+
+import { ShiftModel } from "@/app/lib/types";
+import { formatTime, formatTotal } from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+import { WorkDayShiftsOutput } from "@/trpc/shared";
+
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle
+} from "./alert-dialog";
+import { Button } from "./button";
+import FormModal from "./form-modal";
+import Heading from "./heading";
+import { Input } from "./input";
+import RolesDropdown from "./roles-dropdown";
+import { useToast } from "./use-toast";
 
 export default function EditShift({
 	shift,
@@ -18,11 +23,11 @@ export default function EditShift({
 	setValue,
 	shiftModels,
 }: {
-	shift: Shift
 	setEdit: (edit: boolean) => void
-	employee: StaffScheduleOutput
 	shiftModels: ShiftModel[] | undefined
+	shift: WorkDayShiftsOutput['shifts'][number]
 	setValue?: ({ date, refetch }: { date: Date; refetch: boolean }) => void
+	employee: { id: string; name: string; roles: { id: string; name: string }[] }
 }) {
 	const [end, setEnd] = useState(shift?.end ?? 0)
 	const [start, setStart] = useState(shift?.start ?? 0)

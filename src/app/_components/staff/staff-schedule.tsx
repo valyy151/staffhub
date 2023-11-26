@@ -1,18 +1,21 @@
 'use client'
-import Link from 'next/link'
-import Heading from '../ui/heading'
-import { api } from '@/trpc/react'
-import ShiftRow from './shift-row'
-import Spinner from '../ui/spinner'
-import { Shift } from '@/app/lib/types'
-import 'react-calendar/dist/Calendar.css'
-import { Calendar } from 'react-calendar'
-import { useEffect, useState } from 'react'
-import type { StaffScheduleOutput } from '@/trpc/shared'
-import { calculateHours, formatDate, formatDay } from '@/app/lib/utils'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import dynamic from 'next/dynamic'
+import "react-calendar/dist/Calendar.css";
 
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Calendar } from "react-calendar";
+
+import { Shift } from "@/app/lib/types";
+import { calculateHours, formatDate, formatDay } from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+
+import Heading from "../ui/heading";
+import Spinner from "../ui/spinner";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import ShiftRow from "./shift-row";
+
+import type { StaffScheduleOutput } from '@/trpc/shared'
 const PDFButton = dynamic(() => import('@/app/_components/PDFButton'), {
 	ssr: false,
 })

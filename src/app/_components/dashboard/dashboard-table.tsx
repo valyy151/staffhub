@@ -1,21 +1,23 @@
 'use client'
 
-import Link from 'next/link'
-import AbsenceCard from './absence-card'
-import Heading from '@/app/_components/ui/heading'
-import Paragraph from '@/app/_components/ui/paragraph'
-import { DashboardAbsence, Note } from '@/app/lib/types'
-import { formatDay, formatDate, formatTime } from '@/app/lib/utils'
-import { CalendarOff, Scroll, ScrollText, User } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { api } from '@/trpc/react'
-import { Button } from '../ui/button'
+import "react-calendar/dist/Calendar.css";
 
-import Calendar from 'react-calendar'
-import 'react-calendar/dist/Calendar.css'
-import { Select, SelectContent, SelectTrigger, SelectValue } from '@/app/_components/ui/select'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import Spinner from '../ui/spinner'
+import { CalendarOff, Scroll, ScrollText, User } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import Calendar from "react-calendar";
+
+import Heading from "@/app/_components/ui/heading";
+import Paragraph from "@/app/_components/ui/paragraph";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "@/app/_components/ui/select";
+import { DashboardAbsence, Note } from "@/app/lib/types";
+import { formatDate, formatDay, formatTime } from "@/app/lib/utils";
+import { api } from "@/trpc/react";
+
+import { Button } from "../ui/button";
+import Spinner from "../ui/spinner";
+import AbsenceCard from "./absence-card";
 
 export default function DashboardTable() {
 	const router = useRouter()

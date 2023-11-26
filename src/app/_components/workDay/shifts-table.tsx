@@ -1,9 +1,11 @@
 'use client'
-import { Table, TableBody, TableHeader, TableHead, TableRow } from '@/app/_components/ui/table'
-import Shift from './shift'
-import { api } from '@/trpc/react'
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/app/_components/ui/table";
+import { api } from "@/trpc/react";
+import { WorkDayShiftsOutput } from "@/trpc/shared";
 
-export default function ShiftsTable({ shifts }: { shifts: any }) {
+import Shift from "./shift";
+
+export default function ShiftsTable({ shifts }: WorkDayShiftsOutput) {
 	const { data: shiftModels } = api.shiftModel.get.useQuery()
 
 	return (
@@ -18,7 +20,7 @@ export default function ShiftsTable({ shifts }: { shifts: any }) {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{shifts.map((shift: any) => (
+				{shifts.map((shift) => (
 					<Shift
 						shift={shift}
 						key={shift.id}

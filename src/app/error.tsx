@@ -1,6 +1,7 @@
 'use client'
-import { useRouter } from 'next/navigation'
-import { Button } from './_components/ui/button'
+import { useRouter } from "next-nprogress-bar";
+
+import { Button } from "./_components/ui/button";
 
 export default function Error() {
 	const router = useRouter()

@@ -1,7 +1,7 @@
 'use client'
-import Link from 'next/link'
-import { ClockIcon, ClipboardListIcon, UserCogIcon } from 'lucide-react'
-import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
+import { ClipboardListIcon, ClockIcon, UserCogIcon } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 
 export default function WorkDayLayout({ children }: { children: React.ReactNode }) {
 	const path = usePathname()

@@ -1,7 +1,7 @@
 'use client'
-import Link from 'next/link'
-import { useSelectedLayoutSegment } from 'next/navigation'
-import { ClipboardListIcon, ClockIcon, UserCogIcon } from 'lucide-react'
+import { ClipboardListIcon, ClockIcon, UserCogIcon } from "lucide-react";
+import Link from "next/link";
+import { useSelectedLayoutSegment } from "next/navigation";
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
 	const segment = useSelectedLayoutSegment()

@@ -1,7 +1,8 @@
-import CreateNote from '@/app/_components/ui/create-note'
-import Heading from '@/app/_components/ui/heading'
-import Note from '@/app/_components/ui/note'
-import { api } from '@/trpc/server'
+import CreateNote from "@/app/_components/ui/create-note";
+import Heading from "@/app/_components/ui/heading";
+import Note from "@/app/_components/ui/note";
+import { api } from "@/trpc/server";
+
 import type { Metadata } from 'next/types'
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {

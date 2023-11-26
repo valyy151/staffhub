@@ -1,7 +1,9 @@
-import { SignInButton, GetStartedButton } from './_components/auth-buttons'
-import { getServerAuthSession } from '@/server/auth'
-import { CalendarClock, Cog, FileSearch, Forward, Palmtree, Users } from 'lucide-react'
-import { redirect } from 'next/navigation'
+import { CalendarClock, Cog, FileSearch, Forward, Palmtree, Users } from "lucide-react";
+import { redirect } from "next/navigation";
+
+import { getServerAuthSession } from "@/server/auth";
+
+import { GetStartedButton, SignInButton } from "./_components/auth-buttons";
 
 export default async function Home() {
 	const session = await getServerAuthSession()

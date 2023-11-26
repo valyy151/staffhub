@@ -1,15 +1,16 @@
-import { createTRPCRouter } from '@/server/api/trpc'
-import { staffRouter } from '@/server/api/routers/staff'
-import { staffNoteRouter } from '@/server/api/routers/staffNote'
-import { sickLeaveRouter } from './routers/sickLeave'
-import { roleRouter } from './routers/role'
-import { vacationRouter } from './routers/vacation'
-import { shiftModelRouter } from './routers/shiftModel'
-import { shiftRouter } from './routers/shift'
-import { dashboardRouter } from './routers/dashboard'
-import { workDayRouter } from './routers/workDay'
-import { workDayNoteRouter } from './routers/workDayNote'
-import { userRouter } from './routers/user'
+import { staffRouter } from "@/server/api/routers/staff";
+import { staffNoteRouter } from "@/server/api/routers/staffNote";
+import { createTRPCRouter } from "@/server/api/trpc";
+
+import { dashboardRouter } from "./routers/dashboard";
+import { roleRouter } from "./routers/role";
+import { shiftRouter } from "./routers/shift";
+import { shiftModelRouter } from "./routers/shiftModel";
+import { sickLeaveRouter } from "./routers/sickLeave";
+import { userRouter } from "./routers/user";
+import { vacationRouter } from "./routers/vacation";
+import { workDayRouter } from "./routers/workDay";
+import { workDayNoteRouter } from "./routers/workDayNote";
 
 /**
  * This is the primary router for your server.

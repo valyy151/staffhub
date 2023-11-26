@@ -1,6 +1,8 @@
-import { db } from '@/server/db'
-import { protectedProcedure, createTRPCRouter } from './../trpc'
-import { z } from 'zod'
+import { z } from "zod";
+
+import { db } from "@/server/db";
+
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const workDayRouter = createTRPCRouter({
 	yearExists: protectedProcedure.input(z.object({ date: z.number() })).query(async ({ input: { date } }) => {
@@ -52,8 +54,8 @@ export const workDayRouter = createTRPCRouter({
 				date: true,
 				start: true,
 				role: { select: { id: true, name: true } },
-				employee: { select: { id: true, name: true } },
-				absence: { select: { id: true, absent: true, approved: true } },
+				absence: { select: { id: true, absent: true, approved: true, reason: true } },
+				employee: { select: { id: true, name: true, roles: { select: { id: true, name: true } } } },
 			},
 			orderBy: { start: 'asc' },
 		})

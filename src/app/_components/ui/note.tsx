@@ -1,12 +1,14 @@
 'use client'
-import { useState } from 'react'
-import { Button } from './button'
-import { Trash2 } from 'lucide-react'
-import { useToast } from './use-toast'
-import { api } from '@/trpc/react'
-import FormModal from './form-modal'
-import { useRouter } from 'next/navigation'
-import { Card, CardDescription } from './card'
+import { Trash2 } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { api } from "@/trpc/react";
+
+import { Button } from "./button";
+import { Card, CardDescription } from "./card";
+import FormModal from "./form-modal";
+import { useToast } from "./use-toast";
 
 type NoteProps = {
 	type: 'employee' | 'workDay'

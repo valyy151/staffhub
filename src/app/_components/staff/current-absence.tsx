@@ -1,14 +1,18 @@
 'use client'
 
-import { HeartPulseIcon, MoreVerticalIcon, PalmtreeIcon, Trash2Icon } from 'lucide-react'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu'
-import Heading from '../ui/heading'
-import { Absence } from '@/app/lib/types'
-import { useState } from 'react'
-import FormModal from '../ui/form-modal'
-import { useToast } from '../ui/use-toast'
-import { api } from '@/trpc/react'
-import { useRouter } from 'next/navigation'
+import { HeartPulseIcon, MoreVerticalIcon, PalmtreeIcon, Trash2Icon } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
+import { useState } from "react";
+
+import { Absence } from "@/app/lib/types";
+import { api } from "@/trpc/react";
+
+import {
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
+} from "../ui/dropdown-menu";
+import FormModal from "../ui/form-modal";
+import Heading from "../ui/heading";
+import { useToast } from "../ui/use-toast";
 
 export default function Absence({ absence, type }: { absence: Absence; type: 'vacation' | 'sick' }) {
 	const [showModal, setShowModal] = useState(false)
