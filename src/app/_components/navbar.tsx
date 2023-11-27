@@ -10,6 +10,11 @@ import ThemeToggle from './theme-toggle'
 
 const links: { title: string; href: string; description: string }[] = [
 	{
+		title: 'Account',
+		href: '/settings',
+		description: 'Manage your account settings.',
+	},
+	{
 		title: 'Staff Roles',
 		href: '/settings/roles',
 		description: 'Manage the roles that your staff can have.',
@@ -18,11 +23,6 @@ const links: { title: string; href: string; description: string }[] = [
 		title: 'Shift Models',
 		href: '/settings/shift-models',
 		description: 'Manage the shift models that your staff can have.',
-	},
-	{
-		title: 'Account',
-		href: '/settings',
-		description: 'Manage your account settings.',
 	},
 	{
 		title: 'Sign Out',
