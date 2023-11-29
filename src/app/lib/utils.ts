@@ -1,5 +1,5 @@
-import { ClassValue, clsx, type } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 import type { Absence, Shift } from './types'
 
@@ -76,13 +76,52 @@ export const getNumberOfSickDays = (sickLeaves: Absence[]): number => {
 	return days
 }
 
-export const calculateHours = (shifts: Shift[]): string => {
+export const calculateStaffHours = (shifts: Shift[]): string => {
 	let hours = 0
 	let minutes = 0
 
 	for (const shift of shifts) {
 		if (shift.start && shift.end) {
 			const diff = Number(shift.end) - Number(shift.start)
+
+			const diffHours = Math.floor(diff / 3600)
+
+			const diffMinutes = Math.floor((diff % 3600) / 60)
+
+			hours += diffHours
+			minutes += diffMinutes
+		}
+	}
+
+	hours += Math.floor(minutes / 60)
+
+	if (minutes === 0) {
+		return hours + 'h'
+	}
+
+	return hours + 'h ' + (minutes % 60) + 'm'
+}
+
+export const calculateHours = (shifts: { date: number; start?: string; end?: string }[]): string => {
+	let hours = 0
+	let minutes = 0
+
+	for (const shift of shifts) {
+		const startDate = new Date()
+		const endDate = new Date()
+
+		if (shift.start && shift.end) {
+			const [startHour, startMinute] = shift.start.split(':')
+
+			startDate.setHours(Number(startHour))
+			startDate.setMinutes(Number(startMinute))
+
+			const [endHour, endMinute] = shift.end.split(':')
+
+			endDate.setHours(Number(endHour))
+			endDate.setMinutes(Number(endMinute))
+
+			const diff = Math.floor((endDate.getTime() - startDate.getTime()) / 1000)
 
 			const diffHours = Math.floor(diff / 3600)
 
@@ -217,7 +256,7 @@ export const changeMonth = (date: Date) => {
 	const monthIndex = date.getMonth()
 	const daysInMonth = new Date(year, monthIndex + 1, 0).getDate()
 
-	const data: { start?: number; end?: number; date: number }[] = new Array(daysInMonth).fill(null).map((_, index) => {
+	const data: { start?: string; end?: string; date: number }[] = new Array(daysInMonth).fill(null).map((_, index) => {
 		const day = index + 1
 		const dateUnixTimestamp = new Date(year, monthIndex, day).getTime() / 1000
 
@@ -243,4 +282,37 @@ export const findAbsenceDays = (absences: { id: string; end: bigint; start: bigi
 		})
 	})
 	return { vacationDays, sickDays }
+}
+
+export const handleTimeChange = (newTime: string, field: 'start' | 'end', setStart: (start: string) => void, setEnd: (end: string) => void) => {
+	if (newTime.length > 5) {
+		return
+	}
+
+	field === 'start' ? setStart(newTime) : setEnd(newTime)
+
+	if (newTime.length === 2) {
+		if (Number(newTime) > 23) {
+			field === 'start' ? setStart('00:') : setEnd('00:')
+		} else {
+			field === 'start' ? setStart(`${newTime}:`) : setEnd(`${newTime}:`)
+		}
+	}
+
+	if (Number(newTime.split(':')[1]) > 59) {
+		field === 'start' ? setStart(`${newTime.split(':')[0]}:00`) : setEnd(`${newTime.split(':')[0]}:00`)
+	}
+
+	const date = new Date()
+
+	const [hour, minute] = newTime.split(':')
+
+	date.setHours(Number(hour))
+	date.setMinutes(Number(minute))
+
+	const newUnixTime = Math.floor(date.getTime() / 1000)
+
+	if (minute?.length === 5) {
+		field === 'start' ? setStart(formatTime(newUnixTime)) : setEnd(formatTime(newUnixTime))
+	}
 }

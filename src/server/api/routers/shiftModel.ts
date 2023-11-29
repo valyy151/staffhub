@@ -1,11 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod'
 
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { db } from "@/server/db";
+import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
+import { db } from '@/server/db'
+import { formatTime } from '@/app/lib/utils'
 
 export const shiftModelRouter = createTRPCRouter({
 	get: protectedProcedure.query(async ({ ctx }) => {
-		return await db.shiftModel.findMany({
+		const models = await db.shiftModel.findMany({
 			where: {
 				userId: ctx.session.user.id,
 			},
@@ -14,8 +15,31 @@ export const shiftModelRouter = createTRPCRouter({
 				end: true,
 				start: true,
 			},
-			orderBy: { start: 'asc' },
 		})
+
+		const date = new Date()
+
+		return models
+			.map((model) => {
+				const formattedStart = formatTime(model.start)
+				const formattedEnd = formatTime(model.end)
+
+				const [startHour, startMinute] = formattedStart.split(':')
+				const [endHour, endMinute] = formattedEnd.split(':')
+
+				date.setHours(parseInt(startHour!))
+				date.setMinutes(parseInt(startMinute!))
+
+				model.start = date.getTime() / 1000
+
+				date.setHours(parseInt(endHour!))
+				date.setMinutes(parseInt(endMinute!))
+
+				model.end = date.getTime() / 1000
+
+				return model
+			})
+			.sort((a, b) => a.start - b.start)
 	}),
 
 	create: protectedProcedure

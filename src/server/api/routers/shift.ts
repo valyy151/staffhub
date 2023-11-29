@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod'
 
-import { getMonth } from "@/app/lib/utils";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { db } from "@/server/db";
+import { getMonth } from '@/app/lib/utils'
+import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
+import { db } from '@/server/db'
 
 export const shiftRouter = createTRPCRouter({
 	create: protectedProcedure
@@ -142,9 +142,9 @@ export const shiftRouter = createTRPCRouter({
 				employeeId: z.string(),
 				schedule: z.array(
 					z.object({
-						end: z.number(),
 						date: z.number(),
-						start: z.number(),
+						end: z.string(),
+						start: z.string(),
 					})
 				),
 			})
@@ -152,18 +152,29 @@ export const shiftRouter = createTRPCRouter({
 		.mutation(async ({ input: { schedule, employeeId }, ctx }) => {
 			return await db.shift.createMany({
 				data: schedule.map((shift) => {
-					const modifiedDate = new Date(shift.date * 1000)
+					const date = new Date(shift.date * 1000)
+					date.setHours(0, 0, 0, 0)
 
-					modifiedDate.setHours(0, 0, 0, 0)
+					const midnightUnixCode = Math.floor(date.getTime() / 1000)
 
-					const midnightUnixCode = Math.floor(modifiedDate.getTime() / 1000)
+					const startDate = new Date(shift.date * 1000)
+					const endDate = new Date(shift.date * 1000)
+
+					const [startHour, startMinute] = shift.start.split(':')
+					const [endHour, endMinute] = shift.end.split(':')
+
+					startDate.setHours(Number(startHour))
+					startDate.setMinutes(Number(startMinute))
+
+					endDate.setHours(Number(endHour))
+					endDate.setMinutes(Number(endMinute))
 
 					return {
 						employeeId,
-						end: shift.end,
-						start: shift.start,
 						date: midnightUnixCode,
 						userId: ctx.session.user.id,
+						end: Math.floor(endDate.getTime() / 1000),
+						start: Math.floor(startDate.getTime() / 1000),
 					}
 				}),
 			})

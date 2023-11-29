@@ -1,8 +1,8 @@
-import CreateModel from "@/app/_components/settings/create-model";
-import ShiftModel from "@/app/_components/settings/shift-model";
-import Heading from "@/app/_components/ui/heading";
-import Paragraph from "@/app/_components/ui/paragraph";
-import { api } from "@/trpc/server";
+import CreateModel from '@/app/_components/settings/create-model'
+import ShiftModel from '@/app/_components/settings/shift-model'
+import Heading from '@/app/_components/ui/heading'
+import Paragraph from '@/app/_components/ui/paragraph'
+import { api } from '@/trpc/server'
 
 export const metadata = {
 	title: 'Settings | StaffHub',
@@ -27,14 +27,12 @@ export default async function ShiftModelsSettings() {
 			</Heading>
 			{shiftModels.length > 0 ? (
 				<div className='flex gap-4 flex-wrap max-w-4xl'>
-					{shiftModels
-						.sort((a, b) => Number(b.start) - Number(a.start))
-						.map((shiftModel) => (
-							<ShiftModel
-								key={shiftModel.id}
-								shiftModel={shiftModel}
-							/>
-						))}
+					{shiftModels.map((shiftModel) => (
+						<ShiftModel
+							key={shiftModel.id}
+							shiftModel={shiftModel}
+						/>
+					))}
 				</div>
 			) : (
 				<Paragraph className='mt-4'>You don't have any shift models yet.</Paragraph>

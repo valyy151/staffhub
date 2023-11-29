@@ -1,23 +1,20 @@
 'use client'
-import { ClockIcon } from "lucide-react";
-import { useRouter } from "next-nprogress-bar";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { ClockIcon } from 'lucide-react'
+import { useRouter } from 'next-nprogress-bar'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
-import { Input } from "@/app/_components/ui/input";
-import { useToast } from "@/app/_components/ui/use-toast";
-import { formatTime, formatTotal } from "@/app/lib/utils";
-import { api } from "@/trpc/react";
-import { StaffDropdownOutput } from "@/trpc/shared";
+import { Input } from '@/app/_components/ui/input'
+import { useToast } from '@/app/_components/ui/use-toast'
+import { formatTime, handleTimeChange, renderTotal } from '@/app/lib/utils'
+import { api } from '@/trpc/react'
+import { StaffDropdownOutput } from '@/trpc/shared'
 
-import SelectStaff from "../staff/select-staff";
-import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
-    AlertDialogHeader, AlertDialogTitle
-} from "../ui/alert-dialog";
-import { Button } from "../ui/button";
-import Heading from "../ui/heading";
-import RolesDropdown from "../ui/roles-dropdown";
+import SelectStaff from '../staff/select-staff'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
+import { Button } from '../ui/button'
+import Heading from '../ui/heading'
+import RolesDropdown from '../ui/roles-dropdown'
 
 type AddShiftProps = {
 	date: number
@@ -35,25 +32,13 @@ export default function AddShift({ date }: AddShiftProps) {
 			name: string
 		}
 	)
-	const [end, setEnd] = useState<number>(0)
-	const [start, setStart] = useState<number>(0)
+	const [end, setEnd] = useState<string>('')
+	const [start, setStart] = useState<string>('')
 
 	const [endDate, setEndDate] = useState<number>(0)
 	const [isSick, setIsSick] = useState<boolean>(false)
 	const [remainingDays, setRemainingDays] = useState<number>(0)
 	const [isOnVacation, setIsOnVacation] = useState<boolean>(false)
-
-	function handleTimeChange(newTime: string, field: 'start' | 'end') {
-		// convert the new time into Unix timestamp
-
-		const [hour, minute]: string[] = newTime.split(':')
-		const newDate: any = new Date(date * 1000)
-		newDate.setHours(hour)
-		newDate.setMinutes(minute)
-		const newUnixTime = Math.floor(newDate.getTime() / 1000)
-
-		field === 'start' ? setStart(newUnixTime) : setEnd(newUnixTime)
-	}
 
 	function checkIfSickOrVacation(employee: any) {
 		setIsSick(false)
@@ -126,12 +111,24 @@ export default function AddShift({ date }: AddShiftProps) {
 			})
 		}
 
+		const startDate = new Date(date * 1000)
+		const endDate = new Date(date * 1000)
+
+		const [startHour, startMinute] = start.split(':')
+		const [endHour, endMinute] = end.split(':')
+
+		startDate.setHours(Number(startHour))
+		startDate.setMinutes(Number(startMinute))
+
+		endDate.setHours(Number(endHour))
+		endDate.setMinutes(Number(endMinute))
+
 		createShift.mutate({
 			date,
-			end: end,
-			start: start,
 			roleId: role.id,
 			employeeId: employee.id,
+			end: Math.floor(endDate.getTime() / 1000),
+			start: Math.floor(startDate.getTime() / 1000),
 		})
 	}
 
@@ -174,29 +171,29 @@ export default function AddShift({ date }: AddShiftProps) {
 								<div>
 									<label className='ml-2'>Start</label>
 									<Input
-										value={formatTime(start)}
+										value={start}
 										className='w-36 text-lg'
 										onKeyDown={(e) => {
 											if (e.key === 'Backspace') {
 												e.currentTarget.select()
-												handleTimeChange('', 'start')
+												handleTimeChange('', 'start', setStart, setEnd)
 											}
 										}}
-										onChange={(e) => handleTimeChange(e.target.value, 'start')}
+										onChange={(e) => handleTimeChange(e.target.value, 'start', setStart, setEnd)}
 									/>
 								</div>
 								<div>
 									<label className='ml-2'>End</label>
 									<Input
-										value={formatTime(end)}
+										value={end}
 										className='w-36 text-lg'
 										onKeyDown={(e) => {
 											if (e.key === 'Backspace') {
 												e.currentTarget.select()
-												handleTimeChange('', 'end')
+												handleTimeChange('', 'end', setStart, setEnd)
 											}
 										}}
-										onChange={(e) => handleTimeChange(e.target.value, 'end')}
+										onChange={(e) => handleTimeChange(e.target.value, 'end', setStart, setEnd)}
 									/>
 								</div>
 								<div>
@@ -204,7 +201,7 @@ export default function AddShift({ date }: AddShiftProps) {
 									<Heading
 										size={'xs'}
 										className='h-14 border-none px-4 py-1 text-2xl disabled:cursor-default'>
-										{formatTotal(start, end)}
+										{renderTotal(start, end)}
 									</Heading>
 								</div>
 							</div>
@@ -218,8 +215,8 @@ export default function AddShift({ date }: AddShiftProps) {
 												key={shiftModel.id}
 												size={'xxs'}
 												onClick={() => {
-													handleTimeChange(formatTime(shiftModel.start), 'start')
-													handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end), 'end')
+													handleTimeChange(formatTime(shiftModel.start), 'start', setStart, setEnd)
+													handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end), 'end', setStart, setEnd)
 												}}
 												className='cursor-pointer mr-auto font-medium w-fit hover:text-sky-500'>
 												{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}

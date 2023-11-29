@@ -1,21 +1,18 @@
 'use client'
 
-import { useRouter } from "next-nprogress-bar";
-import { useState } from "react";
+import { useRouter } from 'next-nprogress-bar'
+import { useState } from 'react'
 
-import { formatTime, renderTotal } from "@/app/lib/utils";
-import { api } from "@/trpc/react";
+import { formatTime, handleTimeChange, renderTotal } from '@/app/lib/utils'
+import { api } from '@/trpc/react'
 
-import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
-    AlertDialogHeader, AlertDialogTitle
-} from "../ui/alert-dialog";
-import { Button } from "../ui/button";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
-import FormModal from "../ui/form-modal";
-import Heading from "../ui/heading";
-import { Input } from "../ui/input";
-import { useToast } from "../ui/use-toast";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
+import { Button } from '../ui/button'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
+import FormModal from '../ui/form-modal'
+import Heading from '../ui/heading'
+import { Input } from '../ui/input'
+import { useToast } from '../ui/use-toast'
 
 export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; start: number; end: number } }) {
 	const router = useRouter()
@@ -59,39 +56,6 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 			})
 		},
 	})
-
-	const handleTimeChange = (newTime: string, field: 'start' | 'end') => {
-		if (newTime.length > 5) {
-			return
-		}
-
-		field === 'start' ? setStart(newTime) : setEnd(newTime)
-
-		if (newTime.length === 2) {
-			if (Number(newTime) > 23) {
-				field === 'start' ? setStart('00:') : setEnd('00:')
-			} else {
-				field === 'start' ? setStart(`${newTime}:`) : setEnd(`${newTime}:`)
-			}
-		}
-
-		if (Number(newTime.split(':')[1]) > 59) {
-			field === 'start' ? setStart(`${newTime.split(':')[0]}:00`) : setEnd(`${newTime.split(':')[0]}:00`)
-		}
-
-		const date = new Date()
-
-		const [hour, minute] = newTime.split(':')
-
-		date.setHours(Number(hour))
-		date.setMinutes(Number(minute))
-
-		const newUnixTime = Math.floor(date.getTime() / 1000)
-
-		if (minute?.length === 5) {
-			field === 'start' ? setStart(formatTime(newUnixTime)) : setEnd(formatTime(newUnixTime))
-		}
-	}
 
 	const handleSubmit = () => {
 		const date = new Date()
@@ -149,7 +113,7 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 								<Input
 									type='text'
 									value={start}
-									onChange={(e) => handleTimeChange(e.target.value, 'start')}
+									onChange={(e) => handleTimeChange(e.target.value, 'start', setStart, setEnd)}
 								/>
 							</div>
 							<div>
@@ -157,7 +121,7 @@ export default function ShiftModel({ shiftModel }: { shiftModel: { id: string; s
 								<Input
 									type='text'
 									value={end}
-									onChange={(e) => handleTimeChange(e.target.value, 'end')}
+									onChange={(e) => handleTimeChange(e.target.value, 'end', setStart, setEnd)}
 								/>
 							</div>
 							<div>

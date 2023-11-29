@@ -1,20 +1,18 @@
-import { useState } from "react";
+import { useState } from 'react'
 
-import { ShiftModel } from "@/app/lib/types";
-import { formatTime, formatTotal } from "@/app/lib/utils";
-import { api } from "@/trpc/react";
-import { WorkDayShiftsOutput } from "@/trpc/shared";
+import { ShiftModel } from '@/app/lib/types'
+import { formatTime, renderTotal } from '@/app/lib/utils'
+import { api } from '@/trpc/react'
+import { WorkDayShiftsOutput } from '@/trpc/shared'
 
-import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
-    AlertDialogHeader, AlertDialogTitle
-} from "./alert-dialog";
-import { Button } from "./button";
-import FormModal from "./form-modal";
-import Heading from "./heading";
-import { Input } from "./input";
-import RolesDropdown from "./roles-dropdown";
-import { useToast } from "./use-toast";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './alert-dialog'
+import { Button } from './button'
+import FormModal from './form-modal'
+import Heading from './heading'
+import { Input } from './input'
+import RolesDropdown from './roles-dropdown'
+import { useToast } from './use-toast'
+import { useRouter } from 'next/navigation'
 
 export default function EditShift({
 	shift,
@@ -29,31 +27,52 @@ export default function EditShift({
 	setValue?: ({ date, refetch }: { date: Date; refetch: boolean }) => void
 	employee: { id: string; name: string; roles: { id: string; name: string }[] }
 }) {
-	const [end, setEnd] = useState(shift?.end ?? 0)
-	const [start, setStart] = useState(shift?.start ?? 0)
+	const [end, setEnd] = useState(formatTime(shift?.end) ?? '')
+	const [start, setStart] = useState(formatTime(shift?.start ?? ''))
 	const [role, setRole] = useState({ id: shift?.role?.id ?? '', name: shift?.role?.name ?? '' })
 
 	const [showDelete, setShowDelete] = useState(false)
 
 	const { toast } = useToast()
 
-	const handleTimeChange = (newTime: string, field: 'start' | 'end'): void => {
-		try {
-			const [hour, minute]: string[] = newTime.split(':')
-			const newDate: Date = new Date(shift.date! * 1000)
-			newDate.setHours(Number(hour))
-			newDate.setMinutes(Number(minute))
-			const newUnixTime = Math.floor(newDate.getTime() / 1000)
+	const router = useRouter()
 
-			field === 'start' ? setStart(newUnixTime) : setEnd(newUnixTime)
-		} catch (e) {
-			console.error(e)
+	const handleTimeChange = (newTime: string, field: 'start' | 'end'): void => {
+		if (newTime.length > 5) {
+			return
+		}
+
+		field === 'start' ? setStart(newTime) : setEnd(newTime)
+
+		if (newTime.length === 2) {
+			if (Number(newTime) > 23) {
+				field === 'start' ? setStart('00:') : setEnd('00:')
+			} else {
+				field === 'start' ? setStart(`${newTime}:`) : setEnd(`${newTime}:`)
+			}
+		}
+
+		if (Number(newTime.split(':')[1]) > 59) {
+			field === 'start' ? setStart(`${newTime.split(':')[0]}:00`) : setEnd(`${newTime.split(':')[0]}:00`)
+		}
+
+		const date = new Date()
+
+		const [hour, minute] = newTime.split(':')
+
+		date.setHours(Number(hour))
+		date.setMinutes(Number(minute))
+
+		const newUnixTime = Math.floor(date.getTime() / 1000)
+
+		if (minute?.length === 5) {
+			field === 'start' ? setStart(formatTime(newUnixTime)) : setEnd(formatTime(newUnixTime))
 		}
 	}
 
 	const createShiftMutation = api.shift.create.useMutation({
 		onSuccess: () => {
-			setValue && setValue({ date: new Date(shift.date! * 1000), refetch: true })
+			setValue ? setValue({ date: new Date(shift.date! * 1000), refetch: true }) : router.refresh()
 			setEdit(false)
 			toast({
 				title: 'Shift created successfully.',
@@ -70,7 +89,7 @@ export default function EditShift({
 
 	const updateShiftMutation = api.shift.update.useMutation({
 		onSuccess: () => {
-			setValue && setValue({ date: new Date(shift.date! * 1000), refetch: true })
+			setValue ? setValue({ date: new Date(shift.date! * 1000), refetch: true }) : router.refresh()
 			setEdit(false)
 			toast({
 				title: 'Shift updated successfully.',
@@ -102,20 +121,37 @@ export default function EditShift({
 		},
 	})
 
-	const updateShift = (shiftId: string | null) => {
+	const updateShift = (shiftId: string | null, date: number) => {
+		const startDate = new Date(date * 1000)
+		const endDate = new Date(date * 1000)
+
+		const [startHour, startMinute] = start.split(':')
+		const [endHour, endMinute] = end.split(':')
+
+		startDate.setHours(Number(startHour))
+		startDate.setMinutes(Number(startMinute))
+
+		endDate.setHours(Number(endHour))
+		endDate.setMinutes(Number(endMinute))
+
 		if (!shiftId) {
 			createShiftMutation.mutate({
-				end,
-				start,
 				roleId: role.id,
 				date: shift.date!,
 				employeeId: employee.id!,
+				end: Math.floor(endDate.getTime() / 1000),
+				start: Math.floor(startDate.getTime() / 1000),
 			})
 			return
 		}
+
 		updateShiftMutation.mutate({
 			shiftId,
-			shift: { start, end, roleId: role.id },
+			shift: {
+				roleId: role.id,
+				end: Math.floor(endDate.getTime() / 1000),
+				start: Math.floor(startDate.getTime() / 1000),
+			},
 		})
 	}
 
@@ -152,7 +188,7 @@ export default function EditShift({
 							<div>
 								<label className='ml-2'>Start</label>
 								<Input
-									value={formatTime(start)}
+									value={start}
 									className='w-36 text-lg'
 									onKeyDown={(e) => {
 										if (e.key === 'Backspace') {
@@ -166,7 +202,7 @@ export default function EditShift({
 							<div>
 								<label className='ml-2'>End</label>
 								<Input
-									value={formatTime(end)}
+									value={end}
 									className='w-36 text-lg'
 									onKeyDown={(e) => {
 										if (e.key === 'Backspace') {
@@ -182,7 +218,7 @@ export default function EditShift({
 								<Heading
 									size={'xs'}
 									className='h-14 border-none px-4 py-1 text-2xl disabled:cursor-default'>
-									{formatTotal(start, end)}
+									{renderTotal(start, end)}
 								</Heading>
 							</div>
 						</div>
@@ -220,7 +256,7 @@ export default function EditShift({
 						<AlertDialogAction
 							disabled={updateShiftMutation.isLoading || createShiftMutation.isLoading}
 							aria-disabled={updateShiftMutation.isLoading || createShiftMutation.isLoading}
-							onClick={() => updateShift(shift?.id ?? null)}>
+							onClick={() => updateShift(shift?.id ?? null, shift.date)}>
 							Continue
 						</AlertDialogAction>
 					</AlertDialogFooter>

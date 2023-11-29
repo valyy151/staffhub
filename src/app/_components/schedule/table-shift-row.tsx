@@ -1,79 +1,54 @@
-import { useRef } from "react";
+import { useRef } from 'react'
 
-import { Input } from "@/app/_components/ui/input";
-import { TableCell, TableRow } from "@/app/_components/ui/table";
-import { formatDate, formatDay, formatTime, formatTotal } from "@/app/lib/utils";
+import { Input } from '@/app/_components/ui/input'
+import { TableCell, TableRow } from '@/app/_components/ui/table'
+import { formatDate, formatDay, renderTotal } from '@/app/lib/utils'
 
 type Props = {
 	data: Data
 	index: number
-	shift: string
+	shiftModel: string
 	item: {
 		date: number
-		end?: number | undefined
-		start?: number | undefined
+		end?: string | undefined
+		start?: string | undefined
 	}
 	sickDays: number[]
 	vacationDays: number[]
 	setData: (data: Data) => void
 }
 
-type Data = { date: number; end?: number; start?: number }[]
+type Data = { date: number; end?: string; start?: string }[]
 
-export default function ShiftRow({ data, item, index, shift, setData, sickDays, vacationDays }: Props) {
+export default function ShiftRow({ data, item, index, shiftModel, setData, sickDays, vacationDays }: Props) {
 	const endRef = useRef<HTMLInputElement>(null)
 	const startRef = useRef<HTMLInputElement>(null)
 
 	const handleTimeChange = (index: number, newTime: string, field: 'start' | 'end') => {
-		if (newTime === '') {
-			//clear the value
-			const newData = data.map((d, i) => (i === index ? { ...d, [field]: '' } : d))
-			setData(newData)
-		}
-
-		if (!newTime) {
+		if (newTime.length > 5) {
 			return
 		}
 
-		const [hour, minute]: string[] = newTime.split(':')
+		if (newTime.length === 2) {
+			if (Number(newTime) > 23) {
+				return
+			}
+			newTime += ':'
+		}
 
-		const newDate = new Date(data[index]!.date * 1000)
-
-		newDate.setHours(Number(hour))
-		newDate.setMinutes(Number(minute))
-
-		const newUnixTime = Math.floor(newDate.getTime() / 1000)
-
-		const newData = data.map((d, i) => (i === index ? { ...d, [field]: newUnixTime } : d))
+		const newData = data.map((d, i) => (i === index ? { ...d, [field]: newTime } : d))
 		setData(newData)
 	}
 
 	//function like handleTimeChange but it will apply it for both start and end
 	const handleTimeWithClick = (index: number) => {
-		const [start, end] = shift?.split('-') as string[]
+		const [start, end] = shiftModel?.split('-') as string[]
 
 		if (!start || !end) {
 			return
 		}
 
-		const [startHour, startMinute] = start.split(':')
-		const [endHour, endMinute] = end.split(':')
-
-		const newDate = new Date(data[index]!.date * 1000)
-
-		newDate.setHours(Number(startHour))
-		newDate.setMinutes(Number(startMinute))
-
-		const newUnixTime = Math.floor(newDate.getTime() / 1000)
-
-		const newDate2 = new Date(data[index]!.date * 1000)
-
-		newDate2.setHours(Number(endHour))
-		newDate2.setMinutes(Number(endMinute))
-
-		const newUnixTime2 = Math.floor(newDate2.getTime() / 1000)
-
-		const newData = data.map((d, i) => (i === index ? { ...d, start: newUnixTime, end: newUnixTime2 } : d))
+		const newData = data.map((d, i) => (i === index ? { ...d, start: start, end: end } : d))
 		setData(newData)
 	}
 
@@ -85,13 +60,13 @@ export default function ShiftRow({ data, item, index, shift, setData, sickDays, 
 				<span> {formatDay(item.date, 'long')}</span>
 				<span className='ml-auto'>{formatDate(item.date, 'long')}</span>
 			</TableCell>
-			{shift ? (
+			{shiftModel ? (
 				<>
 					<TableCell onClick={() => handleTimeWithClick(index)}>
 						<Input
 							type='text'
 							ref={startRef}
-							value={formatTime(item.start!)}
+							value={item.start!}
 							onKeyDown={(e) => {
 								if (e.key === 'Backspace') {
 									e.currentTarget.select()
@@ -102,13 +77,13 @@ export default function ShiftRow({ data, item, index, shift, setData, sickDays, 
 							}}
 							placeholder={vacationDays.includes(item.date) ? 'Vacation' : undefined || sickDays.includes(item.date) ? 'Sick' : undefined}
 							disabled={sickDays.includes(item.date) || vacationDays.includes(item.date)}
-							className={`w-fit ${shift && !vacationDays.includes(item.date) && 'hover:ring-0.5 w-fit cursor-pointer ring-gray-800 dark:ring-gray-50'}`}
+							className={`w-fit ${shiftModel && !vacationDays.includes(item.date) && 'hover:ring-0.5 w-fit cursor-pointer ring-gray-800 dark:ring-gray-50'}`}
 						/>
 					</TableCell>
 					<TableCell onClick={() => handleTimeWithClick(index)}>
 						<Input
 							ref={endRef}
-							value={formatTime(item.end!)}
+							value={item.end!}
 							onKeyDown={(e) => {
 								if (e.key === 'Backspace') {
 									e.currentTarget.select()
@@ -118,7 +93,7 @@ export default function ShiftRow({ data, item, index, shift, setData, sickDays, 
 								}
 							}}
 							disabled={sickDays.includes(item.date) || vacationDays.includes(item.date)}
-							className={`w-fit ${shift && !vacationDays.includes(item.date) && 'hover:ring-0.5 w-fit cursor-pointer ring-gray-800 dark:ring-gray-50'}`}
+							className={`w-fit ${shiftModel && !vacationDays.includes(item.date) && 'hover:ring-0.5 w-fit cursor-pointer ring-gray-800 dark:ring-gray-50'}`}
 							type='text'
 						/>
 					</TableCell>
@@ -139,7 +114,7 @@ export default function ShiftRow({ data, item, index, shift, setData, sickDays, 
 								}
 							}}
 							disabled={sickDays.includes(item.date) || vacationDays.includes(item.date)}
-							value={formatTime(item.start!)}
+							value={item.start!}
 							onChange={(e) => handleTimeChange(index, e.target.value, 'start')}
 							className='w-fit '
 						/>
@@ -147,7 +122,7 @@ export default function ShiftRow({ data, item, index, shift, setData, sickDays, 
 
 					<TableCell>
 						<Input
-							value={formatTime(item.end!)}
+							value={item.end!}
 							disabled={sickDays.includes(item.date) || vacationDays.includes(item.date)}
 							onChange={(e) => handleTimeChange(index, e.target.value, 'end')}
 							onKeyDown={(e) => {
@@ -169,7 +144,7 @@ export default function ShiftRow({ data, item, index, shift, setData, sickDays, 
 				<TableCell
 					title='Total hours in shift'
 					className='text-right'>
-					{formatTotal(item.start, item.end)}
+					{renderTotal(item.start, item.end)}
 				</TableCell>
 			) : null}
 

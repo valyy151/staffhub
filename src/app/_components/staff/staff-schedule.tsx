@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { Calendar } from 'react-calendar'
 
 import { Shift } from '@/app/lib/types'
-import { calculateHours, formatDate, formatDay } from '@/app/lib/utils'
+import { calculateStaffHours, formatDate, formatDay } from '@/app/lib/utils'
 import { api } from '@/trpc/react'
 
 import Heading from '../ui/heading'
@@ -54,7 +54,7 @@ export default function StaffSchedule({ employee }: { employee: StaffScheduleOut
 				<Heading
 					size={'xs'}
 					className='mb-4 ml-2'>
-					{employee?.name}, {month} - {calculateHours(shifts as Shift[])}
+					{employee?.name}, {month} - {calculateStaffHours(shifts as Shift[])}
 				</Heading>
 				<div className='border max-h-[46.2rem] overflow-y-scroll'>
 					<Table className='min-w-[40vw]'>

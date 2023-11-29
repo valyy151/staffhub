@@ -1,24 +1,22 @@
 'use client'
 
-import { CalendarPlusIcon, InfoIcon, XIcon } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import Calendar from "react-calendar";
+import { CalendarPlusIcon, InfoIcon, XIcon } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
+import Calendar from 'react-calendar'
 
-import {
-    calculateHours, changeMonth, findAbsenceDays, formatTime, generateYearArray
-} from "@/app/lib/utils";
-import { api } from "@/trpc/react";
-import { StaffDropdownOutput } from "@/trpc/shared";
-import { AlertDialogContent } from "@radix-ui/react-alert-dialog";
+import { calculateHours, changeMonth, findAbsenceDays, formatTime, generateYearArray } from '@/app/lib/utils'
+import { api } from '@/trpc/react'
+import { StaffDropdownOutput } from '@/trpc/shared'
+import { AlertDialogContent } from '@radix-ui/react-alert-dialog'
 
-import SelectStaff from "../staff/select-staff";
-import { AlertDialog, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
-import { Button } from "../ui/button";
-import Heading from "../ui/heading";
-import InfoModal from "../ui/info-modal";
-import { useToast } from "../ui/use-toast";
-import ScheduleTable from "./schedule-table";
+import SelectStaff from '../staff/select-staff'
+import { AlertDialog, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
+import { Button } from '../ui/button'
+import Heading from '../ui/heading'
+import InfoModal from '../ui/info-modal'
+import { useToast } from '../ui/use-toast'
+import ScheduleTable from './schedule-table'
 
 type ShiftModel = { id: string; end: number; start: number }
 
@@ -39,7 +37,7 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 	const [value, setValue] = useState<Date>(new Date())
 	const [schedule, setSchedule] = useState(changeMonth(new Date()))
 
-	const [shift, setShift] = useState<string>('')
+	const [shiftModel, setShiftModel] = useState<string>('')
 
 	const [yearArray, setYearArray] = useState(generateYearArray(new Date().getFullYear()))
 
@@ -77,7 +75,7 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 	)
 
 	const handleMonthChange = (date: Date) => {
-		setValue(date as Date)
+		setValue(date)
 		const year = date.getFullYear()
 		setYearArray(generateYearArray(year))
 		setSchedule(changeMonth(date))
@@ -105,7 +103,7 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 
 			createShift.mutate({
 				employeeId: employee.id,
-				schedule: filteredSchedule as { start: number; end: number; date: number }[],
+				schedule: filteredSchedule as { start: string; end: string; date: number }[],
 			})
 		})
 	}
@@ -116,7 +114,7 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 		<main
 			onContextMenu={(e) => {
 				e.preventDefault()
-				setShift('')
+				setShiftModel('')
 			}}
 			onClick={() => isOpen && setIsOpen(false)}
 			className='p-4'>
@@ -174,10 +172,10 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 							</div>
 						)}
 						<ScheduleTable
-							shift={shift}
 							data={schedule}
 							sickDays={sickDays}
 							setData={setSchedule}
+							shiftModel={shiftModel}
 							vacationDays={vacationDays}
 						/>
 					</div>
@@ -219,16 +217,14 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 										<div className='flex flex-col'>
 											{shiftModels?.map((model) => (
 												<Heading
-													size={'xxs'}
 													key={model.id}
+													size={'xxs'}
 													onClick={() => {
-														shift === `${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}`
-															? setShift('')
-															: setShift(`${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}`)
+														shiftModel === `${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}`
+															? setShiftModel('')
+															: setShiftModel(`${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}`)
 													}}
-													className={`my-0.5 w-fit cursor-pointer text-left font-medium ${
-														shift === `${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}` ? 'text-sky-500' : ''
-													}`}>
+													className={`my-0.5 w-fit cursor-pointer text-left font-medium ${shiftModel === `${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}` ? 'text-sky-500' : ''}`}>
 													[{formatTime(model.start)} - {formatTime(model.end)}]
 												</Heading>
 											))}
@@ -245,7 +241,7 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 							<Heading
 								size={'xxs'}
 								className=' font-normal'>
-								<span>{calculateHours(schedule)}</span> / {employee?.schedulePreference?.hoursPerMonth} hours per month
+								<span>{calculateHours(schedule)}</span> / {employee?.schedulePreference?.hoursPerMonth} per month
 							</Heading>
 
 							<div className='flex w-fit flex-col space-y-1 pt-4'>

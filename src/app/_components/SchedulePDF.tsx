@@ -3,7 +3,7 @@ import { createTw } from 'react-pdf-tailwind'
 import { StaffScheduleOutput } from '@/trpc/shared'
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 
-import { calculateHours, formatDate, formatTime, formatTotal } from '../lib/utils'
+import { calculateStaffHours, formatDate, formatTime, formatTotal } from '../lib/utils'
 
 type Shift = {
 	end: number
@@ -95,7 +95,7 @@ export function SchedulePDF({ month, shifts, employee }: { month: string; shifts
 				orientation='portrait'
 				style={tw('bg-white')}>
 				<Text style={styles.title}>
-					{employee?.name} - {month} [{calculateHours(employee?.shifts)} hours]
+					{employee?.name} - {month} [{calculateStaffHours(employee?.shifts)} hours]
 				</Text>
 				<View style={tw('flex flex-row')}>
 					<Text style={tw('px-4 py-[0.3572rem] border-b border-r w-1/4 bg-gray-200')}>Date</Text>
