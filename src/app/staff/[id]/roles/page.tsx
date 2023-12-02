@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 	return {
 		title: employee?.name,
-		openGraph: { images: ['/favicon.ico'] },
 		description: `Profile for ${employee?.name}`,
+		icons: [{ rel: 'icon', url: '/favicon.ico' }],
 	}
 }
 
@@ -25,7 +25,11 @@ export default async function StaffRoles({ params }: { params: { id: string } })
 				<EditRoles employee={employee} />
 			</div>
 
-			{employee?.roles?.length! > 0 ? <RolesTable roles={employee?.roles} /> : <p className='mr-auto mt-8'>There are no roles for {employee?.name}.</p>}
+			{employee?.roles?.length! > 0 ? (
+				<RolesTable roles={employee?.roles} />
+			) : (
+				<p className='mr-auto mt-8'>There are no roles for {employee?.name}.</p>
+			)}
 		</div>
 	)
 }

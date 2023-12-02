@@ -1,3 +1,4 @@
+'use client'
 import { Download } from 'lucide-react'
 
 import { Button } from '@/app/_components/ui/button'
@@ -5,6 +6,7 @@ import { StaffScheduleOutput } from '@/trpc/shared'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 
 import { SchedulePDF } from './SchedulePDF'
+import { useEffect, useState } from 'react'
 
 type Shift = {
 	end: number
@@ -22,20 +24,30 @@ type PDFButtonProps = {
 }
 
 export default function PDFButton({ employee, month, shifts }: PDFButtonProps) {
+	const [isClient, setIsClient] = useState(false)
+
+	useEffect(() => {
+		setIsClient(true)
+	}, [])
+
 	return (
 		<Button className='mt-2'>
 			<Download className='mr-2' />
-			<PDFDownloadLink
-				document={
-					<SchedulePDF
-						month={month}
-						shifts={shifts}
-						employee={employee}
-					/>
-				}
-				fileName={`${employee?.name} - ${month}`}>
-				Save as PDF
-			</PDFDownloadLink>
+			{isClient ? (
+				<PDFDownloadLink
+					document={
+						<SchedulePDF
+							month={month}
+							shifts={shifts}
+							employee={employee}
+						/>
+					}
+					fileName={`${employee?.name} - ${month}`}>
+					Save as PDF
+				</PDFDownloadLink>
+			) : (
+				'Save as PDF'
+			)}
 		</Button>
 	)
 }

@@ -1,4 +1,4 @@
-import { api } from "@/trpc/server";
+import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
 
@@ -8,7 +8,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 	return {
 		title: `Roles | ${data?.date}`,
-		openGraph: { images: ['/favicon.ico'] },
+
 		description: `Roles for ${data?.date}`,
 	}
 }

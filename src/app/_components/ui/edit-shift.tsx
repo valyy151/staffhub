@@ -5,7 +5,15 @@ import { formatTime, renderTotal } from '@/app/lib/utils'
 import { api } from '@/trpc/react'
 import { WorkDayShiftsOutput } from '@/trpc/shared'
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './alert-dialog'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from './alert-dialog'
 import { Button } from './button'
 import FormModal from './form-modal'
 import Heading from './heading'
@@ -18,13 +26,11 @@ export default function EditShift({
 	shift,
 	setEdit,
 	employee,
-	setValue,
 	shiftModels,
 }: {
 	setEdit: (edit: boolean) => void
 	shiftModels: ShiftModel[] | undefined
 	shift: WorkDayShiftsOutput['shifts'][number]
-	setValue?: ({ date, refetch }: { date: Date; refetch: boolean }) => void
 	employee: { id: string; name: string; roles: { id: string; name: string }[] }
 }) {
 	const [end, setEnd] = useState(formatTime(shift?.end) ?? '')
@@ -72,7 +78,7 @@ export default function EditShift({
 
 	const createShiftMutation = api.shift.create.useMutation({
 		onSuccess: () => {
-			setValue ? setValue({ date: new Date(shift.date! * 1000), refetch: true }) : router.refresh()
+			router.refresh()
 			setEdit(false)
 			toast({
 				title: 'Shift created successfully.',
@@ -89,7 +95,7 @@ export default function EditShift({
 
 	const updateShiftMutation = api.shift.update.useMutation({
 		onSuccess: () => {
-			setValue ? setValue({ date: new Date(shift.date! * 1000), refetch: true }) : router.refresh()
+			router.refresh()
 			setEdit(false)
 			toast({
 				title: 'Shift updated successfully.',
@@ -106,7 +112,7 @@ export default function EditShift({
 
 	const deleteShiftMutation = api.shift.delete.useMutation({
 		onSuccess: () => {
-			setValue && setValue({ date: new Date(shift.date! * 1000), refetch: true })
+			router.refresh()
 			setEdit(false)
 			toast({
 				title: 'Shift deleted successfully.',

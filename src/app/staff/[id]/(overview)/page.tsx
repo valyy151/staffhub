@@ -1,6 +1,6 @@
-import DeleteStaff from "@/app/_components/staff/delete-staff";
-import ProfileCards from "@/app/_components/staff/profile-cards";
-import { api } from "@/trpc/server";
+import DeleteStaff from '@/app/_components/staff/delete-staff'
+import ProfileCards from '@/app/_components/staff/profile-cards'
+import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
@@ -9,8 +9,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 	return {
 		title: employee?.name,
-		openGraph: { images: ['/favicon.ico'] },
 		description: `Profile for ${employee?.name}`,
+		icons: [{ rel: 'icon', url: '/favicon.ico' }],
 	}
 }
 

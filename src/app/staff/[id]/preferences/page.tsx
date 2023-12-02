@@ -1,10 +1,8 @@
-import EditPreferences from "@/app/_components/staff/edit-preferences";
-import Heading from "@/app/_components/ui/heading";
-import {
-    Table, TableBody, TableCell, TableHead, TableHeader, TableRow
-} from "@/app/_components/ui/table";
-import { formatTime } from "@/app/lib/utils";
-import { api } from "@/trpc/server";
+import EditPreferences from '@/app/_components/staff/edit-preferences'
+import Heading from '@/app/_components/ui/heading'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/_components/ui/table'
+import { formatTime } from '@/app/lib/utils'
+import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
 
@@ -14,8 +12,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 	return {
 		title: employee?.name,
-		openGraph: { images: ['/favicon.ico'] },
 		description: `Profile for ${employee?.name}`,
+		icons: [{ rel: 'icon', url: '/favicon.ico' }],
 	}
 }
 
@@ -56,7 +54,13 @@ export default async function StaffPreferences({ params }: { params: { id: strin
 
 					<TableBody>
 						<TableRow className='hover:bg-inherit'>
-							<TableCell>{employee?.schedulePreference?.hoursPerMonth! > 0 ? <span>{employee?.schedulePreference?.hoursPerMonth} hours</span> : <span>Not assigned</span>}</TableCell>
+							<TableCell>
+								{employee?.schedulePreference?.hoursPerMonth! > 0 ? (
+									<span>{employee?.schedulePreference?.hoursPerMonth} hours</span>
+								) : (
+									<span>Not assigned</span>
+								)}
+							</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>

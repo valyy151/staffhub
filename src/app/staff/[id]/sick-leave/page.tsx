@@ -1,11 +1,11 @@
-import { HeartPulseIcon } from "lucide-react";
+import { HeartPulseIcon } from 'lucide-react'
 
-import SickLeave from "@/app/_components/staff/absence";
-import CreateAbsence from "@/app/_components/staff/create-absence";
-import CurrentAbsence from "@/app/_components/staff/current-absence";
-import Heading from "@/app/_components/ui/heading";
-import { checkAbsences } from "@/app/lib/utils";
-import { api } from "@/trpc/server";
+import SickLeave from '@/app/_components/staff/absence'
+import CreateAbsence from '@/app/_components/staff/create-absence'
+import CurrentAbsence from '@/app/_components/staff/current-absence'
+import Heading from '@/app/_components/ui/heading'
+import { checkAbsences } from '@/app/lib/utils'
+import { api } from '@/trpc/server'
 
 import type { Absence } from '@/app/lib/types'
 import type { Metadata } from 'next/types'
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 	return {
 		title: employee?.name,
-		openGraph: { images: ['/favicon.ico'] },
 		description: `Profile for ${employee?.name}`,
+		icons: [{ rel: 'icon', url: '/favicon.ico' }],
 	}
 }
 

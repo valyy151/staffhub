@@ -1,17 +1,27 @@
 import { NextResponse } from 'next/server'
-
 import type { NextRequest } from 'next/server'
+
+const month = new Date().toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' })
+const [m, y] = month.split('/')
 
 export function middleware(request: NextRequest) {
 	if (!request.cookies.get('__Secure-next-auth.session-token') && !request.cookies.get('next-auth.session-token')) {
 		return NextResponse.redirect(new URL('/', request.url))
 	}
 
-	if (request.nextUrl.pathname === '/dashboard' && !request.nextUrl.searchParams.get('page') && !request.nextUrl.searchParams.get('month')) {
-		return NextResponse.redirect(new URL(`/dashboard?page=${0}&month=${new Date().toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' })}`, request.url))
+	if (request.nextUrl.pathname.startsWith('/dashboard') && !request.nextUrl.searchParams.get('month')) {
+		return NextResponse.redirect(new URL(`/dashboard?page=${0}&month=${m}_${y}`, request.url))
+	}
+
+	if (
+		request.nextUrl.pathname.includes('/staff') &&
+		request.nextUrl.pathname.includes('/schedule') &&
+		!request.nextUrl.searchParams.get('month')
+	) {
+		return NextResponse.redirect(new URL(`?month=${m}_${y}`, request.url))
 	}
 }
 
 export const config = {
-	matcher: ['/:path/:slug'],
+	matcher: ['/((?!api|static|favicon.ico).*)'],
 }

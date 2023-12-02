@@ -1,35 +1,33 @@
 'use client'
 
-import "react-calendar/dist/Calendar.css";
+import 'react-calendar/dist/Calendar.css'
 
-import { CalendarOff, Scroll, ScrollText, User } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import Calendar from "react-calendar";
+import { CalendarOff, Scroll, ScrollText, User } from 'lucide-react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import Calendar from 'react-calendar'
 
-import Heading from "@/app/_components/ui/heading";
-import Paragraph from "@/app/_components/ui/paragraph";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "@/app/_components/ui/select";
-import { DashboardAbsence, Note } from "@/app/lib/types";
-import { formatDate, formatDay, formatTime } from "@/app/lib/utils";
-import { api } from "@/trpc/react";
+import Heading from '@/app/_components/ui/heading'
+import Paragraph from '@/app/_components/ui/paragraph'
+import { Select, SelectContent, SelectTrigger, SelectValue } from '@/app/_components/ui/select'
+import { DashboardAbsence, Note } from '@/app/lib/types'
+import { formatDate, formatDay, formatTime } from '@/app/lib/utils'
+import { api } from '@/trpc/react'
 
-import { Button } from "../ui/button";
-import Spinner from "../ui/spinner";
-import AbsenceCard from "./absence-card";
+import { Button } from '../ui/button'
+import Spinner from '../ui/spinner'
+import AbsenceCard from './absence-card'
 
 export default function DashboardTable() {
 	const router = useRouter()
 	const searchParams = useSearchParams()
 
-	const pathname = usePathname()
-
 	const pageParams = Number(searchParams.get('page'))
-	const monthParams = new Date(String(searchParams.get('month')).split('/').reverse().join('-'))
+	const monthParams = new Date(String(searchParams.get('month')).split('_').reverse().join('-'))
 
 	const [page, setPage] = useState<number>(pageParams)
-	const [value, setValue] = useState<Date>(new Date(String(monthParams).split('/').reverse().join('-')))
+	const [value, setValue] = useState<Date>(new Date(String(monthParams).split('_').reverse().join('-')))
 
 	const { data: firstAndLastDays } = api.dashboard.findFirstAndLastDay.useQuery()
 
@@ -43,7 +41,9 @@ export default function DashboardTable() {
 	const [showCalendar, setShowCalendar] = useState<boolean>(false)
 
 	useEffect(() => {
-		router.push(`${pathname}?page=${page}&month=${value.toLocaleDateString('en-GB', { year: 'numeric', month: 'numeric' })}`)
+		router.push(
+			`?page=${page}&month=${value.toLocaleDateString('en-GB', { year: 'numeric', month: 'numeric' }).replace('/', '_')}`
+		)
 	}, [page, value])
 
 	useEffect(() => {
@@ -182,7 +182,9 @@ export default function DashboardTable() {
 									return (
 										<div
 											key={day.id}
-											className={`flex w-full flex-col items-center border-x  ${index === 0 && 'rounded-s-lg'} ${index === 6 && 'rounded-e-lg'}`}>
+											className={`flex w-full flex-col items-center border-x  ${index === 0 && 'rounded-s-lg'} ${
+												index === 6 && 'rounded-e-lg'
+											}`}>
 											<Link
 												href={`/days/${day.id}/shifts`}
 												className='group w-full text-center'>
@@ -191,7 +193,9 @@ export default function DashboardTable() {
 													className='px-3 pt-6'>
 													{formatDay(day.date, 'long')}
 												</Heading>
-												<Paragraph className='w-full border-b-2 py-2 text-center duration-150 group-hover:border-primary'>{day && formatDate(day.date, 'short')}</Paragraph>
+												<Paragraph className='w-full border-b-2 py-2 text-center duration-150 group-hover:border-primary'>
+													{day && formatDate(day.date, 'short')}
+												</Paragraph>
 											</Link>
 											<div className='mt-4 flex w-full flex-col items-center'>
 												{day.shifts.length > 0 ? (
@@ -207,13 +211,19 @@ export default function DashboardTable() {
 																		<User className={`ml-1 ${shift.absence?.absent && 'text-rose-500'}`} />
 																		<Link
 																			href={`/staff/${shift.employee.id}`}
-																			className={`text-left hover:underline ${shift.absence?.absent && 'text-muted-foreground'}`}>
+																			className={`text-left hover:underline ${
+																				shift.absence?.absent && 'text-muted-foreground'
+																			}`}>
 																			{shift.employee.name.split(' ')[0]}
 																		</Link>
 
-																		<span className={`ml-auto ${shift.absence?.absent && 'text-muted-foreground'}`}>{formatTime(shift.start)}</span>
+																		<span className={`ml-auto ${shift.absence?.absent && 'text-muted-foreground'}`}>
+																			{formatTime(shift.start)}
+																		</span>
 																		<span className={`mx-0.5 ${shift.absence?.absent && 'text-muted-foreground'}`}>-</span>
-																		<span className={`mr-2 ${shift.absence?.absent && 'text-muted-foreground'}`}>{formatTime(shift.end)}</span>
+																		<span className={`mr-2 ${shift.absence?.absent && 'text-muted-foreground'}`}>
+																			{formatTime(shift.end)}
+																		</span>
 																	</p>
 																</div>
 															)
@@ -231,7 +241,11 @@ export default function DashboardTable() {
 												title={`${day.notes.length} ${day.notes.length === 1 ? 'note' : 'notes'}`}
 												className='mt-auto flex items-center border-b-2 border-transparent px-3 py-2 text-2xl duration-150 hover:border-primary'>
 												{day.notes.length}
-												{day.notes.length > 0 ? <ScrollText className='ml-2 h-6 w-6' /> : <Scroll className='ml-2 h-6 w-6' />}
+												{day.notes.length > 0 ? (
+													<ScrollText className='ml-2 h-6 w-6' />
+												) : (
+													<Scroll className='ml-2 h-6 w-6' />
+												)}
 											</Link>
 										</div>
 									)
