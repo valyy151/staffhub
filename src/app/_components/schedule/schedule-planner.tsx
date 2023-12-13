@@ -4,14 +4,14 @@ import { CalendarPlusIcon, InfoIcon, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
 
 import { calculateHours, changeMonth, findAbsenceDays, formatTime, generateYearArray } from '@/app/lib/utils'
 import { api } from '@/trpc/react'
 import { StaffDropdownOutput } from '@/trpc/shared'
-import { AlertDialogContent } from '@radix-ui/react-alert-dialog'
 
 import SelectStaff from '../staff/select-staff'
-import { AlertDialog, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
+import { AlertDialog, AlertDialogHeader, AlertDialogTitle, AlertDialogContent } from '../ui/alert-dialog'
 import { Button } from '../ui/button'
 import Heading from '../ui/heading'
 import InfoModal from '../ui/info-modal'
@@ -108,7 +108,10 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 		})
 	}
 
-	const { sickDays, vacationDays } = findAbsenceDays([...(employee?.vacations ?? []), ...(employee?.sickLeaves ?? [])], schedule)
+	const { sickDays, vacationDays } = findAbsenceDays(
+		[...(employee?.vacations ?? []), ...(employee?.sickLeaves ?? [])],
+		schedule
+	)
 
 	return (
 		<main
@@ -220,11 +223,25 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 													key={model.id}
 													size={'xxs'}
 													onClick={() => {
-														shiftModel === `${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}`
+														shiftModel ===
+														`${formatTime(model.start)} - ${
+															formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)
+														}`
 															? setShiftModel('')
-															: setShiftModel(`${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}`)
+															: setShiftModel(
+																	`${formatTime(model.start)} - ${
+																		formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)
+																	}`
+															  )
 													}}
-													className={`my-0.5 w-fit cursor-pointer text-left font-medium ${shiftModel === `${formatTime(model.start)} - ${formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)}` ? 'text-sky-500' : ''}`}>
+													className={`my-0.5 w-fit cursor-pointer text-left font-medium ${
+														shiftModel ===
+														`${formatTime(model.start)} - ${
+															formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)
+														}`
+															? 'text-sky-500'
+															: ''
+													}`}>
 													[{formatTime(model.start)} - {formatTime(model.end)}]
 												</Heading>
 											))}
