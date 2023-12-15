@@ -1,7 +1,14 @@
 import Image from 'next/image'
 import React from 'react'
 
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/app/_components/ui/navigation-menu'
+import {
+	NavigationMenu,
+	NavigationMenuContent,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	NavigationMenuTrigger,
+} from '@/app/_components/ui/navigation-menu'
 import { cn } from '@/app/lib/utils'
 import { getServerAuthSession } from '@/server/auth'
 
@@ -26,7 +33,7 @@ const links: { title: string; href: string; description: string }[] = [
 	},
 	{
 		title: 'Sign Out',
-		href: '/api/auth/signout',
+		href: '/api/auth/signout?callbackUrl=/',
 		description: 'Sign out of your account.',
 	},
 ]
@@ -102,7 +109,7 @@ export default async function Navbar() {
 											key={link.title}
 											href={link.href}
 											title={link.title}
-											className={link.href === '/api/auth/signout' ? 'hover:text-rose-500' : ''}>
+											className={link.href === '/api/auth/signout?callbackUrl=/' ? 'hover:text-rose-500' : ''}>
 											{link.description}
 										</ListItem>
 									))}
@@ -120,19 +127,24 @@ export default async function Navbar() {
 	)
 }
 
-const ListItem = React.forwardRef<React.ElementRef<'a'>, React.ComponentPropsWithoutRef<'a'>>(({ className, title, children, ...props }, ref) => {
-	return (
-		<li>
-			<NavigationMenuLink asChild>
-				<a
-					ref={ref}
-					className={cn('hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors', className)}
-					{...props}>
-					<div className='text-sm font-medium leading-none'>{title}</div>
-					<p className='text-muted-foreground line-clamp-2 text-sm leading-snug'>{children}</p>
-				</a>
-			</NavigationMenuLink>
-		</li>
-	)
-})
+const ListItem = React.forwardRef<React.ElementRef<'a'>, React.ComponentPropsWithoutRef<'a'>>(
+	({ className, title, children, ...props }, ref) => {
+		return (
+			<li>
+				<NavigationMenuLink asChild>
+					<a
+						ref={ref}
+						className={cn(
+							'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
+							className
+						)}
+						{...props}>
+						<div className='text-sm font-medium leading-none'>{title}</div>
+						<p className='text-muted-foreground line-clamp-2 text-sm leading-snug'>{children}</p>
+					</a>
+				</NavigationMenuLink>
+			</li>
+		)
+	}
+)
 ListItem.displayName = 'ListItem'

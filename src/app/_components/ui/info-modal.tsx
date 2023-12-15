@@ -1,6 +1,4 @@
-import {
-    Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle
-} from "@/app/_components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/app/_components/ui/dialog'
 
 type ModalProps = {
 	heading: string
