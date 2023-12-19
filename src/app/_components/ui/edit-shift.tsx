@@ -1,9 +1,8 @@
 import { useState } from 'react'
 
-import { ShiftModel } from '@/app/lib/types'
+import type { ShiftEmployee, ShiftModel, ShiftRow } from '@/app/lib/types'
 import { formatTime, renderTotal } from '@/app/lib/utils'
 import { api } from '@/trpc/react'
-import { WorkDayShiftsOutput } from '@/trpc/shared'
 
 import {
 	AlertDialog,
@@ -28,10 +27,10 @@ export default function EditShift({
 	employee,
 	shiftModels,
 }: {
+	shift: ShiftRow
+	employee: ShiftEmployee
 	setEdit: (edit: boolean) => void
 	shiftModels: ShiftModel[] | undefined
-	shift: WorkDayShiftsOutput['shifts'][number]
-	employee: { id: string; name: string; roles: { id: string; name: string }[] }
 }) {
 	const [end, setEnd] = useState(formatTime(shift?.end) ?? '')
 	const [start, setStart] = useState(formatTime(shift?.start ?? ''))

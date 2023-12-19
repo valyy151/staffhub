@@ -239,7 +239,7 @@ export const staffRouter = createTRPCRouter({
 					return { ...shift, workDayId: workDay.id }
 				}
 
-				return { date: workDay.date, workDayId: workDay.id, start: 0, end: 0 }
+				return { date: workDay.date, workDayId: workDay.id, start: 0, end: 0, vacation: false, sickLeave: false }
 			})
 
 			const schedule = newShifts.map((shift) => {
@@ -252,11 +252,11 @@ export const staffRouter = createTRPCRouter({
 				})
 
 				if (sickLeave) {
-					return { ...shift, sickLeave: true }
+					return { ...shift }
 				}
 
 				if (vacation) {
-					return { ...shift, vacation: true }
+					return { ...shift }
 				}
 
 				return { ...shift }

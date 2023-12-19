@@ -1,8 +1,9 @@
 import CreateShift from '@/app/_components/workDay/create-shift'
 import ShiftsTable from '@/app/_components/workDay/shifts-table'
+import type { ShiftRow } from '@/app/lib/types'
 import { formatDate, formatDay } from '@/app/lib/utils'
 import { api } from '@/trpc/server'
-import { WorkDayOutput } from '@/trpc/shared'
+import type { WorkDayOutput } from '@/trpc/shared'
 
 import type { Metadata } from 'next/types'
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
@@ -33,7 +34,7 @@ export default async function WorkDayShifts({ params }: { params: { id: string }
 				<CreateShift date={workDay.date} />
 			</div>
 
-			{workDay.shifts.length > 0 && <ShiftsTable shifts={workDay.shifts} />}
+			{workDay.shifts.length > 0 && <ShiftsTable shifts={workDay.shifts as ShiftRow[]} />}
 		</main>
 	)
 }

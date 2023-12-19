@@ -1,11 +1,11 @@
 'use client'
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/app/_components/ui/table";
-import { api } from "@/trpc/react";
-import { WorkDayShiftsOutput } from "@/trpc/shared";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/app/_components/ui/table'
+import { api } from '@/trpc/react'
 
-import Shift from "./shift";
+import Shift from './shift'
+import type { ShiftRow } from '@/app/lib/types'
 
-export default function ShiftsTable({ shifts }: WorkDayShiftsOutput) {
+export default function ShiftsTable({ shifts }: { shifts: ShiftRow[] }) {
 	const { data: shiftModels } = api.shiftModel.get.useQuery()
 
 	return (

@@ -1,30 +1,35 @@
 'use client'
-import { ClipboardEdit, Clock, MoreVertical, Trash2 } from "lucide-react";
-import { useRouter } from "next-nprogress-bar";
-import Link from "next/link";
-import { useState } from "react";
+import { ClipboardEdit, Clock, MoreVertical, Trash2 } from 'lucide-react'
+import { useRouter } from 'next-nprogress-bar'
+import Link from 'next/link'
+import { useState } from 'react'
 
 import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
-    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle
-} from "@/app/_components/ui/alert-dialog";
-import { Input } from "@/app/_components/ui/input";
-import { PopoverContent } from "@/app/_components/ui/popover";
-import { Switch } from "@/app/_components/ui/switch";
-import { TableCell, TableRow } from "@/app/_components/ui/table";
-import { useToast } from "@/app/_components/ui/use-toast";
-import { ShiftModel } from "@/app/lib/types";
-import { formatDate, formatDay, formatTime, formatTotal } from "@/app/lib/utils";
-import { api } from "@/trpc/react";
-import { WorkDayShiftsOutput } from "@/trpc/shared";
-import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from '@/app/_components/ui/alert-dialog'
+import { Input } from '@/app/_components/ui/input'
+import { PopoverContent } from '@/app/_components/ui/popover'
+import { Switch } from '@/app/_components/ui/switch'
+import { TableCell, TableRow } from '@/app/_components/ui/table'
+import { useToast } from '@/app/_components/ui/use-toast'
+import type { ShiftEmployee, ShiftModel, ShiftRow } from '@/app/lib/types'
+import { formatDate, formatDay, formatTime, formatTotal } from '@/app/lib/utils'
+import { api } from '@/trpc/react'
+import { Popover, PopoverTrigger } from '@radix-ui/react-popover'
 
-import EditShift from "../ui/edit-shift";
-import FormModal from "../ui/form-modal";
+import EditShift from '../ui/edit-shift'
+import FormModal from '../ui/form-modal'
 
 type ShiftProps = {
+	shift: ShiftRow
 	shiftModels: ShiftModel[] | undefined
-	shift: WorkDayShiftsOutput['shifts'][number]
 }
 
 export default function Shift({ shift, shiftModels }: ShiftProps) {
@@ -145,8 +150,8 @@ export default function Shift({ shift, shiftModels }: ShiftProps) {
 				<EditShift
 					shift={shift}
 					setEdit={setEditMode}
-					employee={shift.employee}
 					shiftModels={shiftModels}
+					employee={shift.employee as ShiftEmployee}
 				/>
 			)}
 			{editAbsence && (

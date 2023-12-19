@@ -1,14 +1,13 @@
 import { useState } from 'react'
 
-import { Shift } from '@/app/lib/types'
 import { formatDay, formatTime, formatTotal } from '@/app/lib/utils'
 import { api } from '@/trpc/react'
-import { StaffScheduleOutput } from '@/trpc/shared'
 
 import EditShift from '../ui/edit-shift'
 import { TableCell } from '../ui/table'
+import type { ShiftEmployee, ShiftRow } from '@/app/lib/types'
 
-export default function ShiftRow({ shift, employee }: { employee: StaffScheduleOutput | any; shift: Shift | any }) {
+export default function ShiftRow({ shift, employee }: { employee: ShiftEmployee; shift: ShiftRow }) {
 	const [edit, setEdit] = useState(false)
 
 	const { data: shiftModels } = api.shiftModel.get.useQuery()

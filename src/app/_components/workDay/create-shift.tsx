@@ -11,7 +11,15 @@ import { api } from '@/trpc/react'
 import { StaffDropdownOutput } from '@/trpc/shared'
 
 import SelectStaff from '../staff/select-staff'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from '../ui/alert-dialog'
 import { Button } from '../ui/button'
 import Heading from '../ui/heading'
 import RolesDropdown from '../ui/roles-dropdown'
@@ -40,7 +48,7 @@ export default function AddShift({ date }: AddShiftProps) {
 	const [remainingDays, setRemainingDays] = useState<number>(0)
 	const [isOnVacation, setIsOnVacation] = useState<boolean>(false)
 
-	function checkIfSickOrVacation(employee: any) {
+	function checkIfSickOrVacation(employee: StaffDropdownOutput) {
 		setIsSick(false)
 		setIsOnVacation(false)
 		const currentDate = Date.now()
@@ -216,7 +224,12 @@ export default function AddShift({ date }: AddShiftProps) {
 												size={'xxs'}
 												onClick={() => {
 													handleTimeChange(formatTime(shiftModel.start), 'start', setStart, setEnd)
-													handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end), 'end', setStart, setEnd)
+													handleTimeChange(
+														formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end),
+														'end',
+														setStart,
+														setEnd
+													)
 												}}
 												className='cursor-pointer mr-auto font-medium w-fit hover:text-sky-500'>
 												{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}

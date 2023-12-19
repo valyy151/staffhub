@@ -32,6 +32,7 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
 	return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages]
 }
 
+// Checks the absence status of an employee based on their sick leaves and vacations.
 export const checkAbsence = (sickLeaves: Absence[], vacations: Absence[]) => {
 	const currentDate = Date.now()
 
@@ -76,6 +77,7 @@ export const getNumberOfSickDays = (sickLeaves: Absence[]): number => {
 	return days
 }
 
+//calculates the total hours worked in a month, used in the staff profile overview
 export const calculateStaffHours = (shifts: Shift[]): string => {
 	let hours = 0
 	let minutes = 0
@@ -102,6 +104,7 @@ export const calculateStaffHours = (shifts: Shift[]): string => {
 	return hours + 'h ' + (minutes % 60) + 'm'
 }
 
+// calculates the total hours worked in a month, used when creating schedule
 export const calculateHours = (shifts: { date: number; start?: string; end?: string }[]): string => {
 	let hours = 0
 	let minutes = 0
@@ -141,6 +144,7 @@ export const calculateHours = (shifts: { date: number; start?: string; end?: str
 	return hours + 'h ' + (minutes % 60) + 'm'
 }
 
+// returns the first and last day of the month
 export const getMonth = (date: Date): [number, number] => {
 	date.setDate(1)
 	date.setHours(0, 0, 0, 0)
@@ -154,6 +158,7 @@ export const getMonth = (date: Date): [number, number] => {
 	return [startOfMonth, endOfMonth]
 }
 
+// returns the vacations or sick leaves based if they are in the past, present or future
 export const checkAbsences = (absences: Absence[]): [Absence[], Absence | undefined, Absence[]] => {
 	const today = new Date().getTime()
 
@@ -177,19 +182,23 @@ export const howManyDays = (sickLeave: Absence) => {
 	return Number(days)
 }
 
+// converts the unix timestamp to a time string in the format HH:MM
 export const formatTime = (unix: number) => {
 	if (!unix) return ''
 	return new Date(unix * 1000).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
 }
 
+// returns the name of the weekday
 export const formatDay = (date: number, length: 'long' | 'short') => {
 	return new Date(date * 1000).toLocaleDateString('en-GB', { weekday: length })
 }
 
+// converts date into a string in the format DD/MM/YYYY
 export const formatDate = (date: number, length: 'long' | 'short') => {
 	return new Date(date * 1000).toLocaleDateString('en-GB', { dateStyle: length })
 }
 
+// returns the total number of hours worked in a shift as a string in the format HHh MMmin
 export const formatTotal = (start: number, end: number) => {
 	if (start && end) {
 		const totalSeconds = end - start
@@ -209,7 +218,7 @@ export const formatTotal = (start: number, end: number) => {
 		return result
 	} else return `${0}h ${0}min`
 }
-
+// formatTotal but for creating shifts
 export const renderTotal = (start: string, end: string) => {
 	const date = new Date()
 
@@ -233,23 +242,8 @@ export const renderTotal = (start: string, end: string) => {
 	return formatTotal(startUnixTime, endUnixTime)
 }
 
-export const generateYearArray = (year: number) => {
-	const daysInYear = 365 + (isLeapYear(year) ? 1 : 0)
-	const startOfYear = new Date(year, 0, 1)
-	const yearArray = []
-
-	for (let i = 0; i < daysInYear; i++) {
-		const currentDate = new Date(startOfYear.getTime() + i * 24 * 60 * 60 * 1000)
-		yearArray.push({ date: currentDate.getTime() / 1000 })
-	}
-
-	return yearArray
-}
-
-const isLeapYear = (year: number) => {
-	return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
-}
-
+// function that is used by the calendar when creating a monthly schedule
+// returns an array of objects with the date in unix timestamp format
 export const changeMonth = (date: Date) => {
 	const year = date.getFullYear()
 
@@ -267,9 +261,32 @@ export const changeMonth = (date: Date) => {
 	return data
 }
 
-export const findAbsenceDays = (absences: { id: string; end: bigint; start: bigint }[] | undefined, schedule: any[] | undefined) => {
-	const vacationDays: any[] = []
-	const sickDays: any[] = []
+// function that is used when changeMonth is called
+// returns an array of objects with the date in unix timestamp format for the whole year
+export const generateYearArray = (year: number) => {
+	const daysInYear = 365 + (isLeapYear(year) ? 1 : 0)
+	const startOfYear = new Date(year, 0, 1)
+	const yearArray = []
+
+	for (let i = 0; i < daysInYear; i++) {
+		const currentDate = new Date(startOfYear.getTime() + i * 24 * 60 * 60 * 1000)
+		yearArray.push({ date: currentDate.getTime() / 1000 })
+	}
+
+	return yearArray
+}
+
+const isLeapYear = (year: number) => {
+	return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
+}
+
+// checks the absences of an employee and returns an array of the days when they are absent
+export const findAbsenceDays = (
+	absences: { id: string; end: bigint; start: bigint }[] | undefined,
+	schedule: { start?: string | undefined; end?: string | undefined; date: number }[]
+) => {
+	const vacationDays: number[] = []
+	const sickDays: number[] = []
 	absences?.forEach((absence) => {
 		schedule?.forEach((day) => {
 			if (day.date * 1000 >= absence.start && day.date * 1000 <= absence.end) {
@@ -281,10 +298,18 @@ export const findAbsenceDays = (absences: { id: string; end: bigint; start: bigi
 			}
 		})
 	})
+
 	return { vacationDays, sickDays }
 }
 
-export const handleTimeChange = (newTime: string, field: 'start' | 'end', setStart: (start: string) => void, setEnd: (end: string) => void) => {
+// function that is used when creating a shift
+// converts the time string into a unix timestamp
+export const handleTimeChange = (
+	newTime: string,
+	field: 'start' | 'end',
+	setStart: (start: string) => void,
+	setEnd: (end: string) => void
+) => {
 	if (newTime.length > 5) {
 		return
 	}

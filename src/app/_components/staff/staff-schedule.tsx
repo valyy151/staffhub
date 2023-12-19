@@ -4,17 +4,16 @@ import 'react-calendar/dist/Calendar.css'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Calendar } from 'react-calendar'
-import { Shift } from '@/app/lib/types'
+import type { ShiftEmployee, ShiftRow } from '@/app/lib/types'
 import { calculateStaffHours, formatDate, formatDay } from '@/app/lib/utils'
 import Heading from '../ui/heading'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import ShiftRow from './shift-row'
+import ShiftRowComponent from './shift-row'
 import { useRouter } from 'next-nprogress-bar'
 
-import type { StaffScheduleOutput } from '@/trpc/shared'
 import PDFButton from '@/app/_components/PDFButton'
 
-export default function StaffSchedule({ employee, month }: { employee: StaffScheduleOutput; month: Date }) {
+export default function StaffSchedule({ employee, month }: { employee: ShiftEmployee; month: Date }) {
 	const [value, setValue] = useState(month)
 
 	const router = useRouter()
@@ -30,7 +29,7 @@ export default function StaffSchedule({ employee, month }: { employee: StaffSche
 					size={'xs'}
 					className='mb-4 ml-2'>
 					{employee?.name}, {value.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })} -{' '}
-					{calculateStaffHours(employee?.shifts as Shift[])}
+					{calculateStaffHours(employee?.shifts as ShiftRow[])}
 				</Heading>
 				<div className='border max-h-[46.2rem] overflow-y-scroll'>
 					<Table className='min-w-[40vw]'>
@@ -69,9 +68,9 @@ export default function StaffSchedule({ employee, month }: { employee: StaffSche
 										</Link>
 									</TableCell>
 
-									<ShiftRow
-										shift={shift}
+									<ShiftRowComponent
 										employee={employee}
+										shift={shift as ShiftRow}
 									/>
 								</TableRow>
 							))}

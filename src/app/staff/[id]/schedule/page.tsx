@@ -1,4 +1,5 @@
 import Schedule from '@/app/_components/staff/staff-schedule'
+import type { ShiftEmployee } from '@/app/lib/types'
 import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
@@ -27,7 +28,7 @@ export default async function StaffSchedule({
 	return (
 		<Schedule
 			month={month}
-			employee={employee}
+			employee={employee as ShiftEmployee}
 		/>
 	)
 }

@@ -36,9 +36,9 @@ export type StaffIdOutput = RouterOutputs['staff']['getId']
 
 export type DashboardOutput = RouterOutputs['dashboard']['find']
 
-export type StaffRolesOutput = RouterOutputs['staff']['getRoles']
-
 export type WorkDayShiftsOutput = Pick<WorkDayOutput, 'shifts'>
+
+export type StaffRolesOutput = RouterOutputs['staff']['getRoles']
 
 export type WorkDayOutput = RouterOutputs['workDay']['getShifts']
 
@@ -47,5 +47,7 @@ export type StaffScheduleOutput = RouterOutputs['staff']['getSchedule']
 export type StaffPreferenceOutput = RouterOutputs['staff']['getPreference']
 
 export type StaffDropdownOutput = RouterOutputs['staff']['getDropdown'][number]
+
+export type StaffScheduleShift = RouterOutputs['staff']['getSchedule']['shifts'][number]
 
 export type StaffAbsenceOutput = RouterOutputs['staff']['getSickLeaves'] | RouterOutputs['staff']['getVacations']
