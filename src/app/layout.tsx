@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
 
 const inter = Inter({
 	subsets: ['latin'],
-	variable: '--font-sans',
+	display: 'swap',
 })
 
 export const metadata = {
@@ -25,8 +25,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang='en'>
-			<body className={`font-sans ${inter.variable}`}>
+		<html
+			lang='en'
+			className={inter.className}>
+			<body>
 				<TRPCReactProvider cookies={cookies().toString()}>
 					<ThemeProvider attribute='class'>
 						<Navbar />
