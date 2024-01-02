@@ -121,7 +121,7 @@ export default function Shift({ shift, shiftModels }: ShiftProps) {
 						<PopoverTrigger className='rounded bg-transparent p-2 text-black hover:bg-gray-200 active:bg-gray-300 dark:text-gray-300 dark:hover:bg-gray-600 dark:active:bg-gray-500'>
 							<MoreVertical size={16} />
 						</PopoverTrigger>
-						<PopoverContent className='w-40 bg-white dark:bg-gray-800'>
+						<PopoverContent className='w-fit bg-white dark:bg-gray-800'>
 							<button
 								onClick={() => setEditMode(true)}
 								className='flex w-full items-center space-x-2 rounded-lg px-2 py-2 text-gray-500 hover:bg-gray-200 active:bg-gray-300 dark:text-gray-400 dark:hover:bg-gray-600 dark:active:bg-gray-500'>

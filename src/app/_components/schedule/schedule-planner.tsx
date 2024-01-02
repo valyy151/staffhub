@@ -34,6 +34,8 @@ const sentences = {
 export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftModel[] }) {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 
+	const [loading, setLoading] = useState<boolean>(false)
+
 	const [value, setValue] = useState<Date>(new Date())
 	const [schedule, setSchedule] = useState(changeMonth(new Date()))
 
@@ -62,6 +64,10 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 				title: 'There was a problem creating the schedule.',
 				variant: 'destructive',
 			})
+			setLoading(false)
+		},
+		onSettled: () => {
+			setLoading(false)
 		},
 	})
 
@@ -82,10 +88,14 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 	}
 
 	const createSchedule = () => {
+		setLoading(true)
+
 		if (!employee?.id) {
-			return toast({
+			toast({
 				title: 'Please select an employee.',
 			})
+			setLoading(false)
+			return
 		}
 
 		refetch().then(({ data }) => {
@@ -96,9 +106,11 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 			const filteredSchedule = schedule.filter((shift) => shift.start && shift.end)
 
 			if (filteredSchedule.length === 0) {
-				return toast({
+				toast({
 					title: 'Please select a shift.',
 				})
+				setLoading(false)
+				return
 			}
 
 			createShift.mutate({
@@ -264,6 +276,7 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 							<div className='flex w-fit flex-col space-y-1 pt-4'>
 								<Button
 									title='Create schedule'
+									disabled={loading}
 									onClick={createSchedule}>
 									<CalendarPlusIcon className='mr-2' /> Submit
 								</Button>

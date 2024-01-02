@@ -160,17 +160,19 @@ export default function DashboardTable() {
 							<Heading
 								size={'sm'}
 								className='ml-2'>
-								{new Date(shifts[0]!.date * 1000).toLocaleDateString('en-GB', {
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric',
-								})}{' '}
+								{shifts[0] &&
+									new Date(shifts[0].date * 1000).toLocaleDateString('en-GB', {
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric',
+									})}{' '}
 								-{' '}
-								{new Date(shifts[6]!.date * 1000).toLocaleDateString('en-GB', {
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric',
-								})}{' '}
+								{shifts[6] &&
+									new Date(shifts[6].date * 1000).toLocaleDateString('en-GB', {
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric',
+									})}{' '}
 							</Heading>
 						) : (
 							<div className='h-8 w-96 rounded bg-muted animate-pulse' />

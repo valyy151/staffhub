@@ -25,15 +25,12 @@ export type Note = {
 }
 
 export type DashboardAbsence = {
-	shifts: { id: string; approved: boolean; date: number }[]
+	amount: number
 	reason: string
 	absent: boolean
 	approved: boolean
-	employee: {
-		name: string
-		id: string
-	}
-	amount: number
+	employee: { name: string; id: string }
+	shifts: { id: string; approved: boolean; date: number }[]
 }
 
 export type ShiftEmployee = StaffScheduleOutput & Pick<WorkDayShiftsOutput['shifts'][number], 'employee'>
