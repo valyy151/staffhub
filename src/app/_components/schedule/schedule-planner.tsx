@@ -17,6 +17,7 @@ import Heading from '../ui/heading'
 import InfoModal from '../ui/info-modal'
 import { useToast } from '../ui/use-toast'
 import ScheduleTable from './schedule-table'
+import SelectShiftModel from './select-shift-model'
 
 type ShiftModel = { id: string; end: number; start: number }
 
@@ -227,38 +228,11 @@ export default function SchedulePlanner({ shiftModels }: { shiftModels: ShiftMod
 							)}
 							<div className='flex flex-col pt-2'>
 								{shiftModels?.length! > 0 && (
-									<>
-										<Heading size={'xs'}>Select a shift</Heading>
-										<div className='flex flex-col'>
-											{shiftModels?.map((model) => (
-												<Heading
-													key={model.id}
-													size={'xxs'}
-													onClick={() => {
-														shiftModel ===
-														`${formatTime(model.start)} - ${
-															formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)
-														}`
-															? setShiftModel('')
-															: setShiftModel(
-																	`${formatTime(model.start)} - ${
-																		formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)
-																	}`
-															  )
-													}}
-													className={`my-0.5 w-fit cursor-pointer text-left font-medium ${
-														shiftModel ===
-														`${formatTime(model.start)} - ${
-															formatTime(model.end) == '00:00' ? '24:00' : formatTime(model.end)
-														}`
-															? 'text-sky-500'
-															: ''
-													}`}>
-													[{formatTime(model.start)} - {formatTime(model.end)}]
-												</Heading>
-											))}
-										</div>
-									</>
+									<SelectShiftModel
+										shiftModel={shiftModel}
+										shiftModels={shiftModels}
+										setShiftModel={setShiftModel}
+									/>
 								)}
 							</div>
 

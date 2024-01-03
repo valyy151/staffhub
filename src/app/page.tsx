@@ -1,9 +1,9 @@
-import { CalendarClock, Cog, FileSearch, Forward, Palmtree, Users } from "lucide-react";
-import { redirect } from "next/navigation";
+import { CalendarClock, Cog, FileSearch, Forward, Palmtree, Users } from 'lucide-react'
+import { redirect } from 'next/navigation'
 
-import { getServerAuthSession } from "@/server/auth";
+import { getServerAuthSession } from '@/server/auth'
 
-import { GetStartedButton, SignInButton } from "./_components/auth-buttons";
+import { GetStartedButton, SignInButton } from './_components/auth-buttons'
 
 export default async function Home() {
 	const session = await getServerAuthSession()
@@ -13,8 +13,8 @@ export default async function Home() {
 	}
 
 	return (
-		<main className='mt-4 flex flex-col items-center px-2 sm:px-0'>
-			<section className='w-full py-12'>
+		<main className='py-4 flex flex-col items-center px-2 sm:px-0'>
+			<section className='w-full sm:py-12 py-4'>
 				<div className='container px-4 md:px-6'>
 					<div className='grid items-center gap-6'>
 						<div className='flex flex-col justify-center space-y-8 text-center'>
@@ -22,7 +22,9 @@ export default async function Home() {
 								<h1 className='bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-3xl font-bold tracking-tighter text-transparent sm:text-5xl xl:text-6xl/none'>
 									Simplify Administration, Maximize Results
 								</h1>
-								<p className='mx-auto max-w-[600px] md:text-xl'>Designed to enhance your productivity and streamline your workflow.</p>
+								<p className='mx-auto max-w-[600px] md:text-xl'>
+									Designed to enhance your productivity and streamline your workflow.
+								</p>
 							</div>
 							<div className='mx-auto w-full max-w-full space-y-4'>
 								<div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>

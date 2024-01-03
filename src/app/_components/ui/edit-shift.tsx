@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { ShiftEmployee, ShiftModel, ShiftRow } from '@/app/lib/types'
 import { formatTime, renderTotal } from '@/app/lib/utils'
@@ -20,6 +20,7 @@ import { Input } from './input'
 import RolesDropdown from './roles-dropdown'
 import { useToast } from './use-toast'
 import { useRouter } from 'next/navigation'
+import SelectShiftModel from '../schedule/select-shift-model'
 
 export default function EditShift({
 	shift,
@@ -34,6 +35,7 @@ export default function EditShift({
 }) {
 	const [end, setEnd] = useState(formatTime(shift?.end) ?? '')
 	const [start, setStart] = useState(formatTime(shift?.start ?? ''))
+	const [shiftModel, setShiftModel] = useState<string>('')
 	const [role, setRole] = useState({ id: shift?.role?.id ?? '', name: shift?.role?.name ?? '' })
 
 	const [showDelete, setShowDelete] = useState(false)
@@ -166,6 +168,13 @@ export default function EditShift({
 		})
 	}
 
+	useEffect(() => {
+		if (shiftModel) {
+			handleTimeChange(shiftModel.split(' - ')[0] as string, 'start')
+			handleTimeChange(shiftModel.split(' - ')[1] === '00:00' ? '24:00' : (shiftModel.split(' - ')[1] as string), 'end')
+		}
+	}, [shiftModel])
+
 	return (
 		<>
 			<AlertDialog open>
@@ -231,20 +240,12 @@ export default function EditShift({
 					{shiftModels?.length! > 0 && (
 						<>
 							<Heading size={'xxs'}>Choose a shift:</Heading>
-							<div className='mt-1 flex w-96 flex-wrap'>
-								{shiftModels?.map((shiftModel) => (
-									<Heading
-										key={shiftModel.id}
-										size={'xxs'}
-										onClick={() => {
-											handleTimeChange(formatTime(shiftModel.start), 'start')
-											handleTimeChange(formatTime(shiftModel.end) === '00:00' ? '24:00' : formatTime(shiftModel.end), 'end')
-										}}
-										className='cursor-pointer mr-auto font-medium w-fit hover:text-sky-500'>
-										{formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}
-									</Heading>
-								))}
-							</div>
+
+							<SelectShiftModel
+								shiftModel={shiftModel}
+								setShiftModel={setShiftModel}
+								shiftModels={shiftModels as ShiftModel[]}
+							/>
 						</>
 					)}
 
