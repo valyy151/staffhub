@@ -1,4 +1,4 @@
-import CreateStaffForm from "@/app/_components/staff/create-staff";
+import CreateStaffForm from './_components/create-staff'
 
 export const metadata = {
 	title: 'Create Staff | StaffHub',

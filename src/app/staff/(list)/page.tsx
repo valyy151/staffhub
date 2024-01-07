@@ -1,12 +1,12 @@
 import { UserPlus } from 'lucide-react'
 import Link from 'next/link'
 
-import Search from '@/app/_components/staff/search'
 import Heading from '@/app/_components/ui/heading'
 import Pagination from '@/app/_components/ui/pagination'
 import { api } from '@/trpc/server'
 
-import { StaffTable } from '../../_components/staff/staff-table'
+import { StaffTable } from './_components/staff-table'
+import SearchComponent from './_components/search'
 
 export const metadata = {
 	title: 'Your Staff | StaffHub',
@@ -40,7 +40,7 @@ export default async function Staff({ searchParams }: { searchParams?: { query?:
 							</Heading>
 						</div>
 						<div className='flex items-center space-x-2'>
-							<Search />
+							<SearchComponent />
 							<Link
 								href={'/staff/create'}
 								className='inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'>

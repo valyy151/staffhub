@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { api } from '@/trpc/server'
 
-import SchedulePlanner from '../_components/schedule/schedule-planner'
+import SchedulePlanner from './_components/schedule-planner'
 import Heading from '../_components/ui/heading'
 
 export const metadata = {

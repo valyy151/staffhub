@@ -1,11 +1,11 @@
 import { PalmtreeIcon } from 'lucide-react'
 
-import Vacation from '@/app/_components/staff/absence'
-import CreateAbsence from '@/app/_components/staff/create-absence'
-import CurrentAbsence from '@/app/_components/staff/current-absence'
+import Absence from '@/app/_components/ui/absence'
+import CreateAbsence from '@/app/_components/ui/create-absence'
+import CurrentAbsence from '@/app/_components/ui/current-absence'
 import Heading from '@/app/_components/ui/heading'
-import { Absence } from '@/app/lib/types'
-import { checkAbsences } from '@/app/lib/utils'
+import type { Absence as AbsenceType } from '@/lib/types'
+import { checkAbsences } from '@/lib/utils'
 import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 export default async function StaffVacation({ params }: { params: { id: string } }) {
 	const employee = await api.staff.getVacations.query({ id: params.id })
-	const [pastVacations, currentVacation, upcomingVacations] = checkAbsences(employee?.vacations as Absence[])
+	const [pastVacations, currentVacation, upcomingVacations] = checkAbsences(employee?.vacations as AbsenceType[])
 	return (
 		<>
 			<div className='flex justify-between items-center'>
@@ -65,7 +65,7 @@ export default async function StaffVacation({ params }: { params: { id: string }
 					</Heading>
 
 					{upcomingVacations?.map((vacation) => (
-						<Vacation
+						<Absence
 							type='vacation'
 							key={vacation.id}
 							absence={vacation}
@@ -100,7 +100,7 @@ export default async function StaffVacation({ params }: { params: { id: string }
 					</Heading>
 
 					{pastVacations?.map((vacation) => (
-						<Vacation
+						<Absence
 							type='vacation'
 							key={vacation.id}
 							absence={vacation}

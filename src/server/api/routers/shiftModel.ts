@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { db } from '@/server/db'
-import { formatTime } from '@/app/lib/utils'
+import { formatTime } from '@/lib/utils'
 
 export const shiftModelRouter = createTRPCRouter({
 	get: protectedProcedure.query(async ({ ctx }) => {

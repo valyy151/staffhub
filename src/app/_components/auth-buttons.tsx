@@ -1,9 +1,8 @@
 'use client'
 
+import { Button, buttonVariants } from '@/app/_components/ui/button'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-
-import { Button, buttonVariants } from './ui/button'
 
 export function SignInButton({ text }: { text?: string }) {
 	return (

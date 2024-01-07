@@ -1,14 +1,14 @@
 import { HeartPulseIcon } from 'lucide-react'
 
-import SickLeave from '@/app/_components/staff/absence'
-import CreateAbsence from '@/app/_components/staff/create-absence'
-import CurrentAbsence from '@/app/_components/staff/current-absence'
 import Heading from '@/app/_components/ui/heading'
-import { checkAbsences } from '@/app/lib/utils'
+import { checkAbsences } from '@/lib/utils'
 import { api } from '@/trpc/server'
 
-import type { Absence } from '@/app/lib/types'
+import type { Absence as AbsenceType } from '@/lib/types'
 import type { Metadata } from 'next/types'
+import CreateAbsence from '@/app/_components/ui/create-absence'
+import CurrentAbsence from '@/app/_components/ui/current-absence'
+import Absence from '@/app/_components/ui/absence'
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
 	const id = params.id
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 export default async function StaffSickLeave({ params }: { params: { id: string } }) {
 	const employee = await api.staff.getSickLeaves.query({ id: params.id })
-	const [pastSickLeaves, currentSickLeave] = checkAbsences(employee?.sickLeaves as Absence[])
+	const [pastSickLeaves, currentSickLeave] = checkAbsences(employee?.sickLeaves as AbsenceType[])
 	return (
 		<>
 			<div className='flex justify-between items-center'>
@@ -65,7 +65,7 @@ export default async function StaffSickLeave({ params }: { params: { id: string 
 					</Heading>
 
 					{pastSickLeaves?.map((sickLeave) => (
-						<SickLeave
+						<Absence
 							type='sick'
 							key={sickLeave.id}
 							absence={sickLeave}

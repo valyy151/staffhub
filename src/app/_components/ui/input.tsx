@@ -1,5 +1,5 @@
 'use client'
-import { cn } from '@/app/lib/utils'
+import { cn } from '@/lib/utils'
 import * as React from 'react'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}

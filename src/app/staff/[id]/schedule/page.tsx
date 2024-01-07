@@ -1,8 +1,8 @@
-import Schedule from '@/app/_components/staff/staff-schedule'
-import type { ShiftEmployee } from '@/app/lib/types'
+import type { ShiftEmployee } from '@/lib/types'
 import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
+import Schedule from './_components/schedule'
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
 	const id = params.id

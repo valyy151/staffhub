@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { getMonth } from '@/app/lib/utils'
+import { getMonth } from '@/lib/utils'
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { db } from '@/server/db'
 

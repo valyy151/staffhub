@@ -1,8 +1,8 @@
 'use client'
-import { cva, VariantProps } from "class-variance-authority";
-import { forwardRef, HTMLAttributes } from "react";
+import { cva, VariantProps } from 'class-variance-authority'
+import { forwardRef, HTMLAttributes } from 'react'
 
-import { cn } from "@/app/lib/utils";
+import { cn } from '@/lib/utils'
 
 interface SpinnerProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof spinnerVariants> {
 	noMargin?: boolean

@@ -1,12 +1,12 @@
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import * as React from "react";
+import { format } from 'date-fns'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import * as React from 'react'
 
-import { cn } from "@/app/lib/utils";
+import { cn } from '@/lib/utils'
 
-import { Button } from "./button";
-import { Calendar } from "./calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Button } from './button'
+import { Calendar } from './calendar'
+import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
 import type { DateRange } from 'react-day-picker'
 export function DatePickerWithRange({

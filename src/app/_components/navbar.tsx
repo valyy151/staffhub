@@ -9,7 +9,7 @@ import {
 	NavigationMenuList,
 	NavigationMenuTrigger,
 } from '@/app/_components/ui/navigation-menu'
-import { cn } from '@/app/lib/utils'
+import { cn } from '@/lib/utils'
 import { getServerAuthSession } from '@/server/auth'
 
 import { SignInButton } from './auth-buttons'

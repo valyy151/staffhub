@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import type { ShiftEmployee, ShiftModel, ShiftRow } from '@/app/lib/types'
-import { formatTime, renderTotal } from '@/app/lib/utils'
+import type { ShiftEmployee, ShiftModel, ShiftRow } from '@/lib/types'
+import { formatTime, renderTotal } from '@/lib/utils'
 import { api } from '@/trpc/react'
 
 import {
@@ -20,7 +20,7 @@ import { Input } from './input'
 import RolesDropdown from './roles-dropdown'
 import { useToast } from './use-toast'
 import { useRouter } from 'next/navigation'
-import SelectShiftModel from '../schedule/select-shift-model'
+import SelectShiftModel from './select-shift-model'
 
 export default function EditShift({
 	shift,

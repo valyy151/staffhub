@@ -1,11 +1,11 @@
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import { useState } from "react";
+import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
+import { useState } from 'react'
 
-import { cn } from "@/app/lib/utils";
+import { cn } from '@/lib/utils'
 
-import { Button } from "./button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "./command";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Button } from './button'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from './command'
+import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
 export default function RolesDropdown({
 	role,
@@ -48,7 +48,9 @@ export default function RolesDropdown({
 										setRole && setRole(role)
 										setOpen(false)
 									}}>
-									<CheckIcon className={cn('mr-2 h-4 w-4', value === role.name.toLowerCase() ? 'opacity-100' : 'opacity-0')} />
+									<CheckIcon
+										className={cn('mr-2 h-4 w-4', value === role.name.toLowerCase() ? 'opacity-100' : 'opacity-0')}
+									/>
 									{role?.name}
 								</CommandItem>
 							))}

@@ -1,6 +1,6 @@
 import CreateNote from '@/app/_components/ui/create-note'
 import Note from '@/app/_components/ui/note'
-import { formatDate, formatDay } from '@/app/lib/utils'
+import { formatDate, formatDay } from '@/lib/utils'
 import { api } from '@/trpc/server'
 
 import type { Metadata } from 'next/types'
