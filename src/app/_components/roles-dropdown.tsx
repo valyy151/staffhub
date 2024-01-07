@@ -3,9 +3,9 @@ import { useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-import { Button } from './button'
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from './command'
-import { Popover, PopoverContent, PopoverTrigger } from './popover'
+import { Button } from './ui/button'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from './ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 
 export default function RolesDropdown({
 	role,

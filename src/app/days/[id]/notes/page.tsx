@@ -1,4 +1,4 @@
-import CreateNote from '@/app/_components/ui/create-note'
+import CreateNote from '@/app/_components/create-note'
 import Note from '@/app/_components/ui/note'
 import { formatDate, formatDay } from '@/lib/utils'
 import { api } from '@/trpc/server'

@@ -20,9 +20,9 @@ import {
 	AlertDialogTitle,
 } from '@/app/_components/ui/alert-dialog'
 import { Button } from '@/app/_components/ui/button'
-import RolesDropdown from '@/app/_components/ui/roles-dropdown'
+import RolesDropdown from '@/app/_components/roles-dropdown'
 import Heading from '@/app/_components/ui/heading'
-import SelectStaff from '@/app/_components/ui/select-staff'
+import SelectStaff from '@/app/_components/select-staff'
 
 type AddShiftProps = {
 	date: number

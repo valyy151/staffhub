@@ -7,10 +7,10 @@ import { useState } from 'react'
 import { Absence } from '@/lib/types'
 import { api } from '@/trpc/react'
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './dropdown-menu'
-import FormModal from './form-modal'
-import Heading from './heading'
-import { useToast } from './use-toast'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
+import FormModal from './ui/form-modal'
+import Heading from './ui/heading'
+import { useToast } from './ui/use-toast'
 
 export default function Absence({ absence, type }: { absence: Absence; type: 'vacation' | 'sick' }) {
 	const [showModal, setShowModal] = useState(false)

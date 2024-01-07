@@ -6,9 +6,9 @@ import { api } from '@/trpc/server'
 
 import type { Absence as AbsenceType } from '@/lib/types'
 import type { Metadata } from 'next/types'
-import CreateAbsence from '@/app/_components/ui/create-absence'
-import CurrentAbsence from '@/app/_components/ui/current-absence'
-import Absence from '@/app/_components/ui/absence'
+import CreateAbsence from '@/app/_components/create-absence'
+import CurrentAbsence from '@/app/_components/current-absence'
+import Absence from '@/app/_components/absence'
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
 	const id = params.id

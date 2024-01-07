@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { formatDay, formatTime, formatTotal } from '@/lib/utils'
 import { api } from '@/trpc/react'
 
-import EditShift from '@/app/_components/ui/edit-shift'
+import EditShift from '@/app/_components/edit-shift'
 import { TableCell } from '@/app/_components/ui/table'
 import type { ShiftEmployee, ShiftRow } from '@/lib/types'
 

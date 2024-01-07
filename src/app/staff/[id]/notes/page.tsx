@@ -1,4 +1,4 @@
-import CreateNote from '@/app/_components/ui/create-note'
+import CreateNote from '@/app/_components/create-note'
 import Heading from '@/app/_components/ui/heading'
 import Note from '@/app/_components/ui/note'
 import { api } from '@/trpc/server'

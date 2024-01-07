@@ -1,16 +1,21 @@
 'use client'
-import { ScrollTextIcon } from "lucide-react";
-import { useRouter } from "next-nprogress-bar";
-import { useState } from "react";
+import { ScrollTextIcon } from 'lucide-react'
+import { useRouter } from 'next-nprogress-bar'
+import { useState } from 'react'
 
 import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter,
-    AlertDialogHeader, AlertDialogTitle
-} from "@/app/_components/ui/alert-dialog";
-import { api } from "@/trpc/react";
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from '@/app/_components/ui/alert-dialog'
+import { api } from '@/trpc/react'
 
-import { Button } from "./button";
-import { useToast } from "./use-toast";
+import { Button } from './ui/button'
+import { useToast } from './ui/use-toast'
 
 export default function CreateNote({ id, type }: { id: string; type: 'employee' | 'workDay' }) {
 	const [content, setContent] = useState('')

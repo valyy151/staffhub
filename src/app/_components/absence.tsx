@@ -8,9 +8,9 @@ import { Card, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import { howManyDays } from '@/lib/utils'
 import { api } from '@/trpc/react'
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './dropdown-menu'
-import FormModal from './form-modal'
-import { useToast } from './use-toast'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
+import FormModal from './ui/form-modal'
+import { useToast } from './ui/use-toast'
 
 export default function Absence({ absence, type }: { absence: Absence; type: 'vacation' | 'sick' }) {
 	const [showModal, setShowModal] = useState<boolean>(false)

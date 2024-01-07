@@ -14,8 +14,8 @@ import { AlertDialog, AlertDialogHeader, AlertDialogTitle, AlertDialogContent } 
 import ScheduleTable from './schedule-table'
 import { useToast } from '@/app/_components/ui/use-toast'
 import Heading from '@/app/_components/ui/heading'
-import SelectStaff from '@/app/_components/ui/select-staff'
-import SelectShiftModel from '@/app/_components/ui/select-shift-model'
+import SelectStaff from '@/app/_components/select-staff'
+import SelectShiftModel from '@/app/_components/select-shift-model'
 import { Button } from '@/app/_components/ui/button'
 import InfoModal from '@/app/_components/ui/info-modal'
 

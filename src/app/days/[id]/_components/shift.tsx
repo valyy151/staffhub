@@ -23,7 +23,7 @@ import type { ShiftEmployee, ShiftModel, ShiftRow } from '@/lib/types'
 import { formatDate, formatDay, formatTime, formatTotal } from '@/lib/utils'
 import { api } from '@/trpc/react'
 import { Popover, PopoverTrigger } from '@radix-ui/react-popover'
-import EditShift from '@/app/_components/ui/edit-shift'
+import EditShift from '@/app/_components/edit-shift'
 import FormModal from '@/app/_components/ui/form-modal'
 
 type ShiftProps = {

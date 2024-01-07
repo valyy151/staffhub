@@ -15,10 +15,10 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-} from './alert-dialog'
-import { Button } from './button'
-import { DatePickerWithRange } from './date-range-picker'
-import { useToast } from './use-toast'
+} from './ui/alert-dialog'
+import { Button } from './ui/button'
+import { DatePickerWithRange } from './ui/date-range-picker'
+import { useToast } from './ui/use-toast'
 
 import type { StaffAbsenceOutput } from '@/trpc/shared'
 import type { DateRange } from 'react-day-picker'

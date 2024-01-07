@@ -1,8 +1,8 @@
 import { PalmtreeIcon } from 'lucide-react'
 
-import Absence from '@/app/_components/ui/absence'
-import CreateAbsence from '@/app/_components/ui/create-absence'
-import CurrentAbsence from '@/app/_components/ui/current-absence'
+import Absence from '@/app/_components/absence'
+import CreateAbsence from '@/app/_components/create-absence'
+import CurrentAbsence from '@/app/_components/current-absence'
 import Heading from '@/app/_components/ui/heading'
 import type { Absence as AbsenceType } from '@/lib/types'
 import { checkAbsences } from '@/lib/utils'
