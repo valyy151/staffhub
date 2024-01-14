@@ -114,11 +114,12 @@ export default function DashboardTable() {
 									maxDetail='year'
 									next2Label={null}
 									prev2Label={null}
-									activeStartDate={value!}
 									onChange={(value) => {
 										setValue(value as Date)
 										setShowCalendar(false)
 									}}
+									value={new Date(value)}
+									minDetail='month'
 									maxDate={new Date(1000 * firstAndLastDays?.[1]?.date!)}
 									minDate={new Date(1000 * firstAndLastDays?.[0]?.date!)}
 								/>
