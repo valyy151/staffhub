@@ -30,8 +30,8 @@ export default async function Staff({ searchParams }: { searchParams?: { query?:
 	return (
 		<>
 			{numberOfStaff > 0 ? (
-				<main className='px-36 py-8'>
-					<div className='flex w-full justify-between pb-2 pt-8'>
+				<main className='md:px-36 md:py-8 pb-4 px-1'>
+					<div className='flex flex-col md:flex-row w-full justify-between pb-2 pt-8'>
 						<div className='flex items-baseline space-x-4'>
 							<Heading>Your Staff</Heading>
 

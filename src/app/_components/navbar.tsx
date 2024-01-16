@@ -1,6 +1,6 @@
-import Image from 'next/image'
+import { getServerAuthSession } from '@/server/auth'
 import React from 'react'
-
+import Image from 'next/image'
 import {
 	NavigationMenu,
 	NavigationMenuContent,
@@ -9,11 +9,12 @@ import {
 	NavigationMenuList,
 	NavigationMenuTrigger,
 } from '@/app/_components/ui/navigation-menu'
-import { cn } from '@/lib/utils'
-import { getServerAuthSession } from '@/server/auth'
 
 import { SignInButton } from './auth-buttons'
 import ThemeToggle from './theme-toggle'
+import { cn } from '@/lib/utils'
+import { MenuIcon } from 'lucide-react'
+import Link from 'next/link'
 
 const links: { title: string; href: string; description: string }[] = [
 	{
@@ -42,18 +43,65 @@ export default async function Navbar() {
 	const session = await getServerAuthSession()
 
 	return (
-		<nav className='flex justify-around border-b py-2'>
+		<nav className='flex md:justify-around justify-between border-b py-2'>
 			<NavigationMenu>
 				<NavigationMenuList>
 					<NavigationMenuItem>
 						<NavigationMenuLink
 							href={session?.user ? '/dashboard' : '/'}
-							className='bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50'>
+							className='bg-background hover:bg-accent hidden md:inline-flex hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50'>
 							{session?.user ? 'Dashboard' : 'StaffHub'}
 						</NavigationMenuLink>
 					</NavigationMenuItem>
 
-					<NavigationMenuItem>
+					<NavigationMenuItem className='md:hidden'>
+						<NavigationMenuTrigger className='flex items-center'>
+							<MenuIcon />
+						</NavigationMenuTrigger>
+						<NavigationMenuContent className='flex flex-col w-[150px] gap-3 p-2 md:w-[500px] lg:w-[600px] '>
+							<NavigationMenuLink
+								className={cn(
+									'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors'
+								)}>
+								<Link
+									href='/dashboard'
+									className='text-sm font-medium leading-none'>
+									Dashboard
+								</Link>
+							</NavigationMenuLink>
+							<NavigationMenuLink
+								className={cn(
+									'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors'
+								)}>
+								<Link
+									href='/staff'
+									className='text-sm font-medium leading-none'>
+									Staff
+								</Link>
+							</NavigationMenuLink>
+							<NavigationMenuLink
+								className={cn(
+									'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors'
+								)}>
+								<Link
+									href='/schedule'
+									className='text-sm font-medium leading-none'>
+									Schedule
+								</Link>
+							</NavigationMenuLink>
+							<NavigationMenuLink
+								className={cn(
+									'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors'
+								)}>
+								<Link
+									href='https://staffhub-docs.vercel.app'
+									className='text-sm font-medium leading-none'>
+									Getting Started
+								</Link>
+							</NavigationMenuLink>
+						</NavigationMenuContent>
+					</NavigationMenuItem>
+					<NavigationMenuItem className='inline-flex'>
 						<ThemeToggle />
 					</NavigationMenuItem>
 				</NavigationMenuList>
@@ -66,14 +114,14 @@ export default async function Navbar() {
 							<NavigationMenuItem>
 								<NavigationMenuLink
 									href={'/staff'}
-									className='bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50'>
+									className='bg-background hidden md:inline-flex hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50'>
 									Staff
 								</NavigationMenuLink>
 							</NavigationMenuItem>
 							<NavigationMenuItem>
 								<NavigationMenuLink
 									href={'/schedule'}
-									className='bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50'>
+									className='bg-background hidden md:inline-flex hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50'>
 									Schedule
 								</NavigationMenuLink>
 							</NavigationMenuItem>
@@ -83,7 +131,7 @@ export default async function Navbar() {
 					<NavigationMenuItem>
 						<NavigationMenuLink
 							target='_blank'
-							className='bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50'
+							className='bg-background hidden md:inline-flex hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 group h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50'
 							href='https://staffhub-docs.vercel.app'>
 							Getting Started
 						</NavigationMenuLink>
@@ -103,7 +151,7 @@ export default async function Navbar() {
 							</NavigationMenuTrigger>
 
 							<NavigationMenuContent>
-								<ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
+								<ul className='grid w-full gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
 									{links.map((link) => (
 										<ListItem
 											key={link.title}
@@ -140,7 +188,7 @@ const ListItem = React.forwardRef<React.ElementRef<'a'>, React.ComponentPropsWit
 						)}
 						{...props}>
 						<div className='text-sm font-medium leading-none'>{title}</div>
-						<p className='text-muted-foreground line-clamp-2 text-sm leading-snug'>{children}</p>
+						<p className='text-muted-foreground line-clamp-2 text-sm hidden md:inline-flex leading-snug'>{children}</p>
 					</a>
 				</NavigationMenuLink>
 			</li>
