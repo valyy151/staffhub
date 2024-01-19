@@ -1,4 +1,8 @@
-import { DefaultSession, getServerSession, NextAuthOptions } from "next-auth"
+import {
+  getServerSession,
+  type DefaultSession,
+  type NextAuthOptions,
+} from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 
 import { env } from "@/env.mjs"

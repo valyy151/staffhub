@@ -58,11 +58,12 @@ export default function CreateRole() {
     },
   })
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     if (!role) {
-      return toast({
+      toast({
         title: "Please enter a role name.",
       })
+      return
     }
 
     createStaffRole.mutate({
@@ -70,6 +71,7 @@ export default function CreateRole() {
       numberPerDay: parseInt(number) | 0,
     })
   }
+
   return (
     <>
       <div className="space-x-1">

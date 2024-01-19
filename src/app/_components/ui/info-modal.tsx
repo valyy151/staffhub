@@ -18,8 +18,8 @@ export default function InfoModal({ text, close, heading }: ModalProps) {
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle className="text-2xl">{heading}</DialogTitle>
-          {text.data.map((paragraph) => (
-            <DialogDescription className="text-md pb-2">
+          {text.data.map((paragraph, index) => (
+            <DialogDescription key={index} className="text-md pb-2">
               {paragraph}
             </DialogDescription>
           ))}

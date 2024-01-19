@@ -3,7 +3,7 @@ import { useRouter } from "next-nprogress-bar"
 import { useState } from "react"
 
 import { api } from "@/trpc/react"
-import { StaffRolesOutput } from "@/trpc/shared"
+import type { StaffRolesOutput } from "@/trpc/shared"
 
 import {
   AlertDialog,

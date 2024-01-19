@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/app/_components/ui/popover"
 import { cn } from "@/lib/utils"
-import { StaffDropdownOutput } from "@/trpc/shared"
+import type { StaffDropdownOutput } from "@/trpc/shared"
 
 type Props = {
   links?: boolean

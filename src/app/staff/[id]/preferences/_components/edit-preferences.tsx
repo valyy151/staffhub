@@ -5,7 +5,7 @@ import { useState } from "react"
 
 import { formatTime } from "@/lib/utils"
 import { api } from "@/trpc/react"
-import { StaffPreferenceOutput } from "@/trpc/shared"
+import type { StaffPreferenceOutput } from "@/trpc/shared"
 
 import {
   AlertDialog,
@@ -85,7 +85,7 @@ export default function EditPreferences({
 
             <div className="flex w-fit flex-col space-y-2">
               {shiftModels?.map((shiftModel) => (
-                <div className="flex">
+                <div key={shiftModel.id} className="flex">
                   <input
                     type="checkbox"
                     id={shiftModel.id}

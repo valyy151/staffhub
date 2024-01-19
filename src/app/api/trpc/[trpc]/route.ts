@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server"
+import type { NextRequest } from "next/server"
 
 import { env } from "@/env.mjs"
 import { appRouter } from "@/server/api/root"

@@ -1,6 +1,6 @@
 import { createTw } from "react-pdf-tailwind"
 
-import { StaffScheduleOutput } from "@/trpc/shared"
+import type { StaffScheduleOutput } from "@/trpc/shared"
 import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer"
 import {
   formatTime,

@@ -9,7 +9,7 @@ import {
 import { useRouter } from "next-nprogress-bar"
 import { useState } from "react"
 
-import { Absence } from "@/lib/types"
+import type { Absence } from "@/lib/types"
 import { api } from "@/trpc/react"
 
 import {

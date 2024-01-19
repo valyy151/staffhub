@@ -2,7 +2,7 @@
 import { Download } from "lucide-react"
 
 import { Button } from "@/app/_components/ui/button"
-import { StaffScheduleOutput } from "@/trpc/shared"
+import type { StaffScheduleOutput } from "@/trpc/shared"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 
 import { SchedulePDF } from "./pdf-schedule"

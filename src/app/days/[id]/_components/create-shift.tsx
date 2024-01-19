@@ -8,7 +8,7 @@ import { Input } from "@/app/_components/ui/input"
 import { useToast } from "@/app/_components/ui/use-toast"
 import { formatTime, handleTimeChange, renderTotal } from "@/lib/utils"
 import { api } from "@/trpc/react"
-import { StaffDropdownOutput } from "@/trpc/shared"
+import type { StaffDropdownOutput } from "@/trpc/shared"
 
 import {
   AlertDialog,
@@ -126,9 +126,10 @@ export default function AddShift({ date }: AddShiftProps) {
     e.preventDefault()
 
     if (!end || !start) {
-      return toast({
+      toast({
         title: "Please select a start and end time.",
       })
+      return
     }
 
     const startDate = new Date(date * 1000)

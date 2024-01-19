@@ -63,7 +63,10 @@ export function StaffTable({ staff }: { staff: StaffOutput[] }) {
       </div>
       <div className="grid grid-cols-1 gap-4 md:hidden">
         {staff.map((employee) => (
-          <Card onClick={() => router.push(`/staff/${employee.id}`)}>
+          <Card
+            key={employee.id}
+            onClick={() => router.push(`/staff/${employee.id}`)}
+          >
             <CardHeader>
               <CardTitle className="text-sm">{employee.name}</CardTitle>
             </CardHeader>

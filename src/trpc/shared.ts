@@ -1,7 +1,7 @@
 import superjson from "superjson"
 
-import { AppRouter } from "@/server/api/root"
-import { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
+import type { AppRouter } from "@/server/api/root"
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
 
 export const transformer = superjson
 
@@ -35,7 +35,7 @@ export type StaffOutput = RouterOutputs["staff"]["get"][number]
 
 export type StaffIdOutput = RouterOutputs["staff"]["getId"]
 
-export type DashboardOutput = RouterOutputs["dashboard"]["find"]
+export type DashboardOutput = RouterOutputs["dashboard"]["find"][number]
 
 export type WorkDayShiftsOutput = Pick<WorkDayOutput, "shifts">
 
@@ -48,6 +48,9 @@ export type StaffScheduleOutput = RouterOutputs["staff"]["getSchedule"]
 export type StaffPreferenceOutput = RouterOutputs["staff"]["getPreference"]
 
 export type StaffDropdownOutput = RouterOutputs["staff"]["getDropdown"][number]
+
+export type DashboardFirstAndLastDayOutput =
+  RouterOutputs["dashboard"]["findFirstAndLastDay"]
 
 export type StaffScheduleShift =
   RouterOutputs["staff"]["getSchedule"]["shifts"][number]

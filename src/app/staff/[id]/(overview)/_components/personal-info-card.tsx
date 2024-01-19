@@ -54,13 +54,14 @@ export default function PersonalInfoCard({
     },
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email || !firstName || !lastName) {
-      return toast({
+      toast({
         title: "Please fill out all the required fields",
         variant: "destructive",
       })
+      return
     }
 
     updateMutation.mutate({

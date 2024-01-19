@@ -7,7 +7,7 @@ const month = new Date().toLocaleDateString("en-GB", {
 })
 const [m, y] = month.split("/")
 
-export function middleware(request: NextRequest) {
+export function middleware(request: NextRequest): NextResponse | void {
   if (
     request.nextUrl.pathname.startsWith("/dashboard") &&
     !request.nextUrl.searchParams.get("month")

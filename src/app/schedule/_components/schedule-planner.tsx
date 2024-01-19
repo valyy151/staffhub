@@ -14,7 +14,7 @@ import {
   generateYearArray,
 } from "@/lib/utils"
 import { api } from "@/trpc/react"
-import { StaffDropdownOutput } from "@/trpc/shared"
+import type { StaffDropdownOutput } from "@/trpc/shared"
 
 import {
   AlertDialog,

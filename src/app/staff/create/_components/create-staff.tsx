@@ -51,16 +51,18 @@ export default function CreateStaffForm() {
     },
   })
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!email || !firstName || !lastName) {
-      return toast({
+      toast({
         title: "Please fill out all fields",
         variant: "destructive",
       })
+      return
     }
 
     createStaff.mutate({ email, firstName, lastName, phone, address })
+    return
   }
 
   return (

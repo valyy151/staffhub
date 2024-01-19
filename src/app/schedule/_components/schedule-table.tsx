@@ -43,6 +43,7 @@ export default function ScheduleTable({
         <TableBody>
           {data.map((item, index) => (
             <ShiftRow
+              key={index}
               data={data}
               item={item}
               shiftModel={shiftModel}

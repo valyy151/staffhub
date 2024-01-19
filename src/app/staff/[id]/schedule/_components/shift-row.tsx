@@ -43,6 +43,7 @@ export default function ShiftRow({
         </span>
       )
     }
+    return
   }
 
   return (

@@ -18,20 +18,22 @@
     "jsx": "preserve",
     "incremental": true,
     "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
     },
-    "plugins": [{ "name": "next" }]
+    "plugins": [{ "name": "next" }],
   },
   "include": [
-    ".eslintrc.cjs",
+    ".eslintrc.json",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

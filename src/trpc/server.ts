@@ -1,6 +1,6 @@
 import { headers } from "next/headers"
 
-import { AppRouter } from "@/server/api/root"
+import type { AppRouter } from "@/server/api/root"
 import {
   createTRPCProxyClient,
   loggerLink,
