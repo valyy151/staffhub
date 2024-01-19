@@ -1,15 +1,15 @@
 export default function StaffLoading() {
-	return (
-		<main className='py-8 px-36'>
-			<div className='flex justify-between mb-2 mt-8'>
-				<div className='h-10 w-[26rem] bg-muted animate-pulse rounded' />
-				<div className='flex space-x-2'>
-					<div className='bg-muted animate-pulse h-10 w-[17rem] rounded' />
-					<div className='bg-muted animate-pulse h-10 w-40 rounded' />
-				</div>
-			</div>
+  return (
+    <main className="px-36 py-8">
+      <div className="mb-2 mt-8 flex justify-between">
+        <div className="h-10 w-[26rem] animate-pulse rounded bg-muted" />
+        <div className="flex space-x-2">
+          <div className="h-10 w-[17rem] animate-pulse rounded bg-muted" />
+          <div className="h-10 w-40 animate-pulse rounded bg-muted" />
+        </div>
+      </div>
 
-			<section className='w-full h-[36.5rem] bg-muted animate-pulse rounded' />
-		</main>
-	)
+      <section className="h-[36.5rem] w-full animate-pulse rounded bg-muted" />
+    </main>
+  )
 }

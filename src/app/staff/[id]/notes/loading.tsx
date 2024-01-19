@@ -1,17 +1,17 @@
 export default function StaffNotesLoading() {
-	return (
-		<div className='flex flex-col mt-2'>
-			<div className='flex justify-between'>
-				<div className='h-11 rounded w-80 bg-muted animate-pulse' />
-				<div className='h-11 rounded w-32 bg-muted animate-pulse ml-44' />
-			</div>
-			<div className='mt-4 space-y-2'>
-				<div className='w-full h-24 rounded animate-pulse bg-muted' />
-				<div className='w-full h-24 rounded animate-pulse bg-muted' />
-				<div className='w-full h-24 rounded animate-pulse bg-muted' />
-				<div className='w-full h-24 rounded animate-pulse bg-muted' />
-				<div className='w-full h-24 rounded animate-pulse bg-muted' />
-			</div>
-		</div>
-	)
+  return (
+    <div className="mt-2 flex flex-col">
+      <div className="flex justify-between">
+        <div className="h-11 w-80 animate-pulse rounded bg-muted" />
+        <div className="ml-44 h-11 w-32 animate-pulse rounded bg-muted" />
+      </div>
+      <div className="mt-4 space-y-2">
+        <div className="h-24 w-full animate-pulse rounded bg-muted" />
+        <div className="h-24 w-full animate-pulse rounded bg-muted" />
+        <div className="h-24 w-full animate-pulse rounded bg-muted" />
+        <div className="h-24 w-full animate-pulse rounded bg-muted" />
+        <div className="h-24 w-full animate-pulse rounded bg-muted" />
+      </div>
+    </div>
+  )
 }

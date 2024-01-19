@@ -1,91 +1,76 @@
-import { HeartPulseIcon } from 'lucide-react'
+import { HeartPulseIcon } from "lucide-react"
 
-import Heading from '@/app/_components/ui/heading'
-import { checkAbsences } from '@/lib/utils'
-import { api } from '@/trpc/server'
+import Heading from "@/app/_components/ui/heading"
+import { checkAbsences } from "@/lib/utils"
+import { api } from "@/trpc/server"
 
-import type { Absence as AbsenceType } from '@/lib/types'
-import type { Metadata } from 'next/types'
-import CreateAbsence from '@/app/_components/create-absence'
-import CurrentAbsence from '@/app/_components/current-absence'
-import Absence from '@/app/_components/absence'
+import type { Absence as AbsenceType } from "@/lib/types"
+import type { Metadata } from "next/types"
+import CreateAbsence from "@/app/_components/create-absence"
+import CurrentAbsence from "@/app/_components/current-absence"
+import Absence from "@/app/_components/absence"
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-	const id = params.id
-	const employee = await api.staff.getName.query({ id })
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> {
+  const id = params.id
+  const employee = await api.staff.getName.query({ id })
 
-	return {
-		title: employee?.name,
-		description: `Profile for ${employee?.name}`,
-		icons: [{ rel: 'icon', url: '/favicon.ico' }],
-	}
+  return {
+    title: employee?.name,
+    description: `Profile for ${employee?.name}`,
+    icons: [{ rel: "icon", url: "/favicon.ico" }],
+  }
 }
 
-export default async function StaffSickLeave({ params }: { params: { id: string } }) {
-	const employee = await api.staff.getSickLeaves.query({ id: params.id })
-	const [pastSickLeaves, currentSickLeave] = checkAbsences(employee?.sickLeaves as AbsenceType[])
-	return (
-		<>
-			<div className='flex justify-between items-center'>
-				<Heading size={'xs'}>Sick Leaves for {employee?.name}</Heading>
-				<CreateAbsence
-					type='sick'
-					employee={employee}
-				/>
-			</div>
-			{currentSickLeave ? (
-				<CurrentAbsence
-					type='sick'
-					absence={currentSickLeave}
-				/>
-			) : (
-				<div className='bg-green-500 rounded-md border text-white mt-4 p-2 min-w-[46rem]'>
-					<Heading
-						size={'xxs'}
-						className='flex items-center'>
-						<HeartPulseIcon
-							size={42}
-							className='ml-1 mr-2 text-white'
-						/>
-						Currently not on sick leave
-					</Heading>
-				</div>
-			)}
+export default async function StaffSickLeave({
+  params,
+}: {
+  params: { id: string }
+}) {
+  const employee = await api.staff.getSickLeaves.query({ id: params.id })
+  const [pastSickLeaves, currentSickLeave] = checkAbsences(
+    employee?.sickLeaves as AbsenceType[],
+  )
+  return (
+    <>
+      <div className="flex items-center justify-between">
+        <Heading size={"xs"}>Sick Leaves for {employee?.name}</Heading>
+        <CreateAbsence type="sick" employee={employee} />
+      </div>
+      {currentSickLeave ? (
+        <CurrentAbsence type="sick" absence={currentSickLeave} />
+      ) : (
+        <div className="mt-4 min-w-[46rem] rounded-md border bg-green-500 p-2 text-white">
+          <Heading size={"xxs"} className="flex items-center">
+            <HeartPulseIcon size={42} className="ml-1 mr-2 text-white" />
+            Currently not on sick leave
+          </Heading>
+        </div>
+      )}
 
-			{pastSickLeaves && pastSickLeaves.length > 0 ? (
-				<>
-					<Heading
-						size={'xxs'}
-						className='mb-3 mt-12 flex items-center'>
-						<HeartPulseIcon
-							size={42}
-							className='ml-1 mr-2 text-gray-400'
-						/>
-						Previous Sick Leaves
-					</Heading>
+      {pastSickLeaves && pastSickLeaves.length > 0 ? (
+        <>
+          <Heading size={"xxs"} className="mb-3 mt-12 flex items-center">
+            <HeartPulseIcon size={42} className="ml-1 mr-2 text-gray-400" />
+            Previous Sick Leaves
+          </Heading>
 
-					{pastSickLeaves?.map((sickLeave) => (
-						<Absence
-							type='sick'
-							key={sickLeave.id}
-							absence={sickLeave}
-						/>
-					))}
-				</>
-			) : (
-				<>
-					<Heading
-						size={'xxs'}
-						className='mb-3 mt-12 flex items-center'>
-						<HeartPulseIcon
-							size={42}
-							className='ml-1 mr-2 text-gray-400'
-						/>
-						Past Sick Leaves
-					</Heading>
-					<p className='ml-14 mt-4'>No past sick leaves</p>
-				</>
-			)}
-		</>
-	)
+          {pastSickLeaves?.map((sickLeave) => (
+            <Absence type="sick" key={sickLeave.id} absence={sickLeave} />
+          ))}
+        </>
+      ) : (
+        <>
+          <Heading size={"xxs"} className="mb-3 mt-12 flex items-center">
+            <HeartPulseIcon size={42} className="ml-1 mr-2 text-gray-400" />
+            Past Sick Leaves
+          </Heading>
+          <p className="ml-14 mt-4">No past sick leaves</p>
+        </>
+      )}
+    </>
+  )
 }
