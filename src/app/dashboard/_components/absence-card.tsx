@@ -10,7 +10,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/app/_components/ui/alert-dialog"
-import Paragraph from "@/app/_components/ui/paragraph"
 import { Switch } from "@/app/_components/ui/switch"
 import { useToast } from "@/app/_components/ui/use-toast"
 import { api } from "@/trpc/react"
@@ -32,7 +31,10 @@ type Props = {
 
 export default function AbsenceCard({ absence }: Props) {
   const { toast } = useToast()
-  const [approveAll, setApproveAll] = useState<boolean>(false)
+
+  const [approveAll, setApproveAll] = useState<boolean>(
+    absence.shifts.every((shift) => shift.approved),
+  )
   const [showAbsence, setShowAbsence] = useState<boolean>(false)
 
   const queryClient = useQueryClient()
@@ -68,34 +70,33 @@ export default function AbsenceCard({ absence }: Props) {
 
   return (
     <div className="rounded-lg border bg-card py-2">
-      <Paragraph className="border-b px-2 pb-1">
+      <p className="border-b px-2 pb-1">
         <Link
-          className="underline-offset-2 hover:underline"
+          className="underline-offset-4 hover:underline"
           href={`/staff/${absence.employee.id}`}
         >
           {absence.employee.name}
         </Link>
-      </Paragraph>
+      </p>
 
-      <div className="flex  justify-between px-2 pt-4">
-        <Paragraph size={"sm"}>
-          <span className="font-light">Reason:</span> {absence.reason}
-        </Paragraph>
-        <Paragraph size={"sm"}>
-          <span className="font-light"> Amount: </span> {absence.amount}
-        </Paragraph>
-        <Paragraph
-          size={"sm"}
+      <div
+        onClick={() => setShowAbsence(true)}
+        className="group flex cursor-pointer justify-between px-2 pb-1 pt-4 text-sm"
+      >
+        <p>
+          <span>Reason:</span> {absence.reason}
+        </p>
+        <p>
+          <span> Amount: </span> {absence.amount}
+        </p>
+        <p
           className={`${absence.approved ? "text-green-500" : "text-rose-500"}`}
         >
-          <span
-            onClick={() => setShowAbsence(true)}
-            className="cursor-pointer font-light text-foreground underline-offset-2 hover:underline"
-          >
+          <span className="text-foreground underline-offset-4 group-hover:underline">
             Approved:{" "}
           </span>{" "}
           {absence.approved ? "Yes" : "No"}
-        </Paragraph>
+        </p>
       </div>
 
       {showAbsence && (
@@ -106,47 +107,33 @@ export default function AbsenceCard({ absence }: Props) {
             </AlertDialogHeader>
             <label className="flex w-fit flex-col">
               Approve all
-              {approveAll ? (
-                <Switch
-                  className="mt-1"
-                  onClick={() => {
-                    setApproveAll(!approveAll)
-                    setShifts(
-                      absence.shifts.map((shift) => {
-                        shift.approved = false
-                        return shift
-                      }),
-                    )
-                  }}
-                />
-              ) : (
-                <Switch
-                  onClick={() => {
-                    setApproveAll(!approveAll)
-                    setShifts(
-                      absence.shifts.map((shift) => {
-                        shift.approved = true
-                        return shift
-                      }),
-                    )
-                  }}
-                  className="mt-1"
-                />
-              )}
+              <Switch
+                className="mt-1"
+                checked={approveAll}
+                onClick={() => {
+                  setApproveAll(!approveAll)
+                  setShifts(
+                    absence.shifts.map((shift) => {
+                      shift.approved = !approveAll
+                      return shift
+                    }),
+                  )
+                }}
+              />
             </label>
             {shifts.map((shift) => (
               <div
                 key={shift.id}
                 className="flex items-center justify-between border-b pb-1"
               >
-                <Paragraph size={"sm"}>
+                <p>
                   {new Date(shift.date * 1000).toLocaleDateString("en-GB", {
                     weekday: "short",
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
-                </Paragraph>
+                </p>
                 <label htmlFor={shift.id} className="flex w-fit flex-col">
                   Approved
                   <Switch

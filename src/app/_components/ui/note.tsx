@@ -41,7 +41,7 @@ export default function Note({ note, type }: NoteProps) {
   })
 
   return (
-    <Card className="mb-2 min-w-[28rem]">
+    <Card className="mb-2 w-[42rem]">
       <CardDescription className="flex flex-col rounded-md border bg-card py-1 shadow">
         <span className="px-2 text-justify font-medium">{note.content}</span>
 

@@ -1,14 +1,10 @@
 import Heading from "@/app/_components/ui/heading"
 import Paragraph from "@/app/_components/ui/paragraph"
-import { formatDate, formatDay, formatTime } from "@/lib/utils"
+import { formatDate, formatDay } from "@/lib/utils"
 import type { DashboardOutput } from "@/trpc/shared"
-import {
-  CalendarOffIcon,
-  ScrollIcon,
-  ScrollTextIcon,
-  UserIcon,
-} from "lucide-react"
+import { CalendarOffIcon, ScrollIcon, ScrollTextIcon } from "lucide-react"
 import Link from "next/link"
+import ShiftCard from "./shift-card"
 
 export default function WorkDayCard({
   index,
@@ -35,62 +31,18 @@ export default function WorkDayCard({
           {day && formatDate(day.date, "short")}
         </Paragraph>
       </Link>
-      <div className="flex w-full flex-col items-center gap-1 px-2 pb-2 pt-4">
+      <div className="flex w-full flex-col items-center gap-1 pb-2 pt-4">
         {day.shifts.length > 0 ? (
           day.shifts
             .sort((a, b) => a.start - b.start)
             .map((shift) => {
-              return (
-                <div
-                  key={shift.id}
-                  title={shift.employee.name}
-                  className="w-full min-w-full"
-                >
-                  <p className="flex items-center text-xs">
-                    <UserIcon
-                      className={`ml-1 ${
-                        shift.absence?.absent && "text-rose-500"
-                      }`}
-                    />
-                    <Link
-                      href={`/staff/${shift.employee.id}`}
-                      className={`text-left hover:underline ${
-                        shift.absence?.absent && "text-muted-foreground"
-                      }`}
-                    >
-                      {shift.employee.name.split(" ")[0]}
-                    </Link>
-
-                    <span
-                      className={`ml-auto ${
-                        shift.absence?.absent && "text-muted-foreground"
-                      }`}
-                    >
-                      {formatTime(shift.start)}
-                    </span>
-                    <span
-                      className={`mx-0.5 ${
-                        shift.absence?.absent && "text-muted-foreground"
-                      }`}
-                    >
-                      -
-                    </span>
-                    <span
-                      className={`mr-2 ${
-                        shift.absence?.absent && "text-muted-foreground"
-                      }`}
-                    >
-                      {formatTime(shift.end)}
-                    </span>
-                  </p>
-                </div>
-              )
+              return <ShiftCard key={shift.id} shift={shift} />
             })
         ) : (
-          <Paragraph className="flex items-center">
-            <CalendarOffIcon className="mr-2" />
+          <p className="flex items-center text-xs">
+            <CalendarOffIcon size={20} className="mr-2" />
             No Shifts
-          </Paragraph>
+          </p>
         )}
       </div>
       <div className="mt-auto flex w-full justify-center border-t">

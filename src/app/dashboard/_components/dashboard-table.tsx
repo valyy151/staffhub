@@ -106,7 +106,7 @@ export default function DashboardTable() {
   )
 
   return (
-    <main className="flex pb-24 md:pb-0">
+    <main className="flex pb-24 lg:pb-0">
       <DashboardSidebar
         page={page}
         value={value}
@@ -133,14 +133,14 @@ export default function DashboardTable() {
             />
 
             {!workDays && (
-              <div className="h-8 w-96 animate-pulse rounded bg-muted" />
-            )}
-            {!workDays && (
-              <div className="h-96 w-full animate-pulse rounded bg-muted" />
+              <>
+                <div className="h-8 w-96 animate-pulse rounded bg-muted" />
+                <div className="h-96 w-full animate-pulse rounded bg-muted" />
+              </>
             )}
 
             {workDays && (
-              <div className="flex min-h-[24rem] flex-col gap-2 rounded-lg border-b md:border-b-0 lg:flex-row lg:gap-0">
+              <div className="flex min-h-[24rem] flex-col gap-2 rounded-lg border-b lg:flex-row lg:gap-0 lg:border-b-0">
                 {workDays?.map((day, index) => (
                   <WorkDayCard key={index} day={day} index={index} />
                 ))}
@@ -150,34 +150,36 @@ export default function DashboardTable() {
             {absencesArray.length > 0 && (
               <>
                 <Heading size={"xs"} className="ml-2">
-                  Absences
+                  Absences this week (
+                  {absencesArray
+                    .map((absence) => absence.amount)
+                    .reduce((a, b) => a + b, 0)}
+                  )
                 </Heading>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
                   {absencesArray.map((absence, index) => (
-                    <AbsenceCard absence={absence} key={index} />
+                    <AbsenceCard key={index} absence={absence} />
                   ))}
                 </div>
               </>
             )}
+
             {notesArray.length > 0 && (
               <>
                 <Heading size={"xs"} className="ml-2">
-                  Notes
+                  Notes this week ({notesArray.length})
                 </Heading>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                  {notesArray
-                    .sort(
-                      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-                    )
-                    .map((note) => (
-                      <DashboardNote key={note.id} note={note} />
-                    ))}
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+                  {notesArray.map((note) => (
+                    <DashboardNote key={note.id} note={note} />
+                  ))}
                 </div>
               </>
             )}
           </div>
         </div>
       </div>
+
       <div className="fixed bottom-0 flex w-full justify-center border-t bg-card py-3 lg:hidden">
         <div className="flex space-x-1">
           <Button
