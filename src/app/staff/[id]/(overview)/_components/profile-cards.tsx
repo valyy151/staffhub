@@ -58,7 +58,9 @@ export default function ProfileCards({
                     key={note.id}
                     className="flex items-center justify-between"
                   >
-                    <span className="max-w-xs truncate">{note.content}</span>
+                    <span className="max-w-[10rem] truncate md:max-w-xs">
+                      {note.content}
+                    </span>
                     <span className="ml-2 text-xs">
                       {note.createdAt.toLocaleDateString("en-GB", {
                         day: "numeric",

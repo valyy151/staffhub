@@ -27,7 +27,7 @@ export default async function StaffProfile({
 
   return (
     <div>
-      <h1 className="px-1 text-3xl font-bold">{employee?.name}</h1>
+      <h1 className="px-1 text-xl font-bold md:text-3xl">{employee?.name}</h1>
       <ProfileCards employee={employee} />
       <DeleteStaff id={params.id} />
     </div>

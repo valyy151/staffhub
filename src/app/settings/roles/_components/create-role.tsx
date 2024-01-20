@@ -72,7 +72,7 @@ export default function CreateRole() {
 
   return (
     <>
-      <div className="space-x-1">
+      <div className="flex flex-col gap-1 md:flex-row">
         <Button onClick={() => setShowCreate(true)}>
           <UserCogIcon className="mr-2" /> New Staff Role
         </Button>

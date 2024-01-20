@@ -36,16 +36,16 @@ export default async function StaffSickLeave({
   )
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-baseline justify-between md:flex-row md:items-center">
         <Heading size={"xs"}>Sick Leaves for {employee?.name}</Heading>
         <CreateAbsence type="sick" employee={employee} />
       </div>
       {currentSickLeave ? (
         <CurrentAbsence type="sick" absence={currentSickLeave} />
       ) : (
-        <div className="mt-4 min-w-[46rem] rounded-md border bg-green-500 p-2 text-white">
+        <div className="mt-4 rounded-md border bg-green-500 p-2 text-white md:min-w-[46rem]">
           <Heading size={"xxs"} className="flex items-center">
-            <HeartPulseIcon size={42} className="ml-1 mr-2 text-white" />
+            <HeartPulseIcon size={32} className="ml-1 mr-2 text-white" />
             Currently not on sick leave
           </Heading>
         </div>
@@ -53,8 +53,11 @@ export default async function StaffSickLeave({
 
       {pastSickLeaves && pastSickLeaves.length > 0 ? (
         <>
-          <Heading size={"xxs"} className="mb-3 mt-12 flex items-center">
-            <HeartPulseIcon size={42} className="ml-1 mr-2 text-gray-400" />
+          <Heading
+            size={"xxs"}
+            className="mb-3 mt-6 flex items-center md:mt-12"
+          >
+            <HeartPulseIcon size={32} className="ml-1 mr-2 text-gray-400" />
             Previous Sick Leaves
           </Heading>
 
@@ -64,11 +67,14 @@ export default async function StaffSickLeave({
         </>
       ) : (
         <>
-          <Heading size={"xxs"} className="mb-3 mt-12 flex items-center">
-            <HeartPulseIcon size={42} className="ml-1 mr-2 text-gray-400" />
+          <Heading
+            size={"xxs"}
+            className="mb-3 mt-6 flex items-center md:mt-12"
+          >
+            <HeartPulseIcon size={32} className="ml-1 mr-2 text-gray-400" />
             Past Sick Leaves
           </Heading>
-          <p className="ml-14 mt-4">No past sick leaves</p>
+          <p className="ml-8 mt-4 text-sm md:ml-14">No past sick leaves</p>
         </>
       )}
     </>

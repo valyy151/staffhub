@@ -10,7 +10,7 @@ export default function ShiftCard({ shift }: { shift: Shift }) {
     <div
       key={shift.id}
       title={shift.employee.name}
-      className="flex w-full min-w-full flex-col items-start justify-between border-b px-1 2xl:flex-row 2xl:items-center 2xl:border-b-0 2xl:px-2"
+      className="flex w-full min-w-full flex-row items-start justify-between border-b px-1 lg:flex-col 2xl:flex-row 2xl:items-center 2xl:border-b-0 2xl:px-2"
     >
       <p className="flex items-center text-xs">
         <UserIcon

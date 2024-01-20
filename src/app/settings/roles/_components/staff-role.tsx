@@ -91,7 +91,7 @@ export default function StaffRole({ role }: { role: Role }) {
 
   return (
     <>
-      <Card className="w-fit">
+      <Card className="w-full md:w-fit">
         <CardHeader>
           <CardTitle className="flex items-center text-lg">
             <UserCogIcon className="mr-2" /> {role.name}
@@ -155,16 +155,15 @@ export default function StaffRole({ role }: { role: Role }) {
           </AlertDialogContent>
         </AlertDialog>
       )}
-      {showModal && (
-        <FormModal
-          showModal={showModal}
-          heading={"Delete Staff Role?"}
-          cancel={() => setShowModal(false)}
-          pending={deleteStaffRole.isLoading}
-          submit={() => deleteStaffRole.mutate({ id: role.id })}
-          text={`Are you sure you want to delete the ${role.name} staff role?`}
-        />
-      )}
+
+      <FormModal
+        open={showModal}
+        cancel={setShowModal}
+        heading={"Delete Staff Role?"}
+        pending={deleteStaffRole.isLoading}
+        submit={() => deleteStaffRole.mutate({ id: role.id })}
+        text={`Are you sure you want to delete the ${role.name} staff role?`}
+      />
     </>
   )
 }

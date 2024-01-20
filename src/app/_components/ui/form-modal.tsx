@@ -1,5 +1,3 @@
-import type { MouseEventHandler } from "react"
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,28 +11,29 @@ import {
 
 type ModalProps = {
   text: string
+  open: boolean
   pending: boolean
   heading?: string
-  showModal: boolean
-  cancel: MouseEventHandler<HTMLButtonElement>
-  submit: MouseEventHandler<HTMLButtonElement>
+  submit: () => void
+  cancel: (open: boolean) => void
 }
 
 export default function FormModal({
+  open,
   text,
   pending,
   submit,
   cancel,
 }: ModalProps) {
   return (
-    <AlertDialog open>
+    <AlertDialog open={open} onOpenChange={cancel}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>{text}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={cancel}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={submit}
             disabled={pending}

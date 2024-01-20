@@ -41,7 +41,7 @@ export default function Note({ note, type }: NoteProps) {
   })
 
   return (
-    <Card className="mb-2 w-[42rem]">
+    <Card className="mb-2 md:w-[42rem]">
       <CardDescription className="flex flex-col rounded-md border bg-card py-1 shadow">
         <span className="px-2 text-justify font-medium">{note.content}</span>
 
@@ -66,16 +66,15 @@ export default function Note({ note, type }: NoteProps) {
           {<Trash2 size={18} className="mr-2 text-red-500" />} Remove
         </Button>
       </CardDescription>
-      {showModal && (
-        <FormModal
-          showModal={showModal}
-          heading={"Delete note?"}
-          pending={deleteNote.isLoading}
-          cancel={() => setShowModal(false)}
-          text={"Are you sure you want to delete this note?"}
-          submit={() => deleteNote.mutateAsync({ id: note.id })}
-        />
-      )}
+
+      <FormModal
+        open={showModal}
+        cancel={setShowModal}
+        heading={"Delete note?"}
+        pending={deleteNote.isLoading}
+        text={"Are you sure you want to delete this note?"}
+        submit={() => deleteNote.mutateAsync({ id: note.id })}
+      />
     </Card>
   )
 }

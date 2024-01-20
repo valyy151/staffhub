@@ -101,7 +101,7 @@ export default function ShiftModel({
 
   return (
     <>
-      <Card className="w-fit">
+      <Card className="w-full md:w-fit">
         <CardHeader>
           <CardTitle>
             {start} - {end}
@@ -176,16 +176,15 @@ export default function ShiftModel({
           </AlertDialogContent>
         </AlertDialog>
       )}
-      {showModal && (
-        <FormModal
-          showModal={showModal}
-          pending={deleteShiftModel.isLoading}
-          heading={"Delete Shift Model?"}
-          cancel={() => setShowModal(false)}
-          text="Are you sure you want to delete this shift model?"
-          submit={() => deleteShiftModel.mutate({ id: shiftModel.id })}
-        />
-      )}
+
+      <FormModal
+        open={showModal}
+        cancel={setShowModal}
+        heading={"Delete Shift Model?"}
+        pending={deleteShiftModel.isLoading}
+        text="Are you sure you want to delete this shift model?"
+        submit={() => deleteShiftModel.mutate({ id: shiftModel.id })}
+      />
     </>
   )
 }

@@ -41,15 +41,14 @@ export default function DeleteStaff({ id }: { id: string }) {
       >
         Delete Employee
       </Button>
-      {showModal && (
-        <FormModal
-          showModal={showModal}
-          pending={deleteStaff.isLoading}
-          cancel={() => setShowModal(false)}
-          submit={() => deleteStaff.mutate({ id })}
-          text="Are you sure you want to delete this employee?"
-        />
-      )}
+
+      <FormModal
+        open={showModal}
+        cancel={setShowModal}
+        pending={deleteStaff.isLoading}
+        submit={() => deleteStaff.mutate({ id })}
+        text="Are you sure you want to delete this employee?"
+      />
     </>
   )
 }

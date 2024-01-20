@@ -36,7 +36,7 @@ export default async function StaffVacation({
   )
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-baseline justify-between md:flex-row md:items-center">
         <Heading size={"xs"}>Vacations for {employee?.name}</Heading>
         <CreateAbsence type="vacation" employee={employee} />
       </div>
@@ -45,7 +45,7 @@ export default async function StaffVacation({
       ) : (
         <div className="mt-4 min-w-[46rem] rounded-md border bg-green-500 p-2 text-white">
           <Heading size={"xxs"} className="flex items-center">
-            <PalmtreeIcon size={42} className="ml-1 mr-2 text-white" />
+            <PalmtreeIcon size={32} className="ml-1 mr-2 text-white" />
             Currently not on vacation
           </Heading>
         </div>
@@ -54,28 +54,28 @@ export default async function StaffVacation({
       {upcomingVacations.length > 0 ? (
         <>
           <Heading size={"xxs"} className="mb-3 mt-12 flex items-center">
-            <PalmtreeIcon size={42} className="ml-1 mr-2 text-green-400" />
+            <PalmtreeIcon size={32} className="ml-1 mr-2 text-green-400" />
             Upcoming Vacations
           </Heading>
 
           {upcomingVacations?.map((vacation) => (
-            <Absence type="vacation" key={vacation.id} absence={vacation} />
+            <Absence key={vacation.id} type="vacation" absence={vacation} />
           ))}
         </>
       ) : (
         <>
           <Heading size={"xxs"} className="mb-3 mt-12 flex items-center">
-            <PalmtreeIcon size={42} className="ml-1 mr-2 text-green-400" />
+            <PalmtreeIcon size={32} className="ml-1 mr-2 text-green-400" />
             Upcoming Vacations
           </Heading>
-          <p className="ml-14 mt-4">No upcoming vacations</p>
+          <p className="ml-8 mt-4 text-sm md:ml-14">No upcoming vacations</p>
         </>
       )}
 
       {pastVacations.length > 0 ? (
         <>
           <Heading size={"xxs"} className="mb-3 mt-12 flex items-center">
-            <PalmtreeIcon size={42} className="ml-1 mr-2 text-gray-400" />
+            <PalmtreeIcon size={32} className="ml-1 mr-2 text-gray-400" />
             Previous Vacations
           </Heading>
 
@@ -86,10 +86,10 @@ export default async function StaffVacation({
       ) : (
         <>
           <Heading size={"xxs"} className="mb-3 mt-12 flex items-center">
-            <PalmtreeIcon size={42} className="ml-1 mr-2 text-gray-400" />
+            <PalmtreeIcon size={32} className="ml-1 mr-2 text-gray-400" />
             Past Vacations
           </Heading>
-          <p className="ml-14 mt-4">No past vacations</p>
+          <p className="ml-8 mt-4 text-sm md:ml-14">No past vacations</p>
         </>
       )}
     </>

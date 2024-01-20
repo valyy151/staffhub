@@ -67,9 +67,9 @@ export default function EditPreferences({
 
   return (
     <>
-      <Button className="ml-8 w-fit" onClick={() => setShowEdit(true)}>
+      <Button className="w-fit md:ml-8" onClick={() => setShowEdit(true)}>
         <Sticker className="mr-2" />
-        Edit Schedule Preferences
+        Edit Preferences
       </Button>
       {showEdit && (
         <AlertDialog open>
@@ -101,8 +101,8 @@ export default function EditPreferences({
                     className="my-0.5 mr-2 h-6 w-6 cursor-pointer accent-primary focus:ring-0 focus:ring-offset-0"
                   />
                   <label htmlFor={shiftModel.id} className="cursor-pointer">
-                    {formatTime(shiftModel.start * 1000)} -{" "}
-                    {formatTime(shiftModel.end * 1000)}
+                    {formatTime(shiftModel.start)} -{" "}
+                    {formatTime(shiftModel.end)}
                   </label>
                 </div>
               ))}

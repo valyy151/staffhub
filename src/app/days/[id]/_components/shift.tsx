@@ -225,16 +225,15 @@ export default function Shift({ shift, shiftModels }: ShiftProps) {
           </AlertDialogContent>
         </AlertDialog>
       )}
-      {showModal && (
-        <FormModal
-          heading="Delete Shift?"
-          showModal={showModal}
-          cancel={() => setShowModal(false)}
-          pending={deleteShiftMutation.isLoading}
-          text="Are you sure you want to delete this shift?"
-          submit={() => deleteShiftMutation.mutate({ shiftId: shift.id })}
-        />
-      )}
+
+      <FormModal
+        open={showModal}
+        cancel={setShowModal}
+        heading="Delete Shift?"
+        pending={deleteShiftMutation.isLoading}
+        text="Are you sure you want to delete this shift?"
+        submit={() => deleteShiftMutation.mutate({ shiftId: shift.id })}
+      />
     </>
   )
 }

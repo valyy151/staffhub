@@ -1,5 +1,5 @@
 "use client"
-import { ClipboardListIcon, ClockIcon, UserCogIcon } from "lucide-react"
+import { ClipboardListIcon, UserCogIcon, UserIcon } from "lucide-react"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 
@@ -12,17 +12,19 @@ export default function SettingsLayout({
 
   return (
     <div className="flex">
-      <aside className="sticky top-0 h-screen w-56 border-r p-4">
+      <aside className="sticky top-0 h-screen border-r p-4 md:w-56">
         <nav className="space-y-2">
           <Link
             scroll={false}
             href={`/settings`}
-            className={`flex w-full items-center space-x-2 rounded-lg px-2 py-2 hover:bg-accent ${
+            className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 hover:bg-accent ${
               segment === "(account)" && "bg-secondary"
             }`}
           >
-            <ClockIcon />
-            <span className="text-sm font-medium">Account</span>
+            <UserIcon />
+            <span className="hidden text-sm font-medium md:inline-flex">
+              Account
+            </span>
           </Link>
           <Link
             scroll={false}
@@ -32,7 +34,9 @@ export default function SettingsLayout({
             }`}
           >
             <ClipboardListIcon />
-            <span className="text-sm font-medium">Staff Roles</span>
+            <span className="hidden text-sm font-medium md:inline-flex">
+              Staff Roles
+            </span>
           </Link>
           <Link
             scroll={false}
@@ -42,7 +46,9 @@ export default function SettingsLayout({
             }`}
           >
             <UserCogIcon />
-            <span className="text-sm font-medium">Shift Models</span>
+            <span className="hidden text-sm font-medium md:inline-flex">
+              Shift Models
+            </span>
           </Link>
         </nav>
       </aside>

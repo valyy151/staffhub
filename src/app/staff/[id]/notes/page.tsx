@@ -28,8 +28,8 @@ export default async function StaffNotes({
   const employee = await api.staff.getNotes.query({ id: params.id })
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <Heading size={"xs"} className="min-w-[28rem]">
+      <div className="flex flex-col items-baseline justify-between md:flex-row md:items-center">
+        <Heading size={"xs"} className="md:min-w-[28rem]">
           Notes for {employee?.name}
         </Heading>
         <CreateNote id={employee?.id as string} type="employee" />

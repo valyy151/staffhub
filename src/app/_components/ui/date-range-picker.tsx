@@ -48,10 +48,10 @@ export function DatePickerWithRange({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
-            numberOfMonths={2}
+            numberOfMonths={1}
+            defaultMonth={date?.from}
           />
         </PopoverContent>
       </Popover>

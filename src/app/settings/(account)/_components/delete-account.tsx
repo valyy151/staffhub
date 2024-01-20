@@ -39,16 +39,15 @@ export default function DeleteAccount() {
       <Button variant={"destructive"} onClick={() => setShowModal(true)}>
         Delete my Account
       </Button>
-      {showModal && (
-        <FormModal
-          showModal={showModal}
-          pending={deleteUser.isLoading}
-          cancel={() => setShowModal(false)}
-          submit={() => deleteUser.mutate()}
-          heading="Are you sure you want to delete your account?"
-          text="You will also lose all the data that you have. This change is not reversible."
-        />
-      )}
+
+      <FormModal
+        open={showModal}
+        cancel={setShowModal}
+        pending={deleteUser.isLoading}
+        submit={() => deleteUser.mutate()}
+        heading="Are you sure you want to delete your account?"
+        text="You will also lose all the data that you have. This change is not reversible."
+      />
     </>
   )
 }

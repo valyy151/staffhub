@@ -78,7 +78,7 @@ export default function CreateModel() {
 
   return (
     <>
-      <div className="space-x-2">
+      <div className="flex flex-col gap-1 md:flex-row">
         <Button onClick={() => setShowCreate(true)}>
           <UserCogIcon className="mr-2" /> New Shift Model
         </Button>
@@ -86,67 +86,65 @@ export default function CreateModel() {
           <InfoIcon className="mr-2" /> What are Shift Models?
         </Button>
       </div>
-      {showCreate && (
-        <AlertDialog open>
-          <AlertDialogContent className="min-w-[35rem]">
-            <AlertDialogHeader>
-              <AlertDialogTitle> New Shift Model</AlertDialogTitle>
-            </AlertDialogHeader>
-            <div className="flex items-center space-x-4">
-              <div>
-                <label htmlFor="start">Start</label>
+      <AlertDialog open={showCreate}>
+        <AlertDialogContent className="min-w-[35rem]">
+          <AlertDialogHeader>
+            <AlertDialogTitle> New Shift Model</AlertDialogTitle>
+          </AlertDialogHeader>
+          <div className="flex w-full flex-col items-center gap-2">
+            <div className="w-full">
+              <label htmlFor="start">Start</label>
 
-                <Input
-                  type="text"
-                  name="start"
-                  value={start}
-                  className="w-44"
-                  placeholder="Start time"
-                  onChange={(e) =>
-                    handleTimeChange(e.target.value, "start", setStart, setEnd)
-                  }
-                />
-              </div>
-
-              <div>
-                <label htmlFor="end">End</label>
-
-                <Input
-                  name="end"
-                  type="text"
-                  value={end}
-                  className="w-44"
-                  placeholder="End time"
-                  onChange={(e) =>
-                    handleTimeChange(e.target.value, "end", setStart, setEnd)
-                  }
-                />
-              </div>
-              <div>
-                <label htmlFor="end" className="ml-2">
-                  Total
-                </label>
-
-                <Heading size={"xxs"} className="ml-2 mt-2">
-                  {renderTotal(start, end)}
-                </Heading>
-              </div>
+              <Input
+                type="text"
+                name="start"
+                value={start}
+                className="w-full"
+                placeholder="Start time"
+                onChange={(e) =>
+                  handleTimeChange(e.target.value, "start", setStart, setEnd)
+                }
+              />
             </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setShowCreate(false)}>
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={handleSubmit}
-                disabled={createModel.isLoading}
-                aria-disabled={createModel.isLoading}
-              >
-                Continue
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
+
+            <div className="w-full">
+              <label htmlFor="end">End</label>
+
+              <Input
+                name="end"
+                type="text"
+                value={end}
+                className="w-full"
+                placeholder="End time"
+                onChange={(e) =>
+                  handleTimeChange(e.target.value, "end", setStart, setEnd)
+                }
+              />
+            </div>
+            <div className="flex items-baseline">
+              <label htmlFor="end" className="ml-2">
+                Total:
+              </label>
+
+              <Heading size={"xxs"} className="ml-2 mt-2">
+                {renderTotal(start, end)}
+              </Heading>
+            </div>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowCreate(false)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleSubmit}
+              disabled={createModel.isLoading}
+              aria-disabled={createModel.isLoading}
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <InfoModal
         open={showModal}

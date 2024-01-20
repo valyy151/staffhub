@@ -36,8 +36,8 @@ export default async function StaffPreferences({
   const employee = await api.staff.getPreference.query({ id: params.id })
   return (
     <div className="flex flex-col">
-      <div className="flex items-center">
-        <Heading size={"xs"}>Schedule preferences for {employee?.name}</Heading>
+      <div className="flex flex-col md:flex-row">
+        <Heading size={"xs"}>Shift preferences for {employee?.name}</Heading>
         <EditPreferences employee={employee} />
       </div>
       <div className="mt-4 flex space-x-8">
@@ -48,13 +48,20 @@ export default async function StaffPreferences({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {employee?.schedulePreference?.shiftModels.map((shiftModel) => (
-              <TableRow key={shiftModel.id} className="hover:bg-inherit">
-                <TableCell>
-                  {formatTime(shiftModel.start)} - {formatTime(shiftModel.end)}
-                </TableCell>
+            {employee?.schedulePreference?.shiftModels.length! > 0 ? (
+              employee?.schedulePreference?.shiftModels.map((shiftModel) => (
+                <TableRow key={shiftModel.id} className="hover:bg-inherit">
+                  <TableCell>
+                    {formatTime(shiftModel.start)} -{" "}
+                    {formatTime(shiftModel.end)}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow className="hover:bg-inherit">
+                <TableCell>Not assigned</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
 

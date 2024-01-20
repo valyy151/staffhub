@@ -87,7 +87,7 @@ export default function Absence({
         <DropdownMenuTrigger className="focus-visible:outline-none">
           <MoreVerticalIcon size={20} />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="mt-2">
           <DropdownMenuItem
             className="cursor-pointer text-sm"
             onClick={() => setShowModal(true)}
@@ -98,18 +98,16 @@ export default function Absence({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {showModal && (
-        <FormModal
-          showModal={showModal}
-          pending={deleteAbsence.isLoading}
-          cancel={() => setShowModal(false)}
-          submit={() => deleteAbsence.mutate({ id: absence.id })}
-          heading={`Delete ${type === "vacation" ? "vacation" : "sick leave"}?`}
-          text={`Are you sure you want to delete this ${
-            type === "vacation" ? "vacation" : "sick leave"
-          }?`}
-        />
-      )}
+      <FormModal
+        open={showModal}
+        cancel={setShowModal}
+        pending={deleteAbsence.isLoading}
+        submit={() => deleteAbsence.mutate({ id: absence.id })}
+        heading={`Delete ${type === "vacation" ? "vacation" : "sick leave"}?`}
+        text={`Are you sure you want to delete this ${
+          type === "vacation" ? "vacation" : "sick leave"
+        }?`}
+      />
     </div>
   )
 }

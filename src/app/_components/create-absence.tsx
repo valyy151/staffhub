@@ -1,21 +1,19 @@
 "use client"
 import { addDays, differenceInDays, startOfToday } from "date-fns"
-import { HeartPulseIcon } from "lucide-react"
+import { HeartPulseIcon, PalmtreeIcon } from "lucide-react"
 import { useRouter } from "next-nprogress-bar"
 import { useState } from "react"
 
 import { api } from "@/trpc/react"
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog"
 import { Button } from "./ui/button"
 import { DatePickerWithRange } from "./ui/date-range-picker"
 import { useToast } from "./ui/use-toast"
@@ -64,50 +62,49 @@ export default function NewAbsence({
 
   return (
     <>
-      <Button onClick={() => setShowCreate(true)} className="ml-16">
-        <HeartPulseIcon size={20} className="mr-2" />
+      <Button onClick={() => setShowCreate(true)} className="md:ml-16">
+        {type === "vacation" ? (
+          <PalmtreeIcon size={20} className="mr-2"></PalmtreeIcon>
+        ) : (
+          <HeartPulseIcon size={20} className="mr-2" />
+        )}
         New {type === "vacation" ? "Vacation" : "Sick Leave"}
       </Button>
 
-      {showCreate && (
-        <AlertDialog open>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                New {type === "vacation" ? "Vacation" : "Sick Leave"}{" "}
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Days planned:{" "}
-                <span>
-                  {differenceInDays(date?.to!, date?.from!) + 1 > 0
-                    ? differenceInDays(date?.to!, date?.from!) + 1
-                    : 0}
-                </span>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <DatePickerWithRange date={date} setDate={setDate} />
+      <Dialog open={showCreate} onOpenChange={setShowCreate}>
+        <DialogContent className="min-h-max">
+          <DialogHeader>
+            <DialogTitle>
+              New {type === "vacation" ? "Vacation" : "Sick Leave"}{" "}
+            </DialogTitle>
+            <DialogDescription>
+              Days planned:{" "}
+              <span>
+                {differenceInDays(date?.to!, date?.from!) + 1 > 0
+                  ? differenceInDays(date?.to!, date?.from!) + 1
+                  : 0}
+              </span>
+            </DialogDescription>
+          </DialogHeader>
+          <DatePickerWithRange date={date} setDate={setDate} />
 
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setShowCreate(false)}>
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => {
-                  createAbsence.mutate({
-                    employeeId: employee?.id as string,
-                    end: date?.to?.getTime() as number,
-                    start: date?.from?.getTime() as number,
-                  })
-                }}
-                disabled={createAbsence.isLoading}
-                aria-disabled={createAbsence.isLoading}
-              >
-                Continue
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                createAbsence.mutate({
+                  employeeId: employee?.id as string,
+                  end: date?.to?.getTime() as number,
+                  start: date?.from?.getTime() as number,
+                })
+              }}
+              disabled={createAbsence.isLoading}
+              aria-disabled={createAbsence.isLoading}
+            >
+              Submit
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

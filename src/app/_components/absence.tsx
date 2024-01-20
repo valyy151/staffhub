@@ -52,11 +52,11 @@ export default function Absence({
   })
 
   return (
-    <Card className="mb-4">
-      <CardHeader className="px-4 py-2">
-        <div className="text-md flex flex-col text-muted-foreground">
+    <Card className="mb-2 md:mb-4">
+      <CardHeader className="px-2 py-2 md:px-4">
+        <div className="md:text-md flex flex-col text-xs text-muted-foreground">
           <div className="flex items-center justify-between pb-6">
-            <CardTitle className="text-lg">
+            <CardTitle className="text-md md:text-lg">
               Amount: {howManyDays(absence) + 1}{" "}
               {type === "vacation" ? "Vacation" : "Sick"}{" "}
               {howManyDays(absence) + 1 === 1 ? "Day" : "Days"}
@@ -65,7 +65,7 @@ export default function Absence({
               <DropdownMenuTrigger className="focus-visible:outline-none">
                 <MoreVerticalIcon size={18} />
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent className="mt-2">
                 <DropdownMenuItem
                   className="cursor-pointer text-sm"
                   onClick={() => setShowModal(true)}
@@ -97,18 +97,16 @@ export default function Absence({
         </div>
       </CardHeader>
 
-      {showModal && (
-        <FormModal
-          showModal={showModal}
-          cancel={() => setShowModal(false)}
-          pending={deleteAbsence.isLoading}
-          submit={() => deleteAbsence.mutate({ id: absence.id })}
-          heading={`Delete ${type === "vacation" ? "vacation" : "sick Leave"}?`}
-          text={`Are you sure you want to delete this ${
-            type === "vacation" ? "vacation" : "sick leave"
-          }?`}
-        />
-      )}
+      <FormModal
+        open={showModal}
+        cancel={setShowModal}
+        pending={deleteAbsence.isLoading}
+        submit={() => deleteAbsence.mutate({ id: absence.id })}
+        heading={`Delete ${type === "vacation" ? "vacation" : "sick Leave"}?`}
+        text={`Are you sure you want to delete this ${
+          type === "vacation" ? "vacation" : "sick leave"
+        }?`}
+      />
     </Card>
   )
 }

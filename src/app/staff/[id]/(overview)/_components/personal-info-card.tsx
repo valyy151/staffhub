@@ -25,6 +25,7 @@ import { Input } from "@/app/_components/ui/input"
 import { api } from "@/trpc/react"
 import type { StaffIdOutput } from "@/trpc/shared"
 import { useToast } from "@/app/_components/ui/use-toast"
+import { Button } from "@/app/_components/ui/button"
 
 export default function PersonalInfoCard({
   employee,
@@ -98,7 +99,14 @@ export default function PersonalInfoCard({
           </CardDescription>
         </CardContent>
         <CardFooter>
-          <button onClick={() => setEdit(true)}>Edit</button>
+          <Button
+            size={"sm"}
+            className="px-6"
+            variant={"outline"}
+            onClick={() => setEdit(true)}
+          >
+            Edit
+          </Button>
         </CardFooter>
       </Card>
       {edit && (

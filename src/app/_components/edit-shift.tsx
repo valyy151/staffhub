@@ -289,16 +289,15 @@ export default function EditShift({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      {showDelete && (
-        <FormModal
-          submit={deleteShift}
-          showModal={showDelete}
-          heading="Are you absolutely sure?"
-          cancel={() => setShowDelete(false)}
-          pending={deleteShiftMutation.isLoading}
-          text="Are you sure you want to delete this shift?"
-        />
-      )}
+
+      <FormModal
+        open={showDelete}
+        submit={deleteShift}
+        cancel={setShowDelete}
+        heading="Are you absolutely sure?"
+        pending={deleteShiftMutation.isLoading}
+        text="Are you sure you want to delete this shift?"
+      />
     </>
   )
 }
