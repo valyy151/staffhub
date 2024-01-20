@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import type { Absence, Shift } from "./types"
+import type { ScheduleData } from "@/lib/types"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -391,4 +392,47 @@ export const handleTimeChange = (
       ? setStart(formatTime(newUnixTime))
       : setEnd(formatTime(newUnixTime))
   }
+}
+
+export const handleScheduleTimeChange = (
+  index: number,
+  newTime: string,
+  field: "start" | "end",
+  data: ScheduleData,
+  setData: (data: ScheduleData) => void,
+) => {
+  if (newTime.length > 5) {
+    return
+  }
+
+  if (newTime.length === 2) {
+    if (Number(newTime) > 23) {
+      return
+    }
+    newTime += ":"
+  }
+
+  const newData = data.map((d, i) =>
+    i === index ? { ...d, [field]: newTime } : d,
+  )
+  setData(newData)
+}
+
+//function like handleScheduleTimeChange but it will apply it for both start and end
+export const handleTimeWithClick = (
+  index: number,
+  shiftModel: string,
+  data: ScheduleData,
+  setData: (data: ScheduleData) => void,
+) => {
+  const [start, end] = shiftModel?.split("-") as string[]
+
+  if (!start || !end) {
+    return
+  }
+
+  const newData = data.map((d, i) =>
+    i === index ? { ...d, start: start, end: end } : d,
+  )
+  setData(newData)
 }

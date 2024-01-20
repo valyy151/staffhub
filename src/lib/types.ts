@@ -42,3 +42,17 @@ export type ShiftEmployee = StaffScheduleOutput &
 
 export type ShiftRow = WorkDayShiftsOutput["shifts"][number] &
   StaffScheduleShift
+
+export type ScheduleData = {
+  date: number
+  end?: string
+  start?: string
+}[]
+
+export type ScheduleTableProps = {
+  data: ScheduleData
+  shiftModel: string
+  sickDays: number[]
+  vacationDays: number[]
+  setData: (data: ScheduleData) => void
+}

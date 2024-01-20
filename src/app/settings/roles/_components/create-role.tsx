@@ -20,13 +20,11 @@ import { Button } from "@/app/_components/ui/button"
 import { Input } from "@/app/_components/ui/input"
 import InfoModal from "@/app/_components/ui/info-modal"
 
-const sentences = {
-  data: [
-    "Staff roles are used to assign permissions to staff members.",
-    "For example, you can create a role called 'Manager' or 'Drive' and assign it to one of your staff members.",
-    "You can then use these roles when planning your schedules to know what roles are filled and what roles need to be filled.",
-  ],
-}
+const sentences = [
+  "Staff roles are used to assign permissions to staff members.",
+  "For example, you can create a role called 'Manager' or 'Drive' and assign it to one of your staff members.",
+  "You can then use these roles when planning your schedules to know what roles are filled and what roles need to be filled.",
+]
 
 export default function CreateRole() {
   const { toast } = useToast()
@@ -82,13 +80,12 @@ export default function CreateRole() {
           <InfoIcon className="mr-2" /> What are Staff Roles?
         </Button>
       </div>
-      {showModal && (
-        <InfoModal
-          text={sentences}
-          heading="What are Staff Roles?"
-          close={() => setShowModal(false)}
-        />
-      )}
+      <InfoModal
+        open={showModal}
+        text={sentences}
+        close={setShowModal}
+        heading="What are Staff Roles?"
+      />
 
       {showCreate && (
         <AlertDialog open>

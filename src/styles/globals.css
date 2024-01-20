@@ -81,7 +81,7 @@
 }
 
 /* Common styles for multiple elements */
-.react-calendar__navigation__arrow,
+
 .react-calendar__tile,
 .react-calendar__tile--now {
   @apply rounded-md duration-100 hover:bg-secondary focus:bg-primary focus:text-white focus:hover:bg-primary active:text-white dark:focus:text-black dark:active:text-black !important;
@@ -89,12 +89,17 @@
 
 /* Styles for calendar and navigation buttons */
 .react-calendar,
+.react-calendar__navigation__arrow,
 .react-calendar__navigation__label,
 .react-calendar__navigation__next-button,
 .react-calendar__navigation__prev-button,
 .react-calendar__navigation__next2-button,
 .react-calendar__navigation__prev2-button {
   @apply min-w-[2rem] cursor-pointer rounded-md border-border bg-background text-sm duration-100 !important;
+}
+
+.react-calendar__navigation__arrow {
+  @apply active:bg-primary active:text-secondary !important;
 }
 
 /* Styles for the current tile */

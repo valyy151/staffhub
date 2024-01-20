@@ -1,7 +1,4 @@
-import { useRef } from "react"
-
-import { Input } from "@/app/_components/ui/input"
-import { TableCell, TableRow } from "@/app/_components/ui/table"
+import { Card } from "@/app/_components/ui/card"
 import {
   formatDate,
   formatDay,
@@ -9,43 +6,32 @@ import {
   handleTimeWithClick,
   renderTotal,
 } from "@/lib/utils"
-import type { ScheduleData } from "@/lib/types"
+import { Input } from "@/app/_components/ui/input"
+import { useRef } from "react"
+import type { ScheduleData, ScheduleTableProps } from "@/lib/types"
 
-type Props = {
-  data: ScheduleData
-  index: number
-  shiftModel: string
-  item: {
-    date: number
-    end?: string | undefined
-    start?: string | undefined
-  }
-  sickDays: number[]
-  vacationDays: number[]
-  setData: (data: ScheduleData) => void
-}
-
-export default function ShiftRow({
+export default function ShiftCard({
   data,
   item,
   index,
-  shiftModel,
   setData,
   sickDays,
+  shiftModel,
   vacationDays,
-}: Props) {
+}: ScheduleTableProps & { item: ScheduleData[number]; index: number }) {
   const endRef = useRef<HTMLInputElement>(null)
   const startRef = useRef<HTMLInputElement>(null)
 
   return (
-    <TableRow className="hover:bg-inherit">
-      <TableCell className="flex pt-6">
+    <Card className="p-4 shadow">
+      <div className="flex items-center justify-between pb-2">
         <span> {formatDay(item.date, "long")}</span>
         <span className="ml-auto">{formatDate(item.date, "long")}</span>
-      </TableCell>
+      </div>
       {shiftModel ? (
         <>
-          <TableCell
+          <div
+            className="flex flex-col items-center py-1"
             onClick={() =>
               handleTimeWithClick(index, shiftModel, data, setData)
             }
@@ -67,7 +53,7 @@ export default function ShiftRow({
                   ? "Vacation"
                   : undefined || sickDays.includes(item.date)
                     ? "Sick"
-                    : undefined
+                    : undefined ?? "Start"
               }
               disabled={
                 sickDays.includes(item.date) || vacationDays.includes(item.date)
@@ -78,8 +64,9 @@ export default function ShiftRow({
                 "hover:ring-0.5 w-fit cursor-pointer ring-gray-800 dark:ring-gray-50"
               }`}
             />
-          </TableCell>
-          <TableCell
+          </div>
+          <div
+            className="flex flex-col items-center py-1"
             onClick={() =>
               handleTimeWithClick(index, shiftModel, data, setData)
             }
@@ -98,6 +85,13 @@ export default function ShiftRow({
               disabled={
                 sickDays.includes(item.date) || vacationDays.includes(item.date)
               }
+              placeholder={
+                vacationDays.includes(item.date)
+                  ? "Vacation"
+                  : undefined || sickDays.includes(item.date)
+                    ? "Sick"
+                    : undefined ?? "End"
+              }
               className={`w-fit ${
                 shiftModel &&
                 !vacationDays.includes(item.date) &&
@@ -105,11 +99,11 @@ export default function ShiftRow({
               }`}
               type="text"
             />
-          </TableCell>
+          </div>
         </>
       ) : (
         <>
-          <TableCell>
+          <div className="flex flex-col items-center py-1">
             <Input
               type="text"
               autoFocus={index === 0}
@@ -118,7 +112,7 @@ export default function ShiftRow({
                   ? "Vacation"
                   : undefined || sickDays.includes(item.date)
                     ? "Sick"
-                    : undefined
+                    : undefined ?? "Start"
               }
               onKeyDown={(e) => {
                 if (e.key === "Backspace") {
@@ -143,9 +137,9 @@ export default function ShiftRow({
               }
               className="w-fit "
             />
-          </TableCell>
+          </div>
 
-          <TableCell>
+          <div className="flex flex-col items-center py-1">
             <Input
               value={item.end!}
               disabled={
@@ -160,6 +154,13 @@ export default function ShiftRow({
                   setData,
                 )
               }
+              placeholder={
+                vacationDays.includes(item.date)
+                  ? "Vacation"
+                  : undefined || sickDays.includes(item.date)
+                    ? "Sick"
+                    : undefined ?? "End"
+              }
               onKeyDown={(e) => {
                 if (e.key === "Backspace") {
                   e.currentTarget.select()
@@ -171,30 +172,30 @@ export default function ShiftRow({
               className="w-fit"
               type="text"
             />
-          </TableCell>
+          </div>
         </>
       )}
 
       {item.start && item.end ? (
-        <TableCell title="Total hours in shift" className="text-right">
-          {renderTotal(item.start, item.end)}
-        </TableCell>
+        <div title="Total hours in shift" className="text-center">
+          Total: {renderTotal(item.start, item.end)}
+        </div>
       ) : null}
 
       {(vacationDays.includes(item.date) || sickDays.includes(item.date)) && (
-        <TableCell title="Total hours in shift" className="text-right">
-          8h
-        </TableCell>
+        <div title="Total hours in shift" className="text-center">
+          Total: 8h
+        </div>
       )}
 
       {!item.end &&
         !item.start &&
         !sickDays.includes(item.date) &&
         !vacationDays.includes(item.date) && (
-          <TableCell title="Total hours in shift" className="text-right">
+          <div title="Total hours in shift" className="text-center">
             -
-          </TableCell>
+          </div>
         )}
-    </TableRow>
+    </Card>
   )
 }

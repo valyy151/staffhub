@@ -1,6 +1,6 @@
 "use client"
 
-import { CalendarPlusIcon, InfoIcon, XIcon } from "lucide-react"
+import { CalendarPlusIcon, InfoIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import Calendar from "react-calendar"
@@ -17,39 +17,43 @@ import { api } from "@/trpc/react"
 import type { StaffDropdownOutput } from "@/trpc/shared"
 
 import {
-  AlertDialog,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogContent,
-} from "../../_components/ui/alert-dialog"
-import ScheduleTable from "./schedule-table"
+  Dialog,
+  DialogHeader,
+  DialogTitle,
+  DialogContent,
+} from "@/app/_components/ui/dialog"
+import { ScheduleTable } from "./schedule-table"
 import { useToast } from "@/app/_components/ui/use-toast"
 import Heading from "@/app/_components/ui/heading"
 import SelectStaff from "@/app/_components/select-staff"
 import SelectShiftModel from "@/app/_components/select-shift-model"
 import { Button } from "@/app/_components/ui/button"
 import InfoModal from "@/app/_components/ui/info-modal"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/app/_components/ui/drawer"
+import { MobileScheduleTable } from "./schedule-table"
 
 type ShiftModel = { id: string; end: number; start: number }
 
-const sentences = {
-  data: [
-    "Start by selecting a staff member on the left and choosing which month you want to make a schedule for.",
-    "If the staff member has any schedule preferences, you will see them below the table. You can use the shift models from there to quickly assign a shift to a day.",
-    "Alternatively you can write the schedule manually. You can do this by clicking on the day you want to edit.",
-    "For each day, there are 2 inputs: one for the start time and one for the end time.",
-    "Type the start time and end time in the format HH:MM (24 hour format). For example 09:00 - 16:45.",
-    "If you already made the schedule but want to make changes, go to the Dashboard and edit that particular day.",
-  ],
-}
+const sentences = [
+  "Start by selecting a staff member and choosing which month you want to make a schedule for.",
+  "If the staff member has any schedule preferences, you will see them below the table. You can use the shift models from there to quickly assign a shift to a day.",
+  "Alternatively you can write the schedule manually. You can do this by clicking on the day you want to edit.",
+  "For each day, there are 2 inputs: one for the start time and one for the end time.",
+  "Type the start time and end time in the format HH:MM (24 hour format). For example 09:00 - 16:45.",
+  "If you already made the schedule but want to make changes, go to the Dashboard and edit that particular day.",
+]
 
 export default function SchedulePlanner({
   shiftModels,
 }: {
   shiftModels: ShiftModel[]
 }) {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-
   const [loading, setLoading] = useState<boolean>(false)
 
   const [value, setValue] = useState<Date>(new Date())
@@ -155,10 +159,9 @@ export default function SchedulePlanner({
         e.preventDefault()
         setShiftModel("")
       }}
-      onClick={() => isOpen && setIsOpen(false)}
-      className="p-4"
+      className="p-2 pb-48 xl:p-4 xl:pb-0"
     >
-      <section className="flex">
+      <section className="hidden xl:flex">
         <div className="flex">
           <div>
             {employee?.name && schedule ? (
@@ -300,39 +303,133 @@ export default function SchedulePlanner({
         </div>
       </section>
 
-      {showCalendar && (
-        <AlertDialog open>
-          <AlertDialogContent className="justify-center">
-            <Button
-              variant={"link"}
-              onClick={() => setShowCalendar(false)}
-              className="absolute right-2 top-0 w-fit p-1"
-            >
-              <XIcon size={16} />
-            </Button>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Choose a Month</AlertDialogTitle>
-            </AlertDialogHeader>
-            <Calendar
-              maxDetail="year"
-              next2Label={null}
-              prev2Label={null}
-              onChange={(value) => {
-                setShowCalendar(false)
-                setValue(value as Date)
-                handleMonthChange(value as Date)
-              }}
-            />
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
-      {showModal && (
-        <InfoModal
-          text={sentences}
-          close={() => setShowModal(false)}
-          heading="How do I write a schedule?"
+      <section className="flex flex-col items-center xl:hidden">
+        <Button
+          size={"lg"}
+          variant={"secondary"}
+          className="border"
+          title="How do I make a schedule?"
+          onClick={() => setShowModal(true)}
+        >
+          <InfoIcon className="mr-2" /> How do I write a schedule?
+        </Button>
+
+        <MobileScheduleTable
+          data={schedule}
+          sickDays={sickDays}
+          setData={setSchedule}
+          shiftModel={shiftModel}
+          vacationDays={vacationDays}
         />
-      )}
+        <Button
+          title="Create schedule"
+          className="mt-4 w-48"
+          size={"lg"}
+          disabled={loading}
+          onClick={createSchedule}
+        >
+          <CalendarPlusIcon className="mr-2" /> Submit
+        </Button>
+        <div className="fixed bottom-0 flex w-full items-center justify-center border-t bg-card p-4">
+          <Drawer>
+            <DrawerTrigger>
+              <Heading size={"xs"}>
+                {employee?.name ?? "Select a staff member"} -{" "}
+                {value.toLocaleDateString("en-GB", {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </Heading>
+
+              {shiftModel && employee?.name && shiftModel !== "None" && (
+                <Heading size={"xxs"} className="space-x-2">
+                  <span>Shift model selected:</span>
+                  <span className="text-sm font-normal">{shiftModel}</span>
+                </Heading>
+              )}
+              {employee?.name && (
+                <Heading size={"xxs"} className="space-x-2">
+                  <span> Hours planned this month:</span>
+                  <span className="text-sm font-normal">
+                    {" "}
+                    {calculateHours(schedule)}
+                  </span>
+                </Heading>
+              )}
+            </DrawerTrigger>
+            <DrawerContent className="flex flex-col items-center py-4">
+              <DrawerHeader>
+                <Button onClick={() => setShowCalendar(true)} size={"lg"}>
+                  {value.toLocaleDateString("en-GB", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </Button>
+              </DrawerHeader>
+              <DrawerHeader>
+                <DrawerTitle>Select a staff member </DrawerTitle>
+              </DrawerHeader>
+              <SelectStaff
+                staff={staff}
+                employee={employee}
+                setEmployee={setEmployee}
+              />
+
+              {employee?.name &&
+                employee.schedulePreference?.shiftModels.length! > 0 && (
+                  <div className="mt-2 flex flex-col items-center">
+                    <Heading size={"xxs"}>Shift Preferences</Heading>
+                    <div className="flex flex-col items-center">
+                      {employee.schedulePreference?.shiftModels.map((item) => (
+                        <p key={item.id} className=" my-0.5 text-sm">
+                          ({formatTime(item.start)} - {formatTime(item.end)})
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              {shiftModels?.length! > 0 && (
+                <DrawerHeader>
+                  <DrawerTitle>Select a shift model </DrawerTitle>
+                  <SelectShiftModel
+                    shiftModel={shiftModel}
+                    shiftModels={shiftModels}
+                    setShiftModel={setShiftModel}
+                  />
+                </DrawerHeader>
+              )}
+            </DrawerContent>
+          </Drawer>
+        </div>
+      </section>
+
+      <Dialog open={showCalendar} onOpenChange={setShowCalendar}>
+        <DialogContent className="justify-center">
+          <DialogHeader>
+            <DialogTitle>Choose a Month</DialogTitle>
+          </DialogHeader>
+          <Calendar
+            view="month"
+            maxDetail="year"
+            next2Label={null}
+            prev2Label={null}
+            value={new Date(value)}
+            minDetail="month"
+            onChange={(value) => {
+              setShowCalendar(false)
+              setValue(value as Date)
+              handleMonthChange(value as Date)
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <InfoModal
+        open={showModal}
+        text={sentences}
+        close={setShowModal}
+        heading="How do I write a schedule?"
+      />
     </main>
   )
 }

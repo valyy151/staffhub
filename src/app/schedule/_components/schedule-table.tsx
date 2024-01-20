@@ -8,21 +8,10 @@ import {
 
 import ShiftRow from "./table-shift-row"
 
-type Data = {
-  date: number
-  end?: string
-  start?: string
-}[]
+import ShiftCard from "./shift-card"
+import type { ScheduleTableProps } from "@/lib/types"
 
-type ScheduleTableProps = {
-  data: Data
-  shiftModel: string
-  sickDays: number[]
-  vacationDays: number[]
-  setData: (data: Data) => void
-}
-
-export default function ScheduleTable({
+export function ScheduleTable({
   data,
   shiftModel,
   setData,
@@ -55,6 +44,31 @@ export default function ScheduleTable({
           ))}
         </TableBody>
       </Table>
+    </div>
+  )
+}
+
+export function MobileScheduleTable({
+  data,
+  shiftModel,
+  sickDays,
+  vacationDays,
+  setData,
+}: ScheduleTableProps) {
+  return (
+    <div className="mt-4 flex w-full flex-col gap-2">
+      {data.map((item, index) => (
+        <ShiftCard
+          key={index}
+          data={data}
+          item={item}
+          index={index}
+          setData={setData}
+          sickDays={sickDays}
+          shiftModel={shiftModel}
+          vacationDays={vacationDays}
+        />
+      ))}
     </div>
   )
 }

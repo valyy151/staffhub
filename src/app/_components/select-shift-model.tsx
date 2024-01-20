@@ -28,6 +28,9 @@ export default function SelectShiftModel({
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Shift Models</SelectLabel>
+            <SelectItem value="None" onSelect={() => setShiftModel("")}>
+              None
+            </SelectItem>
             {shiftModels?.map((model) => (
               <SelectItem
                 key={model.id}

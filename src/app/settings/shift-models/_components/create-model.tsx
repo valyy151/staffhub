@@ -22,13 +22,11 @@ import { Button } from "../../../_components/ui/button"
 import InfoModal from "../../../_components/ui/info-modal"
 import { useToast } from "../../../_components/ui/use-toast"
 
-const sentences = {
-  data: [
-    "Shift models are a way to describe the different types of shifts available that you use most often. For example: 06:00 - 14:00 or 12:00 - 20:00",
-    "You can use this to create schedules faster by selecting a shift model and applying it quickly to a day.",
-    "You can also use it to assign it to your staff if they have a preference to work those shifts.",
-  ],
-}
+const sentences = [
+  "Shift models are a way to describe the different types of shifts available that you use most often. For example: 06:00 - 14:00 or 12:00 - 20:00",
+  "You can use this to create schedules faster by selecting a shift model and applying it quickly to a day.",
+  "You can also use it to assign it to your staff if they have a preference to work those shifts.",
+]
 
 export default function CreateModel() {
   const router = useRouter()
@@ -150,13 +148,12 @@ export default function CreateModel() {
         </AlertDialog>
       )}
 
-      {showModal && (
-        <InfoModal
-          text={sentences}
-          heading={"What are Shift Models?"}
-          close={() => setShowModal(false)}
-        />
-      )}
+      <InfoModal
+        open={showModal}
+        text={sentences}
+        close={setShowModal}
+        heading={"What are Shift Models?"}
+      />
     </>
   )
 }
