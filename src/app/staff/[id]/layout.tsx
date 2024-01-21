@@ -103,7 +103,7 @@ export default function StaffProfileLayout({
 					</div> */}
         </nav>
       </aside>
-      <div className="mt-4 px-2 md:px-0">{children}</div>
+      <div className="mt-2 px-1 md:mt-4 md:px-0">{children}</div>
     </main>
   )
 }

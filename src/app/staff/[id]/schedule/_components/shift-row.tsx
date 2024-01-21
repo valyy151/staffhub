@@ -43,7 +43,9 @@ export default function ShiftRow({
         </span>
       )
     }
-    return
+    return (
+      <span className="py-3 pl-2 italic group-hover:text-gray-800 dark:group-hover:text-gray-300"></span>
+    )
   }
 
   return (

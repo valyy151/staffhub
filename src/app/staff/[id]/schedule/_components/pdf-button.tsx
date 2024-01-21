@@ -31,7 +31,7 @@ export default function PDFButton({ employee, month, shifts }: PDFButtonProps) {
   }, [])
 
   return (
-    <Button className="mt-2">
+    <Button className="mt-2 w-full">
       <Download className="mr-2" />
       {isClient ? (
         <PDFDownloadLink

@@ -190,19 +190,21 @@ export default function EditShift({
   return (
     <>
       <AlertDialog open>
-        <AlertDialogContent>
+        <AlertDialogContent className="flex w-fit min-w-0 flex-col items-center">
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              {employee.name} -{"  "}
-              {new Date(shift.date! * 1000).toLocaleDateString("en-GB", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+            <AlertDialogTitle className="flex flex-col items-center">
+              <span> {employee.name}</span>
+              <span>
+                {new Date(shift.date! * 1000).toLocaleDateString("en-GB", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
             </AlertDialogTitle>
           </AlertDialogHeader>
-          <div className="flex w-fit flex-col">
+          <div className="flex w-fit flex-col items-center">
             {employee?.roles?.length! > 0 && (
               <RolesDropdown
                 role={role}
@@ -210,12 +212,12 @@ export default function EditShift({
                 roles={employee.roles}
               />
             )}
-            <div className="mt-4 flex space-x-1">
+            <div className="mt-4  flex flex-col items-center">
               <div>
                 <label className="ml-2">Start</label>
                 <Input
                   value={start}
-                  className="w-36 text-lg"
+                  className="w-full text-lg"
                   onKeyDown={(e) => {
                     if (e.key === "Backspace") {
                       e.currentTarget.select()
@@ -229,7 +231,7 @@ export default function EditShift({
                 <label className="ml-2">End</label>
                 <Input
                   value={end}
-                  className="w-36 text-lg"
+                  className="w-full text-lg"
                   onKeyDown={(e) => {
                     if (e.key === "Backspace") {
                       e.currentTarget.select()
@@ -239,14 +241,11 @@ export default function EditShift({
                   onChange={(e) => handleTimeChange(e.target.value, "end")}
                 />
               </div>
-              <div>
-                <label className="ml-4">Total</label>
-                <Heading
-                  size={"xs"}
-                  className="h-14 border-none px-4 py-1 text-2xl disabled:cursor-default"
-                >
+              <div className="mt-2 flex items-baseline gap-2">
+                <label className="ml-4">Total:</label>
+                <h1 className="text-xl font-bold disabled:cursor-default">
                   {renderTotal(start, end)}
-                </Heading>
+                </h1>
               </div>
             </div>
           </div>
@@ -262,12 +261,12 @@ export default function EditShift({
             </>
           )}
 
-          <AlertDialogFooter className="mt-2">
+          <AlertDialogFooter className="mt-2 w-full">
             {shift.start ? (
               <Button
                 variant={"link"}
                 onClick={() => setShowDelete(true)}
-                className="mr-auto pb-0 pl-0 hover:text-rose-500"
+                className="pb-0 pl-0 hover:text-rose-500"
               >
                 Delete Shift
               </Button>
